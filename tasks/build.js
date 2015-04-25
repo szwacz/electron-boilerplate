@@ -16,12 +16,14 @@ var paths = {
     jsCodeToTranspile: [
         'app/**/*.js',
         '!app/main.js',
+        '!app/main-spec.js',
         '!app/node_modules/**',
         '!app/bower_components/**',
         '!app/vendor/**'
     ],
     toCopy: [
         'app/main.js',
+        'app/main-spec.js',
         'app/node_modules/**',
         'app/bower_components/**',
         'app/vendor/**',
@@ -77,6 +79,13 @@ gulp.task('finalize', ['clean'], function () {
             // Add "-dev" suffix to name, so Electron will write all
             // data like cookies and localStorage into separate place.
             manifest.name += '-dev';
+            break;
+        case 'test':
+            // Add "-test" suffix to name, so Electron will write all
+            // data like cookies and localStorage into separate place.
+            manifest.name += '-test';
+            // Change the main entry to spec runner.
+            manifest.main = 'main-spec.js';
             break;
     }
     destDir.write('package.json', manifest);

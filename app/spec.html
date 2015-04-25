@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Jasmine Spec Runner</title>
+
+    <link rel="stylesheet" type="text/css" href="vendor/jasmine/jasmine.css">
+
+    <script src="vendor/jasmine/jasmine.js"></script>
+    <script src="vendor/jasmine/jasmine-html.js"></script>
+    <script src="vendor/jasmine/boot.js"></script>
+    <script>
+        // Overwrite defaul behaviour of boot.js
+        // We can't start with onload, need to wait until all specs are loaded.
+        var startJasmine = window.onload;
+        window.onload = null;
+    </script>
+    <script src="vendor/require.js"></script>
+
+    <script>
+
+        // This is automatic spec loader.
+        // All files with extension ".spec.js", will be loaded and executed
+        // as specs, so you don't have to declare them here in any way.
+        var fs = require('fs');
+        var pathUtil = require('path');
+        var specPaths = [];
+
+        // Directory names to omit during specs searching.
+        var blacklisted = ['node_modules'];
+
+        var parseDir = function (path) {
+            var files = fs.readdirSync(path);
+            files.forEach(function (filename) {
+                var childPath = path + '/' + filename;
+                if (childPath.match(/\.spec\.js$/)) {
+                    var moduleName = pathUtil.relative(__dirname, childPath);
+                    specPaths.push(moduleName);
+                } else {
+                    var stat = fs.statSync(childPath);
+                    if (stat.isDirectory() && blacklisted.indexOf(filename) === -1) {
+                        parseDir(childPath);
+                    }
+                }
+            });
+        };
+
+        parseDir(__dirname);
+
+        requirejs.config({ baseUrl: '.' });
+        requirejs(specPaths, function () {
+            // All modules has been loaded, we can start now.
+            startJasmine();
+        });
+
+    </script>
+
+</head>
+<body>
+</body>
+</html>
