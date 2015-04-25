@@ -1,0 +1,23 @@
+{
+  "devDependencies": {
+    "electron-prebuilt": "^0.24.0",
+    "esperanto": "^0.6.17",
+    "fs-jetpack": "^0.6.4",
+    "gulp": "^3.8.8",
+    "gulp-less": "^1.3.6",
+    "gulp-util": "^3.0.1",
+    "q": "^1.0.1",
+    "vinyl-map": "^1.0.1",
+    "yargs": "^1.3.1"
+  },
+  "optionalDependencies": {
+    "appdmg": "^0.3.1"
+  },
+  "scripts": {
+    "postinstall": "cd ./app  &&  npm install",
+    "build": "./node_modules/.bin/gulp build",
+    "release": "./node_modules/.bin/gulp release --target=release",
+    "start": "node ./tasks/start",
+    "test": "node ./tasks/start --target=test"
+  }
+}
