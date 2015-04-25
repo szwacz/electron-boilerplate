@@ -20,7 +20,7 @@ app.on('ready', function () {
         width: mainWindowState.width,
         height: mainWindowState.height
     });
-    mainWindow.loadUrl('file://' + __dirname + '/index.html');
+    mainWindow.loadUrl('file://' + __dirname + '/app.html');
 
     mainWindow.on('close', function () {
         mainWindowState.saveState(mainWindow);
