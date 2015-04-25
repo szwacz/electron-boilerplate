@@ -2,32 +2,31 @@
 
 var app = require('app');
 var BrowserWindow = require('browser-window');
-var jetpack = require('fs-jetpack');
+var windowStateKeeper = require('./vendor/electron_boilerplate/window_state');
 
-// Must keep references to opened windows,
-// otherwise Garbage Collector will kick in.
-var mainWindow = null;
+var mainWindow;
 
-// Atom-shell is ready, we can start with our stuff.
+// Preserver of the window size and position between app launches.
+var mainWindowState = windowStateKeeper('main', {
+    width: 1000,
+    height: 600
+});
+
 app.on('ready', function () {
 
-    var appCodeDir = jetpack.cwd(__dirname);
-    var manifest = appCodeDir.read('package.json', 'json');
-
-    mainWindow = new BrowserWindow({ width: 800, height: 600 });
+    mainWindow = new BrowserWindow({
+        x: mainWindowState.x,
+        y: mainWindowState.y,
+        width: mainWindowState.width,
+        height: mainWindowState.height
+    });
     mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
-    mainWindow.on('closed', function () {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
-        mainWindow = null;
+    mainWindow.on('close', function () {
+        mainWindowState.saveState(mainWindow);
     });
 });
 
-// Quit when all windows are closed.
 app.on('window-all-closed', function () {
-    if (process.platform != 'darwin') {
-        app.quit();
-    }
+    app.quit();
 });
