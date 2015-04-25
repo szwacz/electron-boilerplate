@@ -14,6 +14,8 @@
 // </p>
 
 (function () {
+    'use strict';
+
     var shell = require('shell');
 
     var supportExternalLinks = function (e) {
