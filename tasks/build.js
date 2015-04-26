@@ -71,10 +71,9 @@ gulp.task('less', ['clean'], lessTask);
 gulp.task('less-watch', lessTask);
 
 
-// Add and customize OS-specyfic and target-specyfic stuff.
 gulp.task('finalize', ['clean'], function () {
     var manifest = srcDir.read('package.json', 'json');
-    switch (utils.getBuildTarget()) {
+    switch (utils.getEnvName()) {
         case 'development':
             // Add "dev" suffix to name, so Electron will write all
             // data like cookies and localStorage into separate place.
@@ -91,6 +90,9 @@ gulp.task('finalize', ['clean'], function () {
             break;
     }
     destDir.write('package.json', manifest);
+
+    var configFilePath = projectDir.path('config/env_' + utils.getEnvName() + '.json');
+    destDir.copy(configFilePath, 'env_config.json');
 });
 
 

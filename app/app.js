@@ -9,8 +9,9 @@ import { greet } from './hello_world/hello_world';
 // Node modules are required the same way as always.
 var os = require('os');
 
-var greetElement = document.getElementById('greet');
-greetElement.innerHTML = greet();
+// window.env contains data from config/env_XXX.json file.
+var envName = window.env.name;
 
-var platform = document.getElementById('platform-info');
-platform.innerHTML = os.platform();
+document.getElementById('greet').innerHTML = greet();
+document.getElementById('platform-info').innerHTML = os.platform();
+document.getElementById('env-name').innerHTML = envName;

@@ -2,6 +2,7 @@
 
 var app = require('app');
 var BrowserWindow = require('browser-window');
+var env = require('./vendor/electron_boilerplate/env_config');
 var windowStateKeeper = require('./vendor/electron_boilerplate/window_state');
 
 var mainWindow;
@@ -11,6 +12,9 @@ var mainWindowState = windowStateKeeper('main', {
     width: 1000,
     height: 600
 });
+
+// You have data from config/env_XXX.json file loaded here in case you need it.
+// console.log(env.name);
 
 app.on('ready', function () {
 

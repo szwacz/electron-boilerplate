@@ -23,6 +23,6 @@ module.exports.replace = function (str, patterns) {
     return str;
 };
 
-module.exports.getBuildTarget = function () {
-    return argv.target || 'development';
+module.exports.getEnvName = function () {
+    return argv.env || 'development';
 };

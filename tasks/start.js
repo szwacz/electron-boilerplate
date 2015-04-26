@@ -16,7 +16,7 @@ var runBuild = function () {
 
     var build = childProcess.spawn(gulpPath, [
         'build',
-        '--target=' + utils.getBuildTarget(),
+        '--env=' + utils.getEnvName(),
         '--color'
     ]);
 
@@ -33,7 +33,7 @@ var runBuild = function () {
 var runGulpWatch = function () {
     var watch = childProcess.spawn(gulpPath, [
         'watch',
-        '--target=' + utils.getBuildTarget(),
+        '--env=' + utils.getEnvName(),
         '--color'
     ]);
 
