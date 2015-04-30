@@ -10,6 +10,7 @@ var projectDir;
 var tmpDir;
 var releasesDir;
 var readyAppDir;
+var codeDir;
 var manifest;
 
 var init = function () {
@@ -18,6 +19,7 @@ var init = function () {
     releasesDir = projectDir.dir('./releases');
     manifest = projectDir.read('app/package.json', 'json');
     readyAppDir = tmpDir.cwd(manifest.name);
+    codeDir = readyAppDir.cwd('resources/app');
 
     return Q();
 };
@@ -27,7 +29,7 @@ var copyRuntime = function () {
 };
 
 var copyBuiltApp = function () {
-    return projectDir.copyAsync('build', readyAppDir.path(), { overwrite: true });
+    return projectDir.copyAsync('build', codeDir.path(), { overwrite: true });
 };
 
 var prepareOsSpecificThings = function () {
