@@ -24,6 +24,11 @@ app.on('ready', function () {
         width: mainWindowState.width,
         height: mainWindowState.height
     });
+
+    if (mainWindowState.isMaximized) {
+        mainWindow.maximize();
+    }
+
     mainWindow.loadUrl('file://' + __dirname + '/app.html');
 
     mainWindow.on('close', function () {

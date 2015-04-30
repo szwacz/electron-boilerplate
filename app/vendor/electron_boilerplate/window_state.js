@@ -12,13 +12,10 @@ module.exports = function (name, defaults) {
     var userDataDir = jetpack.cwd(app.getPath('userData'));
     var stateStoreFile = 'window-state-' + name +'.json'
 
-    var state = userDataDir.read(stateStoreFile, 'json');
-    if (!state) {
-        state = {
-            width: defaults.width,
-            height: defaults.height
-        };
-    }
+    var state = userDataDir.read(stateStoreFile, 'json') || {
+        width: defaults.width,
+        height: defaults.height
+    };
 
     var saveState = function (win) {
         if (!win.isMaximized() && !win.isMinimized()) {
@@ -28,8 +25,9 @@ module.exports = function (name, defaults) {
             state.y = position[1];
             state.width = size[0];
             state.height = size[1];
-            userDataDir.write(stateStoreFile, state, { atomic: true });
         }
+        state.isMaximized = win.isMaximized();
+        userDataDir.write(stateStoreFile, state, { atomic: true });
     };
 
     return {
@@ -37,6 +35,7 @@ module.exports = function (name, defaults) {
         get y() { return state.y },
         get width() { return state.width },
         get height() { return state.height },
+        get isMaximized() { return state.isMaximized },
         saveState: saveState
     };
 };
