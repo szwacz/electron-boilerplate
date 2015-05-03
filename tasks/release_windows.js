@@ -32,8 +32,11 @@ var copyBuiltApp = function () {
     return projectDir.copyAsync('build', codeDir.path(), { overwrite: true });
 };
 
-var prepareOsSpecificThings = function () {
-    return projectDir.copyAsync('resources/windows/icon.ico', readyAppDir.path('icon.ico'));
+var finalize = function (callback) {
+    var rcedit = require('rcedit');
+    rcedit(readyAppDir.path('electron.exe'), {
+        icon: projectDir.path('resources/windows/icon.ico')
+    }, callback);
 };
 
 var createInstaller = function () {
@@ -78,7 +81,7 @@ module.exports = function () {
     return init()
     .then(copyRuntime)
     .then(copyBuiltApp)
-    .then(prepareOsSpecificThings)
+    .then(finalize)
     .then(createInstaller)
     .then(cleanClutter);
 };
