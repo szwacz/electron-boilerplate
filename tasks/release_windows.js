@@ -32,11 +32,19 @@ var copyBuiltApp = function () {
     return projectDir.copyAsync('build', codeDir.path(), { overwrite: true });
 };
 
-var finalize = function (callback) {
+var finalize = function () {
+    var deferred = Q.defer();
+
     var rcedit = require('rcedit');
     rcedit(readyAppDir.path('electron.exe'), {
         icon: projectDir.path('resources/windows/icon.ico')
-    }, callback);
+    }, function (err) {
+        if (!err) {
+            deferred.resolve();
+        }
+    });
+
+    return deferred.promise;
 };
 
 var createInstaller = function () {
