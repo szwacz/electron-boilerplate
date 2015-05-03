@@ -35,6 +35,9 @@ var copyBuiltApp = function () {
 var finalize = function () {
     var deferred = Q.defer();
 
+    return projectDir.copy('resources/windows/icon.ico', readyAppDir.path('icon.ico'));
+
+    // Replace Electron icon for your own.
     var rcedit = require('rcedit');
     rcedit(readyAppDir.path('electron.exe'), {
         icon: projectDir.path('resources/windows/icon.ico')
