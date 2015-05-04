@@ -19,8 +19,8 @@
 
 !define exec "electron.exe"
 
-!define regkey "Software\${name}"
-!define uninstkey "Software\Microsoft\Windows\CurrentVersion\Uninstall\${name}"
+!define regkey "Software\${productName}"
+!define uninstkey "Software\Microsoft\Windows\CurrentVersion\Uninstall\${productName}"
 
 !define uninstaller "uninstall.exe"
 
@@ -30,10 +30,10 @@
 
 SetCompressor lzma
 
-Name "${name}"
+Name "${productName}"
 Icon "${setupIcon}"
 OutFile "${dest}"
-InstallDir "$PROGRAMFILES\${name}"
+InstallDir "$PROGRAMFILES\${productName}"
 InstallDirRegKey HKLM "${regkey}" ""
 
 CRCCheck on
@@ -85,7 +85,7 @@ FunctionEnd
 Section "Install"
 
     WriteRegStr HKLM "${regkey}" "Install_Dir" "$INSTDIR"
-    WriteRegStr HKLM "${uninstkey}" "DisplayName" "${name}"
+    WriteRegStr HKLM "${uninstkey}" "DisplayName" "${productName}"
     WriteRegStr HKLM "${uninstkey}" "DisplayIcon" '"$INSTDIR\icon.ico"'
     WriteRegStr HKLM "${uninstkey}" "UninstallString" '"$INSTDIR\${uninstaller}"'
 
@@ -98,7 +98,7 @@ Section "Install"
     File /r "${src}\*"
 
     ; Create start menu shortcut
-    CreateShortCut "$SMPROGRAMS\${name}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
+    CreateShortCut "$SMPROGRAMS\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
 
     WriteUninstaller "${uninstaller}"
 
@@ -147,7 +147,7 @@ Section "Uninstall"
     DeleteRegKey HKLM "${uninstkey}"
     DeleteRegKey HKLM "${regkey}"
 
-    Delete "$SMPROGRAMS\${name}.lnk"
+    Delete "$SMPROGRAMS\${productName}.lnk"
 
     ; Remove whole directory from Program Files
     RMDir /r "$INSTDIR"
