@@ -8,7 +8,7 @@ This project gives you mainly three things:
 2. Basic structure for Electron app.
 3. Scripts to generate installers of your app for all three operating systems.
 
-BTW, this project has a twin: [nw-boilerplate](https://github.com/szwacz/nw-boilerplate), which is the same thing but for NW.js.
+By the way, there is a twin project to this one: [nw-boilerplate](https://github.com/szwacz/nw-boilerplate), which is the same thing but for NW.js.
 
 # Quick start
 The only development dependency of this project is [Node.js](https://nodejs.org). So just make sure you have it installed.
