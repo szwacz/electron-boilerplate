@@ -73,9 +73,11 @@ var createInstaller = function () {
     releasesDir.remove(finalPackageName);
 
     // Note: NSIS have to be added to PATH (environment variables).
-    var nsis = childProcess.spawn('makensis', [tmpDir.path('installer.nsi')]);
-    nsis.stdout.pipe(process.stdout);
-    nsis.stderr.pipe(process.stderr);
+    var nsis = childProcess.spawn('makensis', [
+        tmpDir.path('installer.nsi')
+    ], {
+        stdio: 'inherit'
+    });
     nsis.on('close', function () {
         gulpUtil.log('Installer ready!', releasesDir.path(finalPackageName));
         deferred.resolve();

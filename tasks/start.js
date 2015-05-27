@@ -18,10 +18,9 @@ var runBuild = function () {
         'build',
         '--env=' + utils.getEnvName(),
         '--color'
-    ]);
-
-    build.stdout.pipe(process.stdout);
-    build.stderr.pipe(process.stderr);
+    ], {
+        stdio: 'inherit'
+    });
 
     build.on('close', function (code) {
         deferred.resolve();
@@ -35,10 +34,9 @@ var runGulpWatch = function () {
         'watch',
         '--env=' + utils.getEnvName(),
         '--color'
-    ]);
-
-    watch.stdout.pipe(process.stdout);
-    watch.stderr.pipe(process.stderr);
+    ], {
+        stdio: 'inherit'
+    });
 
     watch.on('close', function (code) {
         // Gulp watch exits when error occured during build.
@@ -48,10 +46,9 @@ var runGulpWatch = function () {
 };
 
 var runApp = function () {
-    var app = childProcess.spawn(electron, ['./build']);
-
-    app.stdout.pipe(process.stdout);
-    app.stderr.pipe(process.stderr);
+    var app = childProcess.spawn(electron, ['./build'], {
+        stdio: 'inherit'
+    });
 
     app.on('close', function (code) {
         // User closed the app. Kill the host process.
