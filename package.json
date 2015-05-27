@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "electron-prebuilt": "^0.24.0",
+    "electron-prebuilt": "^0.26.1",
     "esperanto": "^0.6.17",
     "fs-jetpack": "^0.6.4",
     "gulp": "^3.8.8",
