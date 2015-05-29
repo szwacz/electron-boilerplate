@@ -99,7 +99,7 @@ gulp.task('finalize', ['clean'], function () {
 gulp.task('watch', function () {
     gulp.watch(paths.jsCodeToTranspile, ['transpile-watch']);
     gulp.watch(paths.toCopy, ['copy-watch']);
-    gulp.watch('*.less', ['less-watch']);
+    gulp.watch('app/stylesheets/**/*.less', ['less-watch']);
 });
 
 
