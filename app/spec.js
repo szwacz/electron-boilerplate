@@ -2,6 +2,7 @@
 
 var app = require('app');
 var BrowserWindow = require('browser-window');
+var devHelper = require('./vendor/electron_boilerplate/dev_helper');
 var windowStateKeeper = require('./vendor/electron_boilerplate/window_state');
 
 var mainWindow;
@@ -21,6 +22,9 @@ app.on('ready', function () {
         height: mainWindowState.height
     });
     mainWindow.loadUrl('file://' + __dirname + '/spec.html');
+
+    devHelper.setDevMenu();
+    mainWindow.openDevTools();
 
     mainWindow.on('close', function () {
         mainWindowState.saveState(mainWindow);
