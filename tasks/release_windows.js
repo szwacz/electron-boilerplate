@@ -32,15 +32,11 @@ var copyRuntime = function () {
 var packageBuiltApp = function () {
     var deferred = Q.defer();
 
-    asar.createPackage(projectDir.cwd('build').path(), projectDir.cwd('dist').path() + '/app.asar', function() {
+    asar.createPackage(projectDir.cwd('build').path(), codeDir.path() + '/app.asar', function() {
         deferred.resolve();
     });
 
     return deferred.promise;
-};
-
-var copyBuiltApp = function () {
-    return projectDir.copyAsync('dist', codeDir.path(), { overwrite: true });
 };
 
 var finalize = function () {
@@ -103,7 +99,6 @@ module.exports = function () {
     return init()
     .then(copyRuntime)
     .then(packageBuiltApp)
-    .then(copyBuiltApp)
     .then(finalize)
     .then(createInstaller)
     .then(cleanClutter);
