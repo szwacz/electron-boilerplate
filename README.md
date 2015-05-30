@@ -63,6 +63,22 @@ It will also download Electron runtime, and install dependencies for second `pac
 npm start
 ```
 
+#### Adding pure-js npm modules to your app
+
+Remember to add your dependency to `app/package.json` file, so do:
+```
+cd app
+npm install name_of_npm_module --save
+```
+
+#### Adding native npm modules to your app
+
+If you want to install native module you need to compile it agains Electron, not Node.js you are firing in command line by typing `npm install` ([Read more on this subject](https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules.md)).
+```
+npm run app-install -- name_of_npm_module
+```
+Of course this method works also for pure-js modules, so you can use it all the time if you're able to remember such ugly command.
+
 #### Module loader
 
 How about splitting your JavaScript code into modules? This project supports it by new ES6 syntax (thanks to [esperanto](https://github.com/esperantojs/esperanto)). ES6 modules are translated into AMD (RequireJS) modules. The main advantage of this setup is that you can use ES6/RequireJS for your own modules, and at the same time have normal access to node's `require()` to obtain stuff from npm.
