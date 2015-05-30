@@ -8,6 +8,7 @@
 
 var childProcess = require('child_process');
 var jetpack = require('fs-jetpack');
+var argv = require('yargs').argv;
 
 var utils = require('./utils');
 
@@ -30,7 +31,14 @@ if (electronVersion !== dependenciesCompiledAgainst) {
 process.env.npm_config_disturl = "https://atom.io/download/atom-shell";
 process.env.npm_config_target = electronVersion;
 
-var install = childProcess.spawn('npm', ['install'], {
+var params = ['install'];
+// Maybe there was name of package user wants to install passed as a parameter.
+if (argv._.length > 0) {
+    params.push(argv._[0]);
+    params.push('--save');
+}
+
+var install = childProcess.spawn('npm', params, {
     cwd: __dirname + '/../app',
     env: process.env,
     stdio: 'inherit'
