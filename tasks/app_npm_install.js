@@ -38,7 +38,7 @@ if (argv._.length > 0) {
     params.push('--save');
 }
 
-var install = childProcess.spawn('npm', params, {
+var install = childProcess.spawn('npm.cmd', params, {
     cwd: __dirname + '/../app',
     env: process.env,
     stdio: 'inherit'
