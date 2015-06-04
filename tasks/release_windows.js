@@ -11,7 +11,6 @@ var projectDir;
 var tmpDir;
 var releasesDir;
 var readyAppDir;
-var codeDir;
 var manifest;
 
 var init = function () {
@@ -20,7 +19,6 @@ var init = function () {
     releasesDir = projectDir.dir('./releases');
     manifest = projectDir.read('app/package.json', 'json');
     readyAppDir = tmpDir.cwd(manifest.name);
-    codeDir = readyAppDir.cwd('resources');
 
     return Q();
 };
@@ -32,7 +30,7 @@ var copyRuntime = function () {
 var packageBuiltApp = function () {
     var deferred = Q.defer();
 
-    asar.createPackage(projectDir.cwd('build').path(), codeDir.path() + '/app.asar', function() {
+    asar.createPackage(projectDir.path('build'), readyAppDir.path('resources/app.asar'), function() {
         deferred.resolve();
     });
 
