@@ -5,6 +5,7 @@ var gulpUtil = require('gulp-util');
 var childProcess = require('child_process');
 var jetpack = require('fs-jetpack');
 var utils = require('./utils');
+var asar = require('asar');
 
 var projectDir;
 var tmpDir;
@@ -19,7 +20,7 @@ var init = function () {
     releasesDir = projectDir.dir('./releases');
     manifest = projectDir.read('app/package.json', 'json');
     readyAppDir = tmpDir.cwd(manifest.name);
-    codeDir = readyAppDir.cwd('resources/app');
+    codeDir = readyAppDir.cwd('resources');
 
     return Q();
 };
@@ -28,8 +29,14 @@ var copyRuntime = function () {
     return projectDir.copyAsync('node_modules/electron-prebuilt/dist', readyAppDir.path(), { overwrite: true });
 };
 
-var copyBuiltApp = function () {
-    return projectDir.copyAsync('build', codeDir.path(), { overwrite: true });
+var packageBuiltApp = function () {
+    var deferred = Q.defer();
+
+    asar.createPackage(projectDir.cwd('build').path(), codeDir.path() + '/app.asar', function() {
+        deferred.resolve();
+    });
+
+    return deferred.promise;
 };
 
 var finalize = function () {
@@ -93,7 +100,7 @@ var cleanClutter = function () {
 module.exports = function () {
     return init()
     .then(copyRuntime)
-    .then(copyBuiltApp)
+    .then(packageBuiltApp)
     .then(finalize)
     .then(createInstaller)
     .then(cleanClutter);
