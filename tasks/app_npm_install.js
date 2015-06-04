@@ -38,7 +38,16 @@ if (argv._.length > 0) {
     params.push('--save');
 }
 
-var install = childProcess.spawn('npm', params, {
+
+var installCommand = null;
+
+if (process.platform === 'win32') {
+  installCommand = 'npm.cmd'
+} else {
+  installCommand = 'npm'
+}
+
+var install = childProcess.spawn(installCommand, params, {
     cwd: __dirname + '/../app',
     env: process.env,
     stdio: 'inherit'
