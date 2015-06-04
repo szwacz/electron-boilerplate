@@ -18,8 +18,8 @@
 	<string>APPL</string>
 	<key>CFBundleVersion</key>
 	<string>{{version}}</string>
-        <key>CFBundleGetInfoString</key>
-        <string>{{version}}</string>
+	<key>CFBundleGetInfoString</key>
+	<string>{{version}}</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.8.0</string>
 	<key>NSMainNibFile</key>
