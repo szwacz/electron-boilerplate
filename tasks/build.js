@@ -53,7 +53,11 @@ gulp.task('copy-watch', copyTask);
 var transpileTask = function () {
     return gulp.src(paths.jsCodeToTranspile)
     .pipe(map(function(code, filename) {
-        var transpiled = esperanto.toAmd(code.toString(), { strict: true });
+        try {
+            var transpiled = esperanto.toAmd(code.toString(), { strict: true });
+        } catch (err) {
+            throw new Error(err.message + ' ' + filename);
+        }
         return transpiled.code;
     }))
     .pipe(gulp.dest(destDir.path()));
