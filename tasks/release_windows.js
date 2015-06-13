@@ -45,7 +45,11 @@ var finalize = function () {
     // Replace Electron icon for your own.
     var rcedit = require('rcedit');
     rcedit(readyAppDir.path('electron.exe'), {
-        icon: projectDir.path('resources/windows/icon.ico')
+        'icon': projectDir.path('resources/windows/icon.ico'),
+        'version-string': {
+            'ProductName': manifest.productName,
+            'FileDescription': manifest.description,
+        }
     }, function (err) {
         if (!err) {
             deferred.resolve();
