@@ -9,19 +9,19 @@ module.exports.setDevMenu = function () {
         label: 'Development',
         submenu: [{
             label: 'Reload',
-            accelerator: 'Command+R',
+            accelerator: 'CmdOrCtrl+R',
             click: function () {
                 BrowserWindow.getFocusedWindow().reloadIgnoringCache();
             }
         },{
             label: 'Toggle DevTools',
-            accelerator: 'Alt+Command+I',
+            accelerator: 'Alt+CmdOrCtrl+I',
             click: function () {
                 BrowserWindow.getFocusedWindow().toggleDevTools();
             }
         },{
             label: 'Quit',
-            accelerator: 'Command+Q',
+            accelerator: 'CmdOrCtrl+Q',
             click: function () {
                 app.quit();
             }
