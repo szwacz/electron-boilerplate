@@ -43,6 +43,10 @@ var runGulpWatch = function () {
         // Just respawn it then.
         runGulpWatch();
     });
+
+    process.on('exit', function () {
+        watch.kill();
+    });
 };
 
 var runApp = function () {
