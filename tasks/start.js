@@ -4,7 +4,9 @@ var Q = require('q');
 var electron = require('electron-prebuilt');
 var pathUtil = require('path');
 var childProcess = require('child_process');
+var kill = require('tree-kill');
 var utils = require('./utils');
+var watch;
 
 var gulpPath = pathUtil.resolve('./node_modules/.bin/gulp');
 if (process.platform === 'win32') {
@@ -30,7 +32,7 @@ var runBuild = function () {
 };
 
 var runGulpWatch = function () {
-    var watch = childProcess.spawn(gulpPath, [
+    watch = childProcess.spawn(gulpPath, [
         'watch',
         '--env=' + utils.getEnvName(),
         '--color'
@@ -43,10 +45,6 @@ var runGulpWatch = function () {
         // Just respawn it then.
         runGulpWatch();
     });
-
-    process.on('exit', function () {
-        watch.kill();
-    });
 };
 
 var runApp = function () {
@@ -56,7 +54,9 @@ var runApp = function () {
 
     app.on('close', function (code) {
         // User closed the app. Kill the host process.
-        process.exit();
+        kill(watch.pid, 'SIGKILL', function () {
+            process.exit();
+        });
     });
 };
 
