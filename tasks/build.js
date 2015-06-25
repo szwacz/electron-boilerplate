@@ -1,39 +1,30 @@
 'use strict';
 
 var gulp = require('gulp');
-var less = require('gulp-less');
-var esperanto = require('esperanto');
-var map = require('vinyl-map');
+// load all gulp plugins
+var $ = require('gulp-load-plugins')({lazy: true});
+
 var jetpack = require('fs-jetpack');
 
+// own modules
 var utils = require('./utils');
+var config = require('./gulp.config')();
 
 var projectDir = jetpack;
 var srcDir = projectDir.cwd('./app');
 var destDir = projectDir.cwd('./build');
 
-var paths = {
-    jsCodeToTranspile: [
-        'app/**/*.js',
-        '!app/main.js',
-        '!app/spec.js',
-        '!app/node_modules/**',
-        '!app/bower_components/**',
-        '!app/vendor/**'
-    ],
-    toCopy: [
-        'app/main.js',
-        'app/spec.js',
-        'app/node_modules/**',
-        'app/bower_components/**',
-        'app/vendor/**',
-        'app/**/*.html'
-    ],
-}
-
 // -------------------------------------
 // Tasks
 // -------------------------------------
+
+var transpileTask = function () {
+    return gulp.src(config.jsCodeToTranspile, { base: './app' })
+        .pipe($.sourcemaps.init())
+        .pipe($.babel())
+        .pipe($.sourcemaps.write("."))
+        .pipe(gulp.dest(destDir.path()));
+};
 
 gulp.task('clean', function(callback) {
     return destDir.dirAsync('.', { empty: true });
@@ -43,32 +34,20 @@ gulp.task('clean', function(callback) {
 var copyTask = function () {
     return projectDir.copyAsync('app', destDir.path(), {
         overwrite: true,
-        matching: paths.toCopy
+        matching: config.toCopy
     });
 };
+
 gulp.task('copy', ['clean'], copyTask);
 gulp.task('copy-watch', copyTask);
 
-
-var transpileTask = function () {
-    return gulp.src(paths.jsCodeToTranspile)
-    .pipe(map(function(code, filename) {
-        try {
-            var transpiled = esperanto.toAmd(code.toString(), { strict: true });
-        } catch (err) {
-            throw new Error(err.message + ' ' + filename);
-        }
-        return transpiled.code;
-    }))
-    .pipe(gulp.dest(destDir.path()));
-};
 gulp.task('transpile', ['clean'], transpileTask);
 gulp.task('transpile-watch', transpileTask);
 
 
 var lessTask = function () {
     return gulp.src('app/stylesheets/main.less')
-    .pipe(less())
+    .pipe($.less())
     .pipe(gulp.dest(destDir.path('stylesheets')));
 };
 gulp.task('less', ['clean'], lessTask);
@@ -101,10 +80,12 @@ gulp.task('finalize', ['clean'], function () {
 
 
 gulp.task('watch', function () {
-    gulp.watch(paths.jsCodeToTranspile, ['transpile-watch']);
-    gulp.watch(paths.toCopy, ['copy-watch']);
+    gulp.watch(config.jsCodeToTranspile, ['transpile-watch']);
+    gulp.watch(config.toCopy, ['copy-watch']);
     gulp.watch('app/**/*.less', ['less-watch']);
 });
 
 
 gulp.task('build', ['transpile', 'less', 'copy', 'finalize']);
+
+gulp.task('default', ['build']);

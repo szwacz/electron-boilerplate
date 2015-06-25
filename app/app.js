@@ -4,14 +4,18 @@
 // -----------------------------------------------------
 
 // Browser modules are imported through new ES6 syntax.
-import { greet } from './hello_world/hello_world';
+import angular  from "angular";
 
-// Node modules are required the same way as always.
-var os = require('os');
+// Own modules
+import AppController from 'controllers/AppController';
 
-// window.env contains data from config/env_XXX.json file.
-var envName = window.env.name;
+var app = angular.module('repairManagerApp', []);
 
-document.getElementById('greet').innerHTML = greet();
-document.getElementById('platform-info').innerHTML = os.platform();
-document.getElementById('env-name').innerHTML = envName;
+app.controller('AppController', AppController);
+
+app.init = function () {
+    angular.bootstrap(document, ['repairManagerApp']);
+    console.log("app initialized!");
+};
+
+module.exports = app;

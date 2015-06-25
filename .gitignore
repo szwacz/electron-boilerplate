@@ -1,8 +1,10 @@
 node_modules
 bower_components
+app/jspm_packages
 *.log
 .DS_Store
 Thumbs.db
+/.idea/
 /build/
 /releases/
 /tmp/
