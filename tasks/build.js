@@ -1,8 +1,9 @@
 'use strict';
 
 var gulp = require('gulp');
-var less = require('gulp-less');
-var esperanto = require('esperanto');
+// load all gulp plugins
+var $ = require('gulp-load-plugins')({lazy: true});
+
 var map = require('vinyl-map');
 var jetpack = require('fs-jetpack');
 
@@ -18,6 +19,7 @@ var paths = {
         '!app/main.js',
         '!app/spec.js',
         '!app/node_modules/**',
+        '!app/jspm_packages/**',
         '!app/bower_components/**',
         '!app/vendor/**'
     ],
@@ -25,15 +27,28 @@ var paths = {
         'app/main.js',
         'app/spec.js',
         'app/node_modules/**',
+        'app/jspm_packages/**',
         'app/bower_components/**',
         'app/vendor/**',
         'app/**/*.html'
-    ],
-}
+    ]
+};
 
 // -------------------------------------
 // Tasks
 // -------------------------------------
+
+gulp.task('run', ['default'], function() {
+    return $.run('electron ./build').exec();
+});
+
+var transpileTask = function () {
+    return gulp.src(paths.jsCodeToTranspile, { base: './app' })
+        .pipe($.sourcemaps.init())
+        .pipe($.babel())
+        .pipe($.sourcemaps.write("."))
+        .pipe(gulp.dest(destDir.path()));
+};
 
 gulp.task('clean', function(callback) {
     return destDir.dirAsync('.', { empty: true });
@@ -46,10 +61,11 @@ var copyTask = function () {
         matching: paths.toCopy
     });
 };
+
 gulp.task('copy', ['clean'], copyTask);
 gulp.task('copy-watch', copyTask);
 
-
+/*
 var transpileTask = function () {
     return gulp.src(paths.jsCodeToTranspile)
     .pipe(map(function(code, filename) {
@@ -62,13 +78,14 @@ var transpileTask = function () {
     }))
     .pipe(gulp.dest(destDir.path()));
 };
+*/
 gulp.task('transpile', ['clean'], transpileTask);
 gulp.task('transpile-watch', transpileTask);
 
 
 var lessTask = function () {
     return gulp.src('app/stylesheets/main.less')
-    .pipe(less())
+    .pipe($.less())
     .pipe(gulp.dest(destDir.path('stylesheets')));
 };
 gulp.task('less', ['clean'], lessTask);
@@ -108,3 +125,5 @@ gulp.task('watch', function () {
 
 
 gulp.task('build', ['transpile', 'less', 'copy', 'finalize']);
+
+gulp.task('default', ['build']);

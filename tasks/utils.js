@@ -32,3 +32,15 @@ module.exports.getElectronVersion = function () {
     var manifest = jetpack.read(__dirname + '/../package.json', 'json');
     return manifest.devDependencies['electron-prebuilt'].substring(1);
 };
+
+module.exports.log = function (msg) {
+    if (typeof msg === 'object') {
+        for (var item in msg) {
+            if (msg.hasOwnProperty(item)) {
+                util.log(util.colors.blue(msg[item]));
+            }
+        }
+    } else {
+        util.log(util.colors.blue(msg));
+    }
+};

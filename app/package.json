@@ -2,14 +2,15 @@
   "name": "electron-boilerplate",
   "productName": "Electron Boilerplate",
   "identifier": "com.example.electron-boilerplate",
-  "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
-  "version": "0.1.0",
-  "author": "Mr Gumby <gumby@sillywalks.com>",
+  "description": "A boilerplate for build desktop apps using electron with Babel, Jspm, Gulp, and Angular. ",
+  "version": "1.0.0",
+  "author": "Yail Peralta <yailpz@hotmail.com>",
   "main": "main.js",
   "config": {
     "target": "development"
   },
   "dependencies": {
-    "fs-jetpack": "^0.6.4"
+    "fs-jetpack": "^0.6.4",
+    "pouchdb": "^3.6.0"
   }
 }

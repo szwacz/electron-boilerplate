@@ -5,7 +5,12 @@
     "esperanto": "^0.6.17",
     "fs-jetpack": "^0.6.4",
     "gulp": "^3.8.8",
+    "gulp-babel": "^5.1.0",
     "gulp-less": "^1.3.6",
+    "gulp-load-plugins": "^1.0.0-rc.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-run": "^1.6.8",
+    "gulp-sourcemaps": "^1.5.2",
     "gulp-util": "^3.0.1",
     "q": "^1.0.1",
     "tree-kill": "^0.1.1",
@@ -23,5 +28,15 @@
     "release": "./node_modules/.bin/gulp release --env=production",
     "start": "node ./tasks/start",
     "test": "node ./tasks/start --env=test"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "./app"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.1.13",
+      "babel-runtime": "npm:babel-runtime@^5.1.13",
+      "core-js": "npm:core-js@^0.9.4"
+    }
   }
 }
