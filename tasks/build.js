@@ -4,46 +4,22 @@ var gulp = require('gulp');
 // load all gulp plugins
 var $ = require('gulp-load-plugins')({lazy: true});
 
-var map = require('vinyl-map');
 var jetpack = require('fs-jetpack');
 
+// own modules
 var utils = require('./utils');
+var config = require('./gulp.config')();
 
 var projectDir = jetpack;
 var srcDir = projectDir.cwd('./app');
 var destDir = projectDir.cwd('./build');
 
-var paths = {
-    jsCodeToTranspile: [
-        'app/**/*.js',
-        '!app/main.js',
-        '!app/spec.js',
-        '!app/node_modules/**',
-        '!app/jspm_packages/**',
-        '!app/bower_components/**',
-        '!app/vendor/**'
-    ],
-    toCopy: [
-        'app/main.js',
-        'app/spec.js',
-        'app/node_modules/**',
-        'app/jspm_packages/**',
-        'app/bower_components/**',
-        'app/vendor/**',
-        'app/**/*.html'
-    ]
-};
-
 // -------------------------------------
 // Tasks
 // -------------------------------------
 
-gulp.task('run', ['default'], function() {
-    return $.run('electron ./build').exec();
-});
-
 var transpileTask = function () {
-    return gulp.src(paths.jsCodeToTranspile, { base: './app' })
+    return gulp.src(config.jsCodeToTranspile, { base: './app' })
         .pipe($.sourcemaps.init())
         .pipe($.babel())
         .pipe($.sourcemaps.write("."))
@@ -58,27 +34,13 @@ gulp.task('clean', function(callback) {
 var copyTask = function () {
     return projectDir.copyAsync('app', destDir.path(), {
         overwrite: true,
-        matching: paths.toCopy
+        matching: config.toCopy
     });
 };
 
 gulp.task('copy', ['clean'], copyTask);
 gulp.task('copy-watch', copyTask);
 
-/*
-var transpileTask = function () {
-    return gulp.src(paths.jsCodeToTranspile)
-    .pipe(map(function(code, filename) {
-        try {
-            var transpiled = esperanto.toAmd(code.toString(), { strict: true });
-        } catch (err) {
-            throw new Error(err.message + ' ' + filename);
-        }
-        return transpiled.code;
-    }))
-    .pipe(gulp.dest(destDir.path()));
-};
-*/
 gulp.task('transpile', ['clean'], transpileTask);
 gulp.task('transpile-watch', transpileTask);
 
@@ -118,8 +80,8 @@ gulp.task('finalize', ['clean'], function () {
 
 
 gulp.task('watch', function () {
-    gulp.watch(paths.jsCodeToTranspile, ['transpile-watch']);
-    gulp.watch(paths.toCopy, ['copy-watch']);
+    gulp.watch(config.jsCodeToTranspile, ['transpile-watch']);
+    gulp.watch(config.toCopy, ['copy-watch']);
     gulp.watch('app/**/*.less', ['less-watch']);
 });
 

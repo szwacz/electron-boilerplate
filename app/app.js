@@ -4,7 +4,18 @@
 // -----------------------------------------------------
 
 // Browser modules are imported through new ES6 syntax.
-import { greet } from './hello_world/hello_world';
+import angular  from "angular";
 
-// window.env contains data from config/env_XXX.json file.
-var envName = window.env.name;
+// Own modules
+import AppController from 'controllers/AppController';
+
+var app = angular.module('repairManagerApp', []);
+
+app.controller('AppController', AppController);
+
+app.init = function () {
+    angular.bootstrap(document, ['repairManagerApp']);
+    console.log("app initialized!");
+};
+
+module.exports = app;

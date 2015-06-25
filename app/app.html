@@ -14,13 +14,19 @@
 <body>
 
     <div class="container">
-        <h2>Hello World!!!</h2>
+        <div ng-controller="AppController as appCtrl">
+            <p>You're running Electron version
+                <span ng-bind="appCtrl.electronVersion"></span>
+            </p>
+        </div>
     </div>
 
     <script src="jspm_packages/system.js"></script>
     <script src="config.js"></script>
     <script>
-        System.import('./app').catch(console.error.bind(console))
+        System.import('./app').then(function (app) {
+            app.init();
+        }).catch(console.error.bind(console))
     </script>
 </body>
 </html>
