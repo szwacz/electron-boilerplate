@@ -29,6 +29,12 @@ app.on('window-all-closed', function() {
     }
 });
 
+app.on('activate-with-no-open-windows', function() {
+    if (!mainWindow) {
+        appReady();
+    }
+});
+
 app.on('ready', appReady);
 
 function appReady() {
@@ -54,10 +60,6 @@ function appReady() {
         mainWindow.show();
     });
 
-    mainWindow.webContents.gabriel = 'TEST';
-    console.log(mainWindow.webContents);
-    console.log(ipc);
-
     if (env.name === 'development') {
         devHelper.setDevMenu();
         mainWindow.openDevTools();
@@ -65,6 +67,7 @@ function appReady() {
 
     mainWindow.on('close', function() {
         mainWindowState.saveState(mainWindow);
+        mainWindow = null;
     });
 
 };
