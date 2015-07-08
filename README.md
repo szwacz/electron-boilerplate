@@ -12,8 +12,8 @@ https://github.com/sindresorhus/awesome-electron
 The only development dependency of this project is [Node.js](https://nodejs.org). So just make sure you have it installed.
 Then type few commands known to every Node developer...
 ```
-git clone https://github.com/RocketChat/DesktopApp.git RocketChat-DesktopApp
-cd RocketChat-DesktopApp
+git clone https://github.com/RocketChat/Rocket.Chat.Electron.git
+cd Rocket.Chat.Electron
 npm install
 npm start
 ```
@@ -24,7 +24,7 @@ npm start
 There are **two** `package.json` files:  
 
 #### 1. For development
-Sits on path: `RocketChat-DesktopApp/package.json`. Here you declare dependencies for your development environment and build scripts. **This file is not distributed with real application!**
+Sits on path: `Rocket.Chat.Electron/package.json`. Here you declare dependencies for your development environment and build scripts. **This file is not distributed with real application!**
 
 Also here you declare the version of Electron runtime you want to use:
 ```json
@@ -34,7 +34,7 @@ Also here you declare the version of Electron runtime you want to use:
 ```
 
 #### 2. For your application
-Sits on path: `RocketChat-DesktopApp/app/package.json`. This is **real** manifest of your application. Declare your app dependencies here.
+Sits on path: `Rocket.Chat.Electron/app/package.json`. This is **real** manifest of your application. Declare your app dependencies here.
 
 ### Project's folders
 
@@ -91,7 +91,7 @@ var moment = require('moment');
 
 #### Unit tests
 
-RocketChat-DesktopApp has preconfigured [jasmine](http://jasmine.github.io/2.0/introduction.html) unit test runner. To run it go with standard:
+Rocket.Chat.Electron has preconfigured [jasmine](http://jasmine.github.io/2.0/introduction.html) unit test runner. To run it go with standard:
 ```
 npm test
 ```
