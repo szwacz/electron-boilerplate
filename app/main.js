@@ -13,8 +13,8 @@ var APP_NAME = 'Rocket.Chat';
 var INDEX = 'https://rocket.chat/home';
 // var INDEX = 'file://' + path.join( __dirname, 'app.html' );
 
-// Create main window
-var mainWindow;
+// Create main window and prevent window being GC'd
+let mainWindow;
 
 // Preserver of the window size and position between app launches.
 var mainWindowState = windowStateKeeper('main', {
