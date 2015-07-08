@@ -16,6 +16,7 @@ var paths = {
     jsCodeToTranspile: [
         'app/**/*.js',
         '!app/main.js',
+        '!app/preload.js',
         '!app/spec.js',
         '!app/node_modules/**',
         '!app/bower_components/**',
@@ -23,6 +24,7 @@ var paths = {
     ],
     toCopy: [
         'app/main.js',
+        'app/preload.js',
         'app/spec.js',
         'app/node_modules/**',
         'app/bower_components/**',

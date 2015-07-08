@@ -47,7 +47,8 @@ function appReady() {
         x: mainWindowState.x,
         y: mainWindowState.y,
         width: mainWindowState.width,
-        height: mainWindowState.height
+        height: mainWindowState.height,
+        preload: path.resolve(path.join(__dirname, 'preload.js'))
     });
 
     if (mainWindowState.isMaximized) {
@@ -80,4 +81,8 @@ ipc.on('message', function(event, arg) {
 
 ipc.on('open-dev', function(event, arg) {
     mainWindow.openDevTools();
+});
+
+ipc.on('set-badge', function(event, arg) {
+    app.dock.setBadge(String(arg));
 });
