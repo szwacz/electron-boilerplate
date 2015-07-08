@@ -18,6 +18,9 @@ app.on('ready', function() {
 
     mainWindow = new BrowserWindow({
         "node-integration": false,
+        'accept-first-mouse': true,
+        title: 'Rocket.Chat',
+        show: false,
         x: mainWindowState.x,
         y: mainWindowState.y,
         width: mainWindowState.width,
@@ -28,7 +31,13 @@ app.on('ready', function() {
         mainWindow.maximize();
     }
 
+    // mainWindow.loadUrl('file://' + __dirname + '/app.html');
     mainWindow.loadUrl('https://rocket.chat/home');
+
+    mainWindow.webContents.on('did-finish-load', function() {
+        mainWindow.show();
+    });
+
 
     if (env.name === 'development') {
         devHelper.setDevMenu();
