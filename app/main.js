@@ -27,7 +27,7 @@ app.on('ready', function () {
         mainWindow.maximize();
     }
 
-    mainWindow.loadUrl('file://' + __dirname + '/app.html');
+    mainWindow.loadUrl('https://rocket.chat/home');
 
     if (env.name === 'development') {
         devHelper.setDevMenu();
