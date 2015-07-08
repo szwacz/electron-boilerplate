@@ -1,10 +1,10 @@
 {
   "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
+  "productName": "Rocket.Chat",
   "identifier": "com.example.electron-boilerplate",
   "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
   "version": "0.1.0",
-  "author": "Mr Gumby <gumby@sillywalks.com>",
+  "author": "Rocket.Chat Support <support@rocket.chat>",
   "main": "main.js",
   "config": {
     "target": "development"
