@@ -14,9 +14,10 @@ var mainWindowState = windowStateKeeper('main', {
     height: 600
 });
 
-app.on('ready', function () {
+app.on('ready', function() {
 
     mainWindow = new BrowserWindow({
+        "node-integration": false,
         x: mainWindowState.x,
         y: mainWindowState.y,
         width: mainWindowState.width,
@@ -34,11 +35,11 @@ app.on('ready', function () {
         mainWindow.openDevTools();
     }
 
-    mainWindow.on('close', function () {
+    mainWindow.on('close', function() {
         mainWindowState.saveState(mainWindow);
     });
 });
 
-app.on('window-all-closed', function () {
+app.on('window-all-closed', function() {
     app.quit();
 });
