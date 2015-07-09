@@ -1,13 +1,10 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="utf-8">
     <title>Rocket.Chat</title>
     <meta charset="utf-8" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta http-equiv="expires" content="-1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="fragment" content="!" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <link rel="stylesheet" type="text/css" href="stylesheets/base.css">
     <script src="vendor/require.js"></script>
@@ -23,7 +20,7 @@
     <section class="landing-page">
         <div class="wrapper">
             <header>
-                <a class="logo" href="/">
+                <a class="logo">
                     <img src="images/logo/logo.svg" />
                 </a>
             </header>
@@ -31,29 +28,27 @@
                 <header>
                     <h2>Enter your host url</h2>
                 </header>
-                
                 <div class="fields">
                     <div class="input-text active">
-                        <input autofocus type="url" name="host" placeholder="https://rocket.chat/home" dir="auto">
+                        <input type="text" name="host" placeholder="https://rocket.chat/home" dir="auto" required>
                     </div>
                 </div>
                 <div class="submit">
-                    <button data-loading-text="Please wait..." class="button primary login"><span>Set up</span></button>
+                    <input type="submit" data-loading-text="Connecting..." class="button primary login" value="Connect"></input>
                 </div>
             </form>
             <footer>
                 <div class="social">
                     <nav>
-                        <a target="_blank" class="button share twitter" href="https://twitter.com/RocketChatApp"><i class="icon-twitter"></i><span>Twitter</span></a>
-                        <a target="_blank" class="button share facebook" href="https://www.facebook.com/RocketChatApp"><i class="icon-facebook"></i><span>Facebook</span></a>
-                        <a target="_blank" class="button share google" href="https://plus.google.com/+RocketChatApp"><i class="icon-gplus"></i><span>Google Plus</span></a>
-                        <a target="_blank" class="button share github" href="https://github.com/RocketChat/Rocket.Chat"><i class="icon-github-circled"></i><span>Github</span></a>
-                        <a target="_blank" class="button share linkedin" href="https://www.linkedin.com/company/rocket-chat"><i class="icon-linkedin"></i><span>LinkedIn</span></a>
+                        <a target="_system" class="button share twitter" href="https://twitter.com/RocketChatApp"><i class="icon-twitter"></i><span>Twitter</span></a>
+                        <a target="_system" class="button share facebook" href="https://www.facebook.com/RocketChatApp"><i class="icon-facebook"></i><span>Facebook</span></a>
+                        <a target="_system" class="button share google" href="https://plus.google.com/+RocketChatApp"><i class="icon-gplus"></i><span>Google Plus</span></a>
+                        <a target="_system" class="button share github" href="https://github.com/RocketChat/Rocket.Chat"><i class="icon-github-circled"></i><span>Github</span></a>
+                        <a target="_system" class="button share linkedin" href="https://www.linkedin.com/company/rocket-chat"><i class="icon-linkedin"></i><span>LinkedIn</span></a>
                     </nav>
                 </div>
-                <a href="http://meteor.com" target="_blank" title="Proudly developed with Meteor" class="meteor">Proudly developed with Meteor</a>
-                <a class="github-fork" target="_blank" href="https://github.com/RocketChat/Rocket.Chat">Fork it on github</a>
-                
+                <a href="http://meteor.com" target="_system" title="Proudly developed with Meteor" class="meteor">Proudly developed with Meteor</a>
+                <a class="github-fork" target="_system" href="https://github.com/RocketChat/Rocket.Chat">Fork it on github</a>
             </footer>
             <div id="particles-js"></div>
         </div>

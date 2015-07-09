@@ -72,6 +72,13 @@ function appReady() {
         mainWindow.show();
     });
 
+    mainWindow.webContents.on('new-window', function(ev, url, target) {
+        if (target == '_system') {
+            ev.preventDefault();
+            require('shell').openExternal(url);
+        }
+    });
+
     if (env.name === 'development') {
         devHelper.setDevMenu();
         mainWindow.openDevTools();
