@@ -79,11 +79,12 @@ function appReady() {
 
     mainWindow.on('close', function(event) {
         mainWindowState.saveState(mainWindow);
-        if (willQuit == true) {
-            return
+        if (willQuit !== true && process.platform === 'darwin') {
+            event.preventDefault();
+            mainWindow.hide();
+        } else {
+            mainWindow = null;
         }
-        event.preventDefault();
-        mainWindow.hide();
     });
 
 };
