@@ -37,6 +37,12 @@ app.on('activate-with-no-open-windows', function() {
     }
 });
 
+var willQuit = false;
+
+app.on('before-quit', function() {
+    willQuit = true;
+});
+
 app.on('ready', appReady);
 
 function appReady() {
@@ -70,6 +76,9 @@ function appReady() {
 
     mainWindow.on('close', function(event) {
         mainWindowState.saveState(mainWindow);
+        if (willQuit == true) {
+            return
+        }
         event.preventDefault();
         mainWindow.hide();
     });
