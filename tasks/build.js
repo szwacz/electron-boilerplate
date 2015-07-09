@@ -29,6 +29,9 @@ var paths = {
         'app/node_modules/**',
         'app/bower_components/**',
         'app/vendor/**',
+        'app/images/**',
+        'app/stylesheets/**/*.css',
+        'app/fonts/**',
         'app/**/*.html'
     ],
 }
@@ -69,7 +72,7 @@ gulp.task('transpile-watch', transpileTask);
 
 
 var lessTask = function () {
-    return gulp.src('app/stylesheets/main.less')
+    return gulp.src('app/stylesheets/base.less')
     .pipe(less())
     .pipe(gulp.dest(destDir.path('stylesheets')));
 };
