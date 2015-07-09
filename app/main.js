@@ -45,9 +45,8 @@ app.on('before-quit', function() {
 
 app.on('ready', appReady);
 
-function appReady() {
-
-    mainWindow = new BrowserWindow({
+function initWindow() {
+    var win = new BrowserWindow({
         "title": APP_NAME,
         "node-integration": false,
         "accept-first-mouse": true,
@@ -63,8 +62,34 @@ function appReady() {
     });
 
     if (mainWindowState.isMaximized) {
-        mainWindow.maximize();
+        win.maximize();
     }
+
+    win.on('close', function(event) {
+        mainWindowState.saveState(mainWindow);
+        if (willQuit !== true && process.platform === 'darwin') {
+            event.preventDefault();
+            win.hide();
+        }
+    });
+
+    return win;
+}
+
+function appReady() {
+
+    var appWindow = initWindow();
+    appWindow.hide();
+    appWindow.webContents.on('did-finish-load', function() {
+        //prevent flicker workaround
+        mainWindow.setAlwaysOnTop(true);
+        appWindow.show();
+        setTimeout(function() {
+            mainWindow.close();
+        }, 100);
+    });
+
+    mainWindow = initWindow();
 
     mainWindow.loadUrl(INDEX);
 
@@ -76,6 +101,9 @@ function appReady() {
         if (target == '_system') {
             ev.preventDefault();
             require('shell').openExternal(url);
+        } else if (target == '_blank') {
+            ev.preventDefault();
+            appWindow.loadUrl(url);
         }
     });
 
@@ -83,16 +111,6 @@ function appReady() {
         devHelper.setDevMenu();
         mainWindow.openDevTools();
     }
-
-    mainWindow.on('close', function(event) {
-        mainWindowState.saveState(mainWindow);
-        if (willQuit !== true && process.platform === 'darwin') {
-            event.preventDefault();
-            mainWindow.hide();
-        } else {
-            mainWindow = null;
-        }
-    });
 
 };
 

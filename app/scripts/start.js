@@ -1,10 +1,29 @@
 (function() {
     var key = 'rocket.chat.host';
 
+    //init loader
+    var loader = document.querySelector('.loader');
+    if (loader) {
+        var src = loader.getAttribute('data-src');
+        var http = new XMLHttpRequest();
+        http.open('GET', src);
+        http.onreadystatechange = function() {
+            if (this.readyState == this.DONE) {
+                if (this.response) {
+                    loader.innerHTML = this.response;
+                }
+            }
+        };
+        http.send();
+    }
+
     var url = localStorage.getItem(key);
+    console.debug(url);
     if (url) {
+        document.body.classList.add('connecting');
         // redirect to host
         redirect(url);
+        return;
     }
 
     var form = document.querySelector('form');
@@ -22,6 +41,7 @@
             if (check) {
                 console.debug('url found!');
                 localStorage.setItem(key, url);
+                document.body.classList.add('connecting');
                 // redirect to host
                 redirect(url);
             } else {
@@ -45,7 +65,7 @@
     }
 
     function redirect(url) {
-        window.location.href = url;
+        window.open(url, '_blank');
     }
 
 })();
