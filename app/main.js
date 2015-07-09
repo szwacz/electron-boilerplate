@@ -48,15 +48,18 @@ app.on('ready', appReady);
 function appReady() {
 
     mainWindow = new BrowserWindow({
-        title: APP_NAME,
+        "title": APP_NAME,
         "node-integration": false,
-        'accept-first-mouse': true,
-        show: false,
-        x: mainWindowState.x,
-        y: mainWindowState.y,
-        width: mainWindowState.width,
-        height: mainWindowState.height,
-        preload: path.resolve(path.join(__dirname, 'preload.js'))
+        "accept-first-mouse": true,
+        "show": false,
+        "x": mainWindowState.x,
+        "y": mainWindowState.y,
+        "width": mainWindowState.width,
+        "height": mainWindowState.height,
+        "preload": path.resolve(path.join(__dirname, 'preload.js')),
+        "web-preferences": {
+            "web-security": false
+        }
     });
 
     if (mainWindowState.isMaximized) {
