@@ -2,7 +2,11 @@
 
 Rocket.Chat Native Cross-Platform Desktop Application via Electron
 
-Contributions
+#### Downloads
+
+Follow the link to [download the installer](https://github.com/RocketChat/Rocket.Chat.Electron/releases)
+
+#### Contributions
 
 Useful resources for creating apps with Electron
 
