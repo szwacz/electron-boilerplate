@@ -48,15 +48,18 @@ app.on('ready', appReady);
 function appReady() {
 
     mainWindow = new BrowserWindow({
-        title: APP_NAME,
+        "title": APP_NAME,
         "node-integration": false,
-        'accept-first-mouse': true,
-        show: false,
-        x: mainWindowState.x,
-        y: mainWindowState.y,
-        width: mainWindowState.width,
-        height: mainWindowState.height,
-        preload: path.resolve(path.join(__dirname, 'preload.js'))
+        "accept-first-mouse": true,
+        "show": false,
+        "x": mainWindowState.x,
+        "y": mainWindowState.y,
+        "width": mainWindowState.width,
+        "height": mainWindowState.height,
+        "preload": path.resolve(path.join(__dirname, 'preload.js')),
+        "web-preferences": {
+            "web-security": false
+        }
     });
 
     if (mainWindowState.isMaximized) {
@@ -76,11 +79,12 @@ function appReady() {
 
     mainWindow.on('close', function(event) {
         mainWindowState.saveState(mainWindow);
-        if (willQuit == true) {
-            return
+        if (willQuit !== true && process.platform === 'darwin') {
+            event.preventDefault();
+            mainWindow.hide();
+        } else {
+            mainWindow = null;
         }
-        event.preventDefault();
-        mainWindow.hide();
     });
 
 };
@@ -99,5 +103,7 @@ ipc.on('unread-changed', function(event, unread) {
     if (unread == null) {
         unread = '';
     }
-    app.dock.setBadge(String(unread));
+    if (process.platform === 'darwin') {
+        app.dock.setBadge(String(unread));
+    }
 });

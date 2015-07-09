@@ -3,30 +3,60 @@
 <head>
     <meta charset="utf-8">
     <title>Rocket.Chat</title>
-
-    <link href="./stylesheets/main.css" rel="stylesheet" type="text/css">
-
-    <script src="vendor/electron_boilerplate/env_config.js"></script>
-    <script src="vendor/electron_boilerplate/context_menu.js"></script>
-    <script src="vendor/electron_boilerplate/external_links.js"></script>
-
+    <meta charset="utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="expires" content="-1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="fragment" content="!" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/base.css">
     <script src="vendor/require.js"></script>
-    <script>
-        requirejs(['app'], function (app) {});
+    <script type="text/javascript">
+        // Uncomment the script below to clear the storage
+        // localStorage.clear();
     </script>
-
+    <script type="text/javascript">
+        requirejs(['scripts/start'], function (app) {});
+    </script>
 </head>
 <body>
-
-    <div class="container">
-        <h1 id="greet"></h1>
-        <p class="subtitle">
-            Welcome to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this magnificent <strong id="platform-info"></strong> machine.
-        </p>
-        <p class="subtitle">
-            You are in <strong id="env-name"></strong> environment.
-        </p>
-    </div>
-
+    <section class="landing-page">
+        <div class="wrapper">
+            <header>
+                <a class="logo" href="/">
+                    <img src="images/logo/logo.svg" />
+                </a>
+            </header>
+            <form id="login-card" method="/">
+                <header>
+                    <h2>Enter your host url</h2>
+                </header>
+                
+                <div class="fields">
+                    <div class="input-text active">
+                        <input autofocus type="url" name="host" placeholder="https://rocket.chat/home" dir="auto">
+                    </div>
+                </div>
+                <div class="submit">
+                    <button data-loading-text="Please wait..." class="button primary login"><span>Set up</span></button>
+                </div>
+            </form>
+            <footer>
+                <div class="social">
+                    <nav>
+                        <a target="_blank" class="button share twitter" href="https://twitter.com/RocketChatApp"><i class="icon-twitter"></i><span>Twitter</span></a>
+                        <a target="_blank" class="button share facebook" href="https://www.facebook.com/RocketChatApp"><i class="icon-facebook"></i><span>Facebook</span></a>
+                        <a target="_blank" class="button share google" href="https://plus.google.com/+RocketChatApp"><i class="icon-gplus"></i><span>Google Plus</span></a>
+                        <a target="_blank" class="button share github" href="https://github.com/RocketChat/Rocket.Chat"><i class="icon-github-circled"></i><span>Github</span></a>
+                        <a target="_blank" class="button share linkedin" href="https://www.linkedin.com/company/rocket-chat"><i class="icon-linkedin"></i><span>LinkedIn</span></a>
+                    </nav>
+                </div>
+                <a href="http://meteor.com" target="_blank" title="Proudly developed with Meteor" class="meteor">Proudly developed with Meteor</a>
+                <a class="github-fork" target="_blank" href="https://github.com/RocketChat/Rocket.Chat">Fork it on github</a>
+                
+            </footer>
+            <div id="particles-js"></div>
+        </div>
+    </section>
 </body>
 </html>

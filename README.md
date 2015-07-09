@@ -1,8 +1,12 @@
-# Rocket.Chat DesktopApp
+![Rocket.Chat logo](https://rocket.chat/images/logo/logo-dark.svg?v2)
 
-Native Cross-Platform Desktop Application via Electron
+Rocket.Chat Native Cross-Platform Desktop Application via Electron
 
-Contributions
+#### Downloads
+
+Follow the link to [download the installer](https://github.com/RocketChat/Rocket.Chat.Electron/releases)
+
+#### Contributions
 
 Useful resources for creating apps with Electron
 
@@ -21,7 +25,7 @@ npm start
 
 # Structure of the project
 
-There are **two** `package.json` files:  
+There are **two** `package.json` files:
 
 #### 1. For development
 Sits on path: `Rocket.Chat.Electron/package.json`. Here you declare dependencies for your development environment and build scripts. **This file is not distributed with real application!**
