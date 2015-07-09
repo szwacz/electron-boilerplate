@@ -32,6 +32,8 @@ app.on('window-all-closed', function() {
 app.on('activate-with-no-open-windows', function() {
     if (!mainWindow) {
         appReady();
+    } else {
+        mainWindow.show();
     }
 });
 
@@ -66,9 +68,10 @@ function appReady() {
         mainWindow.openDevTools();
     }
 
-    mainWindow.on('close', function() {
+    mainWindow.on('close', function(event) {
         mainWindowState.saveState(mainWindow);
-        mainWindow = null;
+        event.preventDefault();
+        mainWindow.hide();
     });
 
 };
