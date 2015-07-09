@@ -1,6 +1,6 @@
 global.IPC = require('ipc')
 
-var events = ['set-badge'];
+var events = ['unread-changed'];
 
 events.forEach(function(e) {
 	window.addEventListener(e, function(event) {

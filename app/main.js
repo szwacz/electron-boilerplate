@@ -83,6 +83,9 @@ ipc.on('open-dev', function(event, arg) {
     mainWindow.openDevTools();
 });
 
-ipc.on('set-badge', function(event, arg) {
-    app.dock.setBadge(String(arg));
+ipc.on('unread-changed', function(event, unread) {
+    if (unread == null) {
+        unread = '';
+    }
+    app.dock.setBadge(String(unread));
 });
