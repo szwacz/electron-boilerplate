@@ -3,7 +3,7 @@
   "productName": "Rocket.Chat",
   "identifier": "com.example.rocketchat",
   "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "author": "Rocket.Chat Support <support@rocket.chat>",
   "main": "main.js",
   "config": {
