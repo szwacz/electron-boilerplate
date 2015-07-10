@@ -7,3 +7,5 @@ events.forEach(function(e) {
 		IPC.send(e, event.detail);
 	});
 });
+
+require('./menus');

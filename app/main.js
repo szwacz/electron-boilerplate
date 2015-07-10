@@ -73,6 +73,11 @@ function initWindow() {
         }
     });
 
+    if (env.name === 'development') {
+        devHelper.setDevMenu();
+        win.openDevTools();
+    }
+
     return win;
 }
 
@@ -106,11 +111,6 @@ function appReady() {
             appWindow.loadUrl(url);
         }
     });
-
-    if (env.name === 'development') {
-        devHelper.setDevMenu();
-        mainWindow.openDevTools();
-    }
 
 };
 
