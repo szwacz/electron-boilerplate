@@ -3,7 +3,7 @@
   "productName": "Rocket.Chat",
   "identifier": "com.example.rocketchat",
   "description": "Rocket.Chat Native Cross-Platform Desktop Application via Electron.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Rocket.Chat Support <support@rocket.chat>",
   "main": "main.js",
   "config": {
