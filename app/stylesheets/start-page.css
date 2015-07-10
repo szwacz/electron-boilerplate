@@ -2,14 +2,27 @@
     display: none;
 }
 
-.connecting .loader {
+.connecting .loader,
+.offline .loader {
     display: block;
 }
 
 .connecting header,
 .connecting form,
-.connecting .social {
+.connecting .social,
+.offline header,
+.offline form,
+.offline .social {
     display: none;
+}
+
+body:not(.offline) .only-offline {
+    display: none;
+}
+
+.loader span {
+    color: #FFF;
+    font-size: 1.4em;
 }
 
 .wrong {
