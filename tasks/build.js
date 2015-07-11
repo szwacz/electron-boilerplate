@@ -32,6 +32,7 @@ var paths = {
         'app/bower_components/**',
         'app/vendor/**',
         'app/images/**',
+        'app/icons/**',
         'app/stylesheets/**/*.css',
         'app/fonts/**',
         'app/**/*.html'

@@ -4,6 +4,8 @@ var app = require('app');
 var ipc = require('ipc');
 var path = require('path');
 var BrowserWindow = require('browser-window');
+var Tray = require('tray');
+var Menu = require('menu');
 var env = require('./vendor/electron_boilerplate/env_config');
 var devHelper = require('./vendor/electron_boilerplate/dev_helper');
 var windowStateKeeper = require('./vendor/electron_boilerplate/window_state');
@@ -13,7 +15,8 @@ var APP_NAME = 'Rocket.Chat';
 var INDEX = 'https://rocket.chat/home';
 // var INDEX = 'file://' + path.join( __dirname, 'app.html' );
 
-// Create main window and prevent window being GC'd
+let trayIcon;
+let flagQuitApp = false;
 let mainWindow;
 
 // Preserver of the window size and position between app launches.
@@ -24,8 +27,8 @@ var mainWindowState = windowStateKeeper('main', {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
-    if (process.platform != 'darwin') {
-        app.quit();
+    if (process.platform !== 'darwin') {
+        quit();
     }
 });
 
@@ -47,31 +50,25 @@ app.on('ready', appReady);
 
 function initWindow() {
     var win = new BrowserWindow({
-        "title": APP_NAME,
-        "node-integration": false,
-        "accept-first-mouse": true,
-        "show": false,
-        "x": mainWindowState.x,
-        "y": mainWindowState.y,
-        "width": mainWindowState.width,
-        "height": mainWindowState.height,
-        "preload": path.resolve(path.join(__dirname, 'preload.js')),
-        "web-preferences": {
-            "web-security": false
+        'title': APP_NAME,
+        // Standard icon looks somehow very thin in the taskbar
+        'icon': path.resolve(path.join(__dirname, 'icons', 'tray', 'icon-tray.png')),
+        'node-integration': false,
+        'accept-first-mouse': true,
+        'show': false,
+        'x': mainWindowState.x,
+        'y': mainWindowState.y,
+        'width': mainWindowState.width,
+        'height': mainWindowState.height,
+        'preload': path.resolve(path.join(__dirname, 'preload.js')),
+        'web-preferences': {
+            'web-security': false
         }
     });
 
     if (mainWindowState.isMaximized) {
         win.maximize();
     }
-
-    win.on('close', function(event) {
-        mainWindowState.saveState(mainWindow);
-        if (willQuit !== true && process.platform === 'darwin') {
-            event.preventDefault();
-            win.hide();
-        }
-    });
 
     if (env.name === 'development') {
         devHelper.setDevMenu();
@@ -82,8 +79,9 @@ function initWindow() {
 }
 
 function appReady() {
-
-    var appWindow = initWindow();
+    let appWindow;
+    trayIcon = createAppTray();
+    appWindow = initWindow();
     appWindow.hide();
     appWindow.webContents.on('did-finish-load', function() {
         //prevent flicker workaround
@@ -95,40 +93,92 @@ function appReady() {
     });
 
     mainWindow = initWindow();
-
     mainWindow.loadUrl(INDEX);
+
+    mainWindow.on('close', function(event) {
+        if (mainWindow !== null && !flagQuitApp) {
+            showMainWindow(false);
+            event.preventDefault();
+        } else {
+           mainWindowState.saveState(mainWindow);
+           // Close app window as well that "window-all-closed" gets triggered
+           appWindow.close();
+        }
+    });
+
+    mainWindow.on('closed', function() {
+        mainWindow = null;
+    });
 
     mainWindow.webContents.on('did-finish-load', function() {
         mainWindow.show();
     });
 
     mainWindow.webContents.on('new-window', function(ev, url, target) {
-        if (target == '_system') {
+        if (target === '_system') {
             ev.preventDefault();
             require('shell').openExternal(url);
-        } else if (target == '_blank') {
+        } else if (target === '_blank') {
             ev.preventDefault();
             appWindow.loadUrl(url);
         }
     });
+}
 
-};
+function createAppTray() {
+    let trayIcon = new Tray(path.join(__dirname, 'icons', 'tray', 'icon-tray.png'));
+    var contextMenu = Menu.buildFromTemplate([
+        { label: 'Hide', click: function() { showMainWindow(false); }},
+        { label: 'Show', click: function() { showMainWindow(true); }},
+        { label: 'Quit', click: function() { doQuit(); }}
+    ]);
+    trayIcon.setToolTip('Rocket.Chat');
+    trayIcon.setContextMenu(contextMenu);
+    return trayIcon;
+}
 
-// Custom function
-ipc.on('message', function(event, arg) {
-    console.log(arg); // prints "ping"
-    event.returnValue = 'pong';
-});
+function doQuit() {
+    if (!flagQuitApp) {
+        flagQuitApp = true;
+        if (mainWindow) {
+            mainWindow.close();
+        }
+    }
+}
 
-ipc.on('open-dev', function(event, arg) {
+function quit() {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+}
+
+function showMainWindow(show) {
+    if (mainWindow !== null) {
+        if (show) {
+            mainWindow.restore();
+            mainWindow.setSkipTaskbar(false);
+        } else {
+            mainWindow.minimize();
+            mainWindow.setSkipTaskbar(true);
+        }
+    }
+}
+
+ipc.on('open-dev', function() {
     mainWindow.openDevTools();
 });
 
 ipc.on('unread-changed', function(event, unread) {
-    if (unread == null) {
-        unread = '';
-    }
+    let showAlert = (unread !== null && unread !== undefined && unread !== '');
     if (process.platform === 'darwin') {
-        app.dock.setBadge(String(unread));
+        app.dock.setBadge(String(unread || ''));
+    }
+    if (mainWindow !== null) {
+        mainWindow.flashFrame(showAlert);
+        if (showAlert) {
+            trayIcon.setImage(path.join(__dirname, 'icons', 'tray', 'icon-tray-alert.png'));
+        } else {
+            trayIcon.setImage(path.join(__dirname, 'icons', 'tray', 'icon-tray.png'));
+        }
     }
 });
