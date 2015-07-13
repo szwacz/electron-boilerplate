@@ -4,18 +4,16 @@ var app = require('app');
 var ipc = require('ipc');
 var path = require('path');
 var BrowserWindow = require('browser-window');
-var Tray = require('tray');
-var Menu = require('menu');
 var env = require('./vendor/electron_boilerplate/env_config');
 var devHelper = require('./vendor/electron_boilerplate/dev_helper');
 var windowStateKeeper = require('./vendor/electron_boilerplate/window_state');
+var tray = require('./tray');
 
 // global variable
 var APP_NAME = 'Rocket.Chat';
 var INDEX = 'https://rocket.chat/home';
 // var INDEX = 'file://' + path.join( __dirname, 'app.html' );
 
-let trayIcon;
 let flagQuitApp = false;
 let mainWindow;
 
@@ -27,6 +25,7 @@ var mainWindowState = windowStateKeeper('main', {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
+    tray.destroy();
     if (process.platform !== 'darwin') {
         quit();
     }
@@ -80,7 +79,7 @@ function initWindow() {
 
 function appReady() {
     let appWindow;
-    trayIcon = createAppTray();
+
     appWindow = initWindow();
     appWindow.hide();
     appWindow.webContents.on('did-finish-load', function() {
@@ -95,13 +94,15 @@ function appReady() {
     mainWindow = initWindow();
     mainWindow.loadUrl(INDEX);
 
+    tray.createAppTray(mainWindow);
+    tray.bindOnQuit(onQuitApp);
+
     mainWindow.on('close', function(event) {
         if (mainWindow !== null && !flagQuitApp) {
-            showMainWindow(false);
+            tray.minimizeMainWindow();
             event.preventDefault();
         } else {
            mainWindowState.saveState(mainWindow);
-           // Close app window as well that "window-all-closed" gets triggered
            appWindow.close();
         }
     });
@@ -125,19 +126,7 @@ function appReady() {
     });
 }
 
-function createAppTray() {
-    let trayIcon = new Tray(path.join(__dirname, 'icons', 'tray', 'icon-tray.png'));
-    var contextMenu = Menu.buildFromTemplate([
-        { label: 'Hide', click: function() { showMainWindow(false); }},
-        { label: 'Show', click: function() { showMainWindow(true); }},
-        { label: 'Quit', click: function() { doQuit(); }}
-    ]);
-    trayIcon.setToolTip('Rocket.Chat');
-    trayIcon.setContextMenu(contextMenu);
-    return trayIcon;
-}
-
-function doQuit() {
+function onQuitApp() {
     if (!flagQuitApp) {
         flagQuitApp = true;
         if (mainWindow) {
@@ -152,18 +141,6 @@ function quit() {
     }
 }
 
-function showMainWindow(show) {
-    if (mainWindow !== null) {
-        if (show) {
-            mainWindow.restore();
-            mainWindow.setSkipTaskbar(false);
-        } else {
-            mainWindow.minimize();
-            mainWindow.setSkipTaskbar(true);
-        }
-    }
-}
-
 ipc.on('open-dev', function() {
     mainWindow.openDevTools();
 });
@@ -173,12 +150,5 @@ ipc.on('unread-changed', function(event, unread) {
     if (process.platform === 'darwin') {
         app.dock.setBadge(String(unread || ''));
     }
-    if (mainWindow !== null) {
-        mainWindow.flashFrame(showAlert);
-        if (showAlert) {
-            trayIcon.setImage(path.join(__dirname, 'icons', 'tray', 'icon-tray-alert.png'));
-        } else {
-            trayIcon.setImage(path.join(__dirname, 'icons', 'tray', 'icon-tray.png'));
-        }
-    }
+    tray.showTrayAlert(showAlert);
 });
