@@ -87,6 +87,10 @@ var createInstaller = function () {
     ], {
         stdio: 'inherit'
     });
+    nsis.on('error', function () {
+        gulpUtil.log("NSIS script failed. Are you sure you've "
+            + "installed NSIS and added it to PATH environment variable?");
+    });
     nsis.on('close', function () {
         gulpUtil.log('Installer ready!', releasesDir.path(finalPackageName));
         deferred.resolve();
