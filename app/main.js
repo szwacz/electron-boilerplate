@@ -160,5 +160,5 @@ ipc.on('unread-changed', function(event, unread) {
     if (process.platform === 'darwin') {
         app.dock.setBadge(String(unread || ''));
     }
-    tray.showTrayAlert(showAlert);
+    tray.showTrayAlert(showAlert, String(unread));
 });

@@ -49,13 +49,19 @@ function doQuit() {
     }
 }
 
-function showTrayAlert(showAlert) {
+function showTrayAlert(showAlert, title) {
     if ((_tray !== null && _tray !== undefined) && (_mainWindow !== null && _mainWindow !== undefined)) {
         _mainWindow.flashFrame(showAlert);
         if (showAlert) {
             _tray.setImage(_iconTrayAlert);
+            if (process.platform == 'darwin') {
+                _tray.setTitle(title);
+            }
         } else {
             _tray.setImage(_iconTray);
+            if (process.platform == 'darwin') {
+                _tray.setTitle(' ');
+            }
         }
     }
 }
