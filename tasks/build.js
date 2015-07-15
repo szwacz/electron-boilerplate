@@ -19,6 +19,7 @@ var paths = {
         '!app/preload.js',
         '!app/menus.js',
         '!app/spec.js',
+        '!app/tray.js',
         '!app/node_modules/**',
         '!app/bower_components/**',
         '!app/vendor/**'
@@ -28,10 +29,12 @@ var paths = {
         'app/preload.js',
         'app/menus.js',
         'app/spec.js',
+        'app/tray.js',
         'app/node_modules/**',
         'app/bower_components/**',
         'app/vendor/**',
         'app/images/**',
+        'app/icons/**',
         'app/stylesheets/**/*.css',
         'app/fonts/**',
         'app/**/*.html'
