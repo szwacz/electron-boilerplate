@@ -16,7 +16,7 @@ if (process.platform !== 'darwin') {
     _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'icon-tray-alert.png');
 } else {
     // OS X
-    _iconTray = path.join(__dirname, 'icons', 'tray', 'darwin', 'icon-tray.png');
+    _iconTray = path.join(__dirname, 'icons', 'tray', 'darwin', 'icon-trayTemplate.png');
     _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'darwin', 'icon-tray-alert.png');
 }
 
