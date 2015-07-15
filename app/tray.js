@@ -56,11 +56,12 @@ function showTrayAlert(showAlert, title) {
             _tray.setImage(_iconTrayAlert);
             if (process.platform == 'darwin') {
                 _tray.setTitle(title);
+                _tray.setTitle(title);
             }
         } else {
             _tray.setImage(_iconTray);
             if (process.platform == 'darwin') {
-                _tray.setTitle(' ');
+                _tray.setTitle('');
             }
         }
     }
