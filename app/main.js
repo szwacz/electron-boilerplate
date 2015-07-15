@@ -25,7 +25,6 @@ var mainWindowState = windowStateKeeper('main', {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
-    tray.destroy();
     if (process.platform !== 'darwin') {
         quit();
     }
@@ -99,6 +98,7 @@ function appReady() {
 
     appWindow.on('close', function(event) {
         flagQuitApp = true;
+        tray.destroy();
     });
 
     mainWindow.on('close', function(event) {
