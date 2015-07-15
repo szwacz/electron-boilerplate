@@ -1,4 +1,4 @@
-![Rocket.Chat logo](https://rocket.chat/images/logo/logo-dark.svg?v2)
+![Rocket.Chat logo](https://rocket.chat/images/logo/logo-dark.svg?v3)
 
 Rocket.Chat Native Cross-Platform Desktop Application via Electron
 
