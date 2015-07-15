@@ -25,7 +25,6 @@ var mainWindowState = windowStateKeeper('main', {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
-    tray.destroy();
     if (process.platform !== 'darwin') {
         quit();
     }
@@ -97,13 +96,24 @@ function appReady() {
     tray.createAppTray(mainWindow);
     tray.bindOnQuit(onQuitApp);
 
+    appWindow.on('close', function(event) {
+        flagQuitApp = true;
+        tray.destroy();
+    });
+
+    appWindow.on('closed', function(event) {
+        appWindow = null;
+    });
+
     mainWindow.on('close', function(event) {
         if (mainWindow !== null && !flagQuitApp) {
             tray.minimizeMainWindow();
             event.preventDefault();
         } else {
            mainWindowState.saveState(mainWindow);
-           appWindow.close();
+           if (appWindow) {
+               appWindow.close();
+           }
         }
     });
 
@@ -150,5 +160,5 @@ ipc.on('unread-changed', function(event, unread) {
     if (process.platform === 'darwin') {
         app.dock.setBadge(String(unread || ''));
     }
-    tray.showTrayAlert(showAlert);
+    tray.showTrayAlert(showAlert, String(unread));
 });
