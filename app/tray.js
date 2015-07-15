@@ -22,7 +22,7 @@ if (process.platform === 'windows') {
 }
 
 function createAppTray(mainWindow) {
-    let _tray = new Tray(_iconTray);
+    _tray = new Tray(_iconTray);
     var contextMenu = Menu.buildFromTemplate([
         { label: 'Hide', click: function() { showMainWindow(false); }},
         { label: 'Show', click: function() { showMainWindow(true); }},
