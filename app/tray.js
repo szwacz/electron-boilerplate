@@ -31,6 +31,7 @@ function createAppTray(mainWindow) {
     _tray.setToolTip('Rocket.Chat');
     _tray.setContextMenu(contextMenu);
     _mainWindow = mainWindow;
+    _mainWindow.tray = _tray;
 }
 
 function destroy() {
