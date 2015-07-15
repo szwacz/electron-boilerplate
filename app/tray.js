@@ -10,12 +10,13 @@ let _callbackOnQuit;
 
 let _iconTray, _iconTrayAlert;
 
-if (process.platform !== 'darwin') {
-    // Linux, Windows
-    _iconTray = path.join(__dirname, 'icons', 'tray', 'icon-tray.png');
-    _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'icon-tray-alert.png');
-} else {
-    // OS X
+if (process.platform === 'windows') {
+    _iconTray = path.join(__dirname, 'icons', 'tray', 'windows', 'icon-tray.png');
+    _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'windows', 'icon-tray-alert.png');
+} else if (process.platform === 'linux') {
+    _iconTray = path.join(__dirname, 'icons', 'tray', 'linux', 'icon-tray.png');
+    _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'linux', 'icon-tray-alert.png');
+} else if (process.platform === 'darwin') {
     _iconTray = path.join(__dirname, 'icons', 'tray', 'darwin', 'icon-trayTemplate.png');
     _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'darwin', 'icon-tray-alert.png');
 }
