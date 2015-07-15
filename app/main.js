@@ -97,6 +97,10 @@ function appReady() {
     tray.createAppTray(mainWindow);
     tray.bindOnQuit(onQuitApp);
 
+    appWindow.on('close', function(event) {
+        flagQuitApp = true;
+    });
+
     mainWindow.on('close', function(event) {
         if (mainWindow !== null && !flagQuitApp) {
             tray.minimizeMainWindow();

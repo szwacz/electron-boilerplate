@@ -72,7 +72,11 @@ function showMainWindow(show) {
             _mainWindow.restore();
             _mainWindow.setSkipTaskbar(false);
         } else {
-            _mainWindow.minimize();
+            if (process.platform == 'darwin') {
+                _mainWindow.hide();
+            } else {
+                _mainWindow.minimize();
+            }
             _mainWindow.setSkipTaskbar(true);
         }
     }
