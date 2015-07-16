@@ -89,8 +89,8 @@ var createInstaller = function () {
     });
     nsis.on('error', function (err) {
         if (err.message === 'spawn makensis ENOENT') {
-            throw "NSIS script failed. Are you sure you've installed NSIS and"
-                + " added it to PATH environment variable?";
+            throw "Can't find NSIS. Are you sure you've installed it and"
+                + " added to PATH environment variable?";
         } else {
             throw err;
         }
