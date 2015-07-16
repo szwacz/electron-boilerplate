@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var less = require('gulp-less');
+var coffee = require('gulp-coffee');
 var esperanto = require('esperanto');
 var map = require('vinyl-map');
 var jetpack = require('fs-jetpack');
@@ -85,6 +86,16 @@ gulp.task('less', ['clean'], lessTask);
 gulp.task('less-watch', lessTask);
 
 
+var coffeeTask = function () {
+    return gulp.src('app/*.coffee')
+    .pipe(coffee({bare: true}))
+    .pipe(gulp.dest(destDir.path()));
+};
+gulp.task('coffee', ['clean'], coffeeTask);
+gulp.task('coffee-watch', coffeeTask);
+
+
+
 gulp.task('finalize', ['clean'], function () {
     var manifest = srcDir.read('package.json', 'json');
     switch (utils.getEnvName()) {
@@ -117,4 +128,4 @@ gulp.task('watch', function () {
 });
 
 
-gulp.task('build', ['transpile', 'less', 'copy', 'finalize']);
+gulp.task('build', ['transpile', 'less', 'coffee', 'copy', 'finalize']);
