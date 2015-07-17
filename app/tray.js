@@ -30,6 +30,27 @@ function createAppTray(mainWindow) {
     ]);
     _tray.setToolTip('Rocket.Chat');
     _tray.setContextMenu(contextMenu);
+
+    if (process.platform === 'darwin') {
+        _tray.on('double-clicked', function() {
+            toggleShowMainWindow();
+        });
+    } else {
+        let dblClickDelay = 500, dblClickTimeoutFct = null;
+        _tray.on('clicked', function() {
+            if (!dblClickTimeoutFct) {
+                dblClickTimeoutFct = setTimeout(function() {
+                    // Single click, do nothing for now
+                    dblClickTimeoutFct = null;
+                }, dblClickDelay);
+            } else {
+                clearTimeout(dblClickTimeoutFct);
+                dblClickTimeoutFct = null;
+                toggleShowMainWindow();
+            }
+        });
+    }
+
     _mainWindow = mainWindow;
     _mainWindow.tray = _tray;
 }
@@ -54,13 +75,13 @@ function showTrayAlert(showAlert, title) {
         _mainWindow.flashFrame(showAlert);
         if (showAlert) {
             _tray.setImage(_iconTrayAlert);
-            if (process.platform == 'darwin') {
+            if (process.platform === 'darwin') {
                 _tray.setTitle(title);
                 _tray.setTitle(title);
             }
         } else {
             _tray.setImage(_iconTray);
-            if (process.platform == 'darwin') {
+            if (process.platform === 'darwin') {
                 _tray.setTitle('');
             }
         }
@@ -75,17 +96,19 @@ function restoreMainWindow() {
     showMainWindow(true);
 }
 
+function toggleShowMainWindow() {
+    if (_mainWindow !== null && _mainWindow !== undefined) {
+        showMainWindow(_mainWindow.isMinimized());
+    }
+}
+
 function showMainWindow(show) {
     if (_mainWindow !== null && _mainWindow !== undefined) {
         if (show) {
             _mainWindow.restore();
             _mainWindow.setSkipTaskbar(false);
         } else {
-            if (process.platform == 'darwin') {
-                _mainWindow.hide();
-            } else {
-                _mainWindow.minimize();
-            }
+            _mainWindow.minimize();
             _mainWindow.setSkipTaskbar(true);
         }
     }
