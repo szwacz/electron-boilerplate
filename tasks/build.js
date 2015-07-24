@@ -21,13 +21,13 @@ var paths = {
         '!app/bower_components/**',
         '!app/vendor/**'
     ],
-    toCopy: [
-        'app/main.js',
-        'app/spec.js',
-        'app/node_modules/**',
-        'app/bower_components/**',
-        'app/vendor/**',
-        'app/**/*.html'
+    copyFromAppDir: [
+        './main.js',
+        './spec.js',
+        './node_modules/**',
+        './bower_components/**',
+        './vendor/**',
+        './**/*.html'
     ],
 }
 
@@ -43,7 +43,7 @@ gulp.task('clean', function(callback) {
 var copyTask = function () {
     return projectDir.copyAsync('app', destDir.path(), {
         overwrite: true,
-        matching: paths.toCopy
+        matching: paths.copyFromAppDir
     });
 };
 gulp.task('copy', ['clean'], copyTask);
@@ -102,7 +102,7 @@ gulp.task('finalize', ['clean'], function () {
 
 gulp.task('watch', function () {
     gulp.watch(paths.jsCodeToTranspile, ['transpile-watch']);
-    gulp.watch(paths.toCopy, ['copy-watch']);
+    gulp.watch(paths.copyFromAppDir, { cwd: 'app' }, ['copy-watch']);
     gulp.watch('app/**/*.less', ['less-watch']);
 });
 

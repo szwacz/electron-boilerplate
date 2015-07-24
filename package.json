@@ -3,7 +3,7 @@
     "asar": "^0.7.2",
     "electron-prebuilt": "^0.28.3",
     "esperanto": "^0.7.2",
-    "fs-jetpack": "^0.6.5",
+    "fs-jetpack": "^0.7.0",
     "gulp": "^3.9.0",
     "gulp-less": "^3.0.3",
     "gulp-util": "^3.0.6",
