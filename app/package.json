@@ -3,13 +3,13 @@
   "productName": "Rocket.Chat",
   "identifier": "com.example.rocketchat",
   "description": "Rocket.Chat Native Cross-Platform Desktop Application via Electron.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Rocket.Chat Support <support@rocket.chat>",
   "main": "main.js",
   "config": {
     "target": "development"
   },
   "dependencies": {
-    "fs-jetpack": "^0.6.5"
+    "fs-jetpack": "^0.7.0"
   }
 }
