@@ -26,6 +26,12 @@ var copyRuntime = function () {
     return projectDir.copyAsync('node_modules/electron-prebuilt/dist/Electron.app', finalAppDir.path());
 };
 
+var cleanupRuntime = function() {
+    finalAppDir.remove('Contents/Resources/default_app');
+    finalAppDir.remove('Contents/Resources/atom.icns');
+    return Q();
+}
+
 var packageBuiltApp = function () {
     var deferred = Q.defer();
 
@@ -46,19 +52,32 @@ var finalize = function () {
     });
     finalAppDir.write('Contents/Info.plist', info);
 
-    // Prepare Info.plist of Helper app
-    info = projectDir.read('resources/osx/helper_app/Info.plist');
-    info = utils.replace(info, {
-        productName: manifest.productName,
-        identifier: manifest.identifier
+    // Prepare Info.plist of Helper apps
+    [' EH', ' NP', ''].forEach(function (helper_suffix) {
+        info = projectDir.read('resources/osx/helper_apps/Info' + helper_suffix + '.plist');
+        info = utils.replace(info, {
+            productName: manifest.productName,
+            identifier: manifest.identifier
+        });
+        finalAppDir.write('Contents/Frameworks/Electron Helper' + helper_suffix + '.app/Contents/Info.plist', info);
     });
-    finalAppDir.write('Contents/Frameworks/Electron Helper.app/Contents/Info.plist', info);
 
     // Copy icon
     projectDir.copy('resources/osx/icon.icns', finalAppDir.path('Contents/Resources/icon.icns'));
 
     return Q();
 };
+
+var renameApp = function() {
+    // Rename helpers
+    [' Helper EH', ' Helper NP', ' Helper'].forEach(function (helper_suffix) {
+        finalAppDir.rename('Contents/Frameworks/Electron' + helper_suffix + '.app/Contents/MacOS/Electron' + helper_suffix, manifest.productName + helper_suffix );
+        finalAppDir.rename('Contents/Frameworks/Electron' + helper_suffix + '.app', manifest.productName + helper_suffix + '.app');
+    });
+    // Rename application
+    finalAppDir.rename('Contents/MacOS/Electron', manifest.productName);
+    return Q();
+}
 
 var packToDmgFile = function () {
     var deferred = Q.defer();
@@ -104,8 +123,10 @@ var cleanClutter = function () {
 module.exports = function () {
     return init()
     .then(copyRuntime)
+    .then(cleanupRuntime)
     .then(packageBuiltApp)
     .then(finalize)
+    .then(renameApp)
     .then(packToDmgFile)
     .then(cleanClutter);
 };
