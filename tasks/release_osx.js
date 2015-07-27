@@ -26,6 +26,12 @@ var copyRuntime = function () {
     return projectDir.copyAsync('node_modules/electron-prebuilt/dist/Electron.app', finalAppDir.path());
 };
 
+var cleanupRuntime = function() {
+    finalAppDir.remove('Contents/Resources/default_app');
+    finalAppDir.remove('Contents/Resources/atom.icns');
+    return Q();
+}
+
 var packageBuiltApp = function () {
     var deferred = Q.defer();
 
@@ -104,6 +110,7 @@ var cleanClutter = function () {
 module.exports = function () {
     return init()
     .then(copyRuntime)
+    .then(cleanupRuntime)
     .then(packageBuiltApp)
     .then(finalize)
     .then(packToDmgFile)
