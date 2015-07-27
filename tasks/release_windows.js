@@ -63,6 +63,10 @@ var finalize = function () {
     return deferred.promise;
 };
 
+var renameApp = function() {
+    return readyAppDir.renameAsync('electron.exe', manifest.productName + '.exe');
+}
+
 var createInstaller = function () {
     var deferred = Q.defer();
 
@@ -117,6 +121,7 @@ module.exports = function () {
     .then(cleanupRuntime)
     .then(packageBuiltApp)
     .then(finalize)
+    .then(renameApp)
     .then(createInstaller)
     .then(cleanClutter);
 };
