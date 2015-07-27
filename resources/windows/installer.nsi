@@ -17,7 +17,7 @@
 !define setupIcon "{{setupIcon}}"
 !define banner "{{banner}}"
 
-!define exec "electron.exe"
+!define exec "{{productName}}.exe"
 
 !define regkey "Software\${productName}"
 !define uninstkey "Software\Microsoft\Windows\CurrentVersion\Uninstall\${productName}"
