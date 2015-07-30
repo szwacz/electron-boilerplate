@@ -9,8 +9,8 @@ var mainWindow;
 
 // Preserver of the window size and position between app launches.
 var mainWindowState = windowStateKeeper('main', {
-    width: 1000,
-    height: 600
+    width: 1024,
+    height: 768
 });
 
 app.on('ready', function () {
