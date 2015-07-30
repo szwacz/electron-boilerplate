@@ -85,11 +85,11 @@ template = [
 				accelerator: 'Command+R'
 				click: -> remote.getCurrentWindow().reload()
 			}
-			# {
-			#   label: 'Toggle DevTools'
-			#   accelerator: 'Alt+Command+I'
-			#   click: -> remote.getCurrentWindow().toggleDevTools();
-			# }
+			{
+				label: 'Toggle DevTools'
+				accelerator: 'Alt+Command+I'
+				click: -> remote.getCurrentWindow().toggleDevTools()
+			}
 		]
 	}
 	{
