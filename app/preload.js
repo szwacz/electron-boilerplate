@@ -37,3 +37,10 @@ var supportExternalLinks = function (e) {
 }
 
 document.addEventListener('click', supportExternalLinks, false);
+
+windowOpen = window.open;
+window.open = function() {
+	result = windowOpen.apply(this, arguments);
+	result.closed = false;
+	return result;
+}
