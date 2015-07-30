@@ -97,8 +97,10 @@ function appReady() {
     tray.bindOnQuit(onQuitApp);
 
     appWindow.on('close', function(event) {
-        flagQuitApp = true;
-        tray.destroy();
+        if (!flagQuitApp) {
+            flagQuitApp = true;
+            tray.destroy();
+        }
     });
 
     appWindow.on('closed', function(event) {
@@ -140,7 +142,7 @@ function onQuitApp() {
     if (!flagQuitApp) {
         flagQuitApp = true;
         if (mainWindow) {
-            mainWindow.close();
+            app.quit();
         }
     }
 }
