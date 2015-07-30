@@ -106,6 +106,7 @@ function showMainWindow(show) {
     if (_mainWindow !== null && _mainWindow !== undefined) {
         if (show) {
             _mainWindow.restore();
+            _mainWindow.show();
             _mainWindow.setSkipTaskbar(false);
         } else {
             _mainWindow.minimize();
