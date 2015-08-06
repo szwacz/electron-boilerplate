@@ -79,6 +79,12 @@ var renameApp = function() {
     return Q();
 }
 
+var signApp = function() {
+    // codesign --deep --force --verbose --sign "<identity>" Application.app
+    //finalAppDir.rename('Contents/MacOS/Electron', manifest.productName);
+    return Q();
+}
+
 var packToDmgFile = function () {
     var deferred = Q.defer();
 
@@ -127,6 +133,7 @@ module.exports = function () {
     .then(packageBuiltApp)
     .then(finalize)
     .then(renameApp)
+    .then(signApp)
     .then(packToDmgFile)
     .then(cleanClutter);
 };
