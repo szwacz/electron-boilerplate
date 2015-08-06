@@ -84,7 +84,7 @@ var signApp = function() {
     var deferred = Q.defer();
 
     gulpUtil.log('Signing file...');
-    childProcess.exec('codesign --deep --force --verbose --sign "Developer ID Application: Konecty Informatica Ltda (DX85ENM22A)" ' + finalAppDir.cwd(), function (error, stdout, stderr) {
+    childProcess.exec('codesign --deep --force --sign "Developer ID Application: Konecty Informatica Ltda (DX85ENM22A)" ' + finalAppDir.cwd(), function (error, stdout, stderr) {
         if (error || stderr) {
             console.log("ERROR while signing file");
             console.log(error);
