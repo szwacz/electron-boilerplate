@@ -1,7 +1,7 @@
 {
   "name": "rocketchat",
   "productName": "Rocket.Chat",
-  "identifier": "com.example.rocketchat",
+  "identifier": "chat.rocket",
   "description": "Rocket.Chat Native Cross-Platform Desktop Application via Electron.",
   "version": "0.0.5",
   "author": "Rocket.Chat Support <support@rocket.chat>",

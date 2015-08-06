@@ -80,8 +80,8 @@ var renameApp = function() {
 }
 
 var signApp = function() {
-    // codesign --deep --force --verbose --sign "<identity>" Application.app
-    //finalAppDir.rename('Contents/MacOS/Electron', manifest.productName);
+    gulpUtil.log('Signing file...');
+    gulpUtil.log('codesign --deep --force --verbose --sign "Developer ID Application: Konecty Informatica Ltda (DX85ENM22A)" ' + finalAppDir.cwd());
     return Q();
 }
 
