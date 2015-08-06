@@ -94,7 +94,7 @@ var signApp = function() {
         }
         deferred.resolve();
     });
-    return Q();
+    return deferred.promise;
 }
 
 var packToDmgFile = function () {
