@@ -59,6 +59,10 @@ var finalize = function () {
     return Q();
 };
 
+var renameApp = function() {
+    return projectDir.moveAsync(readyAppDir.path("electron"), readyAppDir.path(manifest.name));
+};
+
 var packToDebFile = function () {
     var deferred = Q.defer();
 
@@ -106,6 +110,7 @@ module.exports = function () {
     .then(copyRuntime)
     .then(packageBuiltApp)
     .then(finalize)
+    .then(renameApp)
     .then(packToDebFile)
     .then(cleanClutter);
 };
