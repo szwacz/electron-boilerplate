@@ -60,7 +60,7 @@ var finalize = function () {
 };
 
 var renameApp = function() {
-    return projectDir.moveAsync(readyAppDir.path("electron"), readyAppDir.path(manifest.name));
+    return readyAppDir.renameAsync("electron", manifest.name);
 };
 
 var packToDebFile = function () {
