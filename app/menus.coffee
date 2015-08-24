@@ -2,119 +2,159 @@
 
 remote = require 'remote'
 Menu = remote.require 'menu'
+app = remote.require 'app'
 APP_NAME = 'Rocket.Chat'
 
-template = [
-	{
-		label: APP_NAME
-		submenu: [
-			{
-				label: 'About ' + APP_NAME
-				selector: 'orderFrontStandardAboutPanel:'
-			}
-			{
-				type: 'separator'
-			}
-			{
-				label: 'Hide ' + APP_NAME
-				accelerator: 'Command+H'
-				selector: 'hide:'
-			}
-			{
-				label: 'Hide Others'
-				accelerator: 'Command+Shift+H'
-				selector: 'hideOtherApplications:'
-			}
-			{
-				label: 'Show All'
-				selector: 'unhideAllApplications:'
-			}
-			{
-				type: 'separator'
-			}
-			{
-				label: 'Quit'
-				accelerator: 'Command+Q'
-				selector: 'terminate:'
-			}
-		]
-	}
-	{
-		label: 'Edit'
-		submenu: [
-			{
-				label: 'Undo'
-				accelerator: 'Command+Z'
-				selector: 'undo:'
-			}
-			{
-				label: 'Redo'
-				accelerator: 'Shift+Command+Z'
-				selector: 'redo:'
-			}
-			{
-				type: 'separator'
-			}
-			{
-				label: 'Cut'
-				accelerator: 'Command+X'
-				selector: 'cut:'
-			}
-			{
-				label: 'Copy'
-				accelerator: 'Command+C'
-				selector: 'copy:'
-			}
-			{
-				label: 'Paste'
-				accelerator: 'Command+V'
-				selector: 'paste:'
-			}
-			{
-				label: 'Select All'
-				accelerator: 'Command+A'
-				selector: 'selectAll:'
-			}
-		]
-	}
-	{
-		label: 'View'
-		submenu: [
-			{
-				label: 'Reload'
-				accelerator: 'Command+R'
-				click: -> remote.getCurrentWindow().reload()
-			}
-			{
-				label: 'Toggle DevTools'
-				accelerator: 'Alt+Command+I'
-				click: -> remote.getCurrentWindow().toggleDevTools()
-			}
-		]
-	}
-	{
-		label: 'Window'
-		submenu: [
-			{
-				label: 'Minimize'
-				accelerator: 'Command+M'
-				selector: 'performMiniaturize:'
-			}
-			{
-				label: 'Close'
-				accelerator: 'Command+W'
-				selector: 'performClose:'
-			}
-			{
-				type: 'separator'
-			}
-			{
-				label: 'Bring All to Front'
-				selector: 'arrangeInFront:'
-			}
-		]
-	}
-]
+if process.platform is 'darwin'
+	template = [
+		{
+			label: APP_NAME
+			submenu: [
+				{
+					label: 'About ' + APP_NAME
+					selector: 'orderFrontStandardAboutPanel:'
+				}
+				{
+					type: 'separator'
+				}
+				{
+					label: 'Hide ' + APP_NAME
+					accelerator: 'CmdOrCtrl+H'
+					selector: 'hide:'
+				}
+				{
+					label: 'Hide Others'
+					accelerator: 'CmdOrCtrl+Shift+H'
+					selector: 'hideOtherApplications:'
+				}
+				{
+					label: 'Show All'
+					selector: 'unhideAllApplications:'
+				}
+				{
+					type: 'separator'
+				}
+				{
+					label: 'Quit'
+					accelerator: 'CmdOrCtrl+Q'
+					selector: 'terminate:'
+				}
+			]
+		}
+		{
+			label: 'Edit'
+			submenu: [
+				{
+					label: 'Undo'
+					accelerator: 'CmdOrCtrl+Z'
+					selector: 'undo:'
+				}
+				{
+					label: 'Redo'
+					accelerator: 'CmdOrCtrl+Shift+Z'
+					selector: 'redo:'
+				}
+				{
+					type: 'separator'
+				}
+				{
+					label: 'Cut'
+					accelerator: 'CmdOrCtrl+X'
+					selector: 'cut:'
+				}
+				{
+					label: 'Copy'
+					accelerator: 'CmdOrCtrl+C'
+					selector: 'copy:'
+				}
+				{
+					label: 'Paste'
+					accelerator: 'CmdOrCtrl+V'
+					selector: 'paste:'
+				}
+				{
+					label: 'Select All'
+					accelerator: 'CmdOrCtrl+A'
+					selector: 'selectAll:'
+				}
+			]
+		}
+		{
+			label: 'View'
+			submenu: [
+				{
+					label: 'Reload'
+					accelerator: 'CmdOrCtrl+R'
+					click: -> remote.getCurrentWindow().reload()
+				}
+				{
+					label: 'Toggle DevTools'
+					accelerator: 'CmdOrCtrl+Alt+I'
+					click: -> remote.getCurrentWindow().toggleDevTools()
+				}
+			]
+		}
+		{
+			label: 'Window'
+			submenu: [
+				{
+					label: 'Minimize'
+					accelerator: 'CmdOrCtrl+M'
+					selector: 'performMiniaturize:'
+				}
+				{
+					label: 'Close'
+					accelerator: 'CmdOrCtrl+W'
+					selector: 'performClose:'
+				}
+				{
+					type: 'separator'
+				}
+				{
+					label: 'Bring All to Front'
+					selector: 'arrangeInFront:'
+				}
+			]
+		}
+	]
+else
+	template = [
+		{
+			label: APP_NAME
+			submenu: [
+				{
+					label: 'Quit'
+					accelerator: 'CmdOrCtrl+Q'
+					click: -> app.quit()
+				}
+			]
+		}
+		{
+			label: 'View'
+			submenu: [
+				{
+					label: 'Reload'
+					accelerator: 'CmdOrCtrl+R'
+					click: -> remote.getCurrentWindow().reload()
+				}
+				{
+					label: 'Toggle DevTools'
+					accelerator: 'CmdOrCtrl+Alt+I'
+					click: -> remote.getCurrentWindow().toggleDevTools()
+				}
+			]
+		}
+		{
+			label: 'Window'
+			submenu: [
+				{
+					label: 'Close'
+					accelerator: 'CmdOrCtrl+W'
+					click: -> remote.getCurrentWindow().close()
+				}
+			]
+		}
+	]
 
 Menu.setApplicationMenu Menu.buildFromTemplate(template)
 
