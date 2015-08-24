@@ -11,7 +11,7 @@ var tray = require('./tray');
 
 // global variable
 var APP_NAME = 'Rocket.Chat';
-var INDEX = 'https://rocket.chat/home';
+var INDEX = 'https://demo.rocket.chat';
 // var INDEX = 'file://' + path.join( __dirname, 'app.html' );
 
 let flagQuitApp = false;
