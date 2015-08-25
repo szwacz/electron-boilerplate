@@ -136,6 +136,7 @@ function appReady() {
             appWindow.loadUrl(url);
         }
     });
+
 }
 
 function onQuitApp() {

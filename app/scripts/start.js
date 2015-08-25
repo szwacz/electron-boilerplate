@@ -55,7 +55,6 @@
 
         if (url.length === 0) {
             button.value = val;
-            
             form.querySelector('#defaultInstance').style.display = 'block';
             form.querySelector('#connectDefaultInstance').onclick = connectDefaultInstance;
         } else {
