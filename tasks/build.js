@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var babel = require('gulp-babel');
+var sourcemaps = require('gulp-sourcemaps');
 var less = require('gulp-less');
 var jetpack = require('fs-jetpack');
 
@@ -51,7 +52,9 @@ gulp.task('copy-watch', copyTask);
 
 var transpileTask = function () {
     return gulp.src(paths.jsCodeToTranspile)
+    .pipe(sourcemaps.init())
     .pipe(babel({ modules: 'amd' }))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(destDir.path()));
 };
 gulp.task('transpile', ['clean'], transpileTask);
