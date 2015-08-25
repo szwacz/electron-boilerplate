@@ -1,5 +1,5 @@
 var greet = function () {
-    return 'Hello Universe!'
+    return 'Hello Universe!';
 };
 
 export default greet;
