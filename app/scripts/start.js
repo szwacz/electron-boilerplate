@@ -1,6 +1,7 @@
 (function() {
     var key = 'rocket.chat.host',
-        header = 'X-Rocket-Chat-Version'.toLowerCase();
+        rocketHeader = 'X-Rocket-Chat-Version'.toLowerCase(),
+        defaultInstance = 'https://demo.rocket.chat/';
 
     //init loader
     var loader = document.querySelector('.loader');
@@ -43,6 +44,7 @@
 
     var form = document.querySelector('form');
     form.addEventListener('submit', function(ev) {
+        console.log('trying to connect')
         ev.preventDefault();
         ev.stopPropagation();
         var input = form.querySelector('[name="host"]');
@@ -50,19 +52,30 @@
         var val = button.value;
         button.value = button.getAttribute('data-loading-text');
         var url = input.value;
-        console.debug('checking', url);
-        input.classList.remove('wrong');
-        urlExists(url, 5000).then(function() {
-            console.debug('url found!');
-            localStorage.setItem(key, url);
-            document.body.classList.add('connecting');
-            // redirect to host
-            redirect(url);
-        }, function(status) {
+
+        if (url.length === 0) {
             button.value = val;
-            console.debug('url wrong');
-            input.classList.add('wrong');
-        });
+            
+            form.querySelector('#defaultInstance').style.display = 'block';
+            form.querySelector('#connectDefaultInstance').onclick = connectDefaultInstance;
+        } else {
+
+            console.debug('checking', url);
+            input.classList.remove('wrong');
+            urlExists(url, 5000).then(function() {
+                console.debug('url found!');
+                localStorage.setItem(key, url);
+                document.body.classList.add('connecting');
+                // redirect to host
+                //redirect(url);
+            }, function(status) {
+                button.value = val;
+                form.querySelector('#invalidUrl').style.display = 'block';
+                console.debug('url wrong');
+                input.classList.add('wrong');
+            });
+        }
+
         return false;
     });
 
@@ -76,7 +89,7 @@
                     if (!resolved) {
                         resolved = true;
                         var headers = this.getAllResponseHeaders().toLowerCase();
-                        if (headers.indexOf(header) !== -1) {
+                        if (headers.indexOf(rocketHeader) !== -1) {
                             resolve();
                         } else {
                             reject(this.status);
@@ -97,7 +110,17 @@
     }
 
     function redirect(url) {
-        window.open(url, '_blank');
+        window.location = url;
+    }
+
+    function connectDefaultInstance() {
+        document.body.classList.add('connecting');
+
+        form.querySelector('#defaultInstance').style.display = 'none';
+        localStorage.setItem(key, defaultInstance);
+
+        redirect(defaultInstance);
+
     }
 
 })();
