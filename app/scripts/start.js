@@ -70,7 +70,7 @@
                 localStorage.setItem(key, url);
                 document.body.classList.add('connecting');
                 // redirect to host
-                //redirect(url);
+                redirect(url);
             }, function(status) {
                 button.value = val;
                 form.querySelector('#invalidUrl').style.display = 'block';
