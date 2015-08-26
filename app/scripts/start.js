@@ -1,11 +1,7 @@
 (function() {
-	var key = 'rocket.chat.host',
+	var key = 'rocket.chat.hosts',
 		rocketHeader = 'X-Rocket-Chat-Version'.toLowerCase(),
 		defaultInstance = 'https://demo.rocket.chat/';
-
-	if (/clearcache=true/.test(location.search)) {
-		localStorage.removeItem(key);
-	}
 
 	//init loader
 	var loader = document.querySelector('.loader');

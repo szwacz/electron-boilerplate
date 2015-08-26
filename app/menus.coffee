@@ -184,7 +184,7 @@ selectedInstance = null
 instanceMenu = Menu.buildFromTemplate [
 	label: 'Remove server'
 	click: ->
-		hosts = localStorage.getItem('rocket.chat.host')
+		hosts = localStorage.getItem('rocket.chat.hosts')
 		hosts = JSON.parse(hosts);
 
 		selectedInstance.parentNode.removeChild selectedInstance
@@ -194,7 +194,7 @@ instanceMenu = Menu.buildFromTemplate [
 			unless instance is selectedInstance.dataset.host
 				newHosts.push instance
 
-		localStorage.setItem 'rocket.chat.host', JSON.stringify newHosts
+		localStorage.setItem 'rocket.chat.hosts', JSON.stringify newHosts
 ]
 
 Menu.setApplicationMenu Menu.buildFromTemplate(template)
