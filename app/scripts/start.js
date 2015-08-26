@@ -123,11 +123,9 @@
 		if (hosts === null) {
 			hosts = [];
 		} else {
-			if (hosts.match(/^http:\/\//)) {
-				hosts = [ hosts ];
-			} else {
+			try {
 				hosts = JSON.parse(hosts);
-			}
+			} catch (e) {}
 		}
 
 		var list = document.getElementById('serverList');
@@ -192,15 +190,18 @@
 		var list = document.getElementById('serverList');
 		var hosts = localStorage.getItem(key);
 
-		if (hosts !== null) {
-			if (hosts.match(/^http:\/\//)) {
+		try {
+			hosts = JSON.parse(hosts);
+		} catch (e) {
+			if (hosts.match(/^https?:\/\//)) {
 				hosts = [ hosts ];
-			} else {
-				hosts = JSON.parse(hosts);
 			}
-			for (var i = 0; i < hosts.length; i++) {
-				list.appendChild(createItem(hosts[i], (i + 1)));
-			}
+
+			localStorage.setItem(key, JSON.stringify(hosts));
+		}
+
+		for (var i = 0; i < hosts.length; i++) {
+			list.appendChild(createItem(hosts[i], (i + 1)));
 		}
 	}
 	renderServers();
