@@ -18,7 +18,9 @@ var supportExternalLinks = function (e) {
 
 	var checkDomElement = function (element) {
 		if (element.nodeName === 'A') {
-			href = element.getAttribute('href') || '';
+			if (element.classList.contains('swipebox') == false) {
+				href = element.getAttribute('href') || '';
+			}
 		}
 
 		if (/^https?:\/\/.+/.test(href) === true /*&& RegExp('^https?:\/\/'+location.host).test(href) === false*/) {
