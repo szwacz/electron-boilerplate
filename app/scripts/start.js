@@ -23,13 +23,14 @@
 		http.send();
 	}
 
-	var url = localStorage.getItem(key);
-	console.debug(url);
-	if (url) {
-		document.body.classList.add('connecting');
-		// redirect to host
-		redirect(url);
-		return;
+	function loadPreviousHost() {
+		var current = localStorage.getItem('rocket.chat.currentHost');
+		if (current) {
+			var item = getInstanceButtonByURL(current);
+			if (item) {
+				loadServer(item);
+			}
+		}
 	}
 
 	// connection check
@@ -58,17 +59,19 @@
 		var url = input.value;
 
 		if (url.length === 0) {
-			connectDefaultInstance()
+			connectDefaultInstance();
+			input.value = '';
+			button.value = val;
 		} else {
 
 			console.debug('checking', url);
 			input.classList.remove('wrong');
 			urlExists(url, 5000).then(function() {
 				console.debug('url found!');
-				localStorage.setItem(key, url);
-				document.body.classList.add('connecting');
-				// redirect to host
+				addServer(url);
 				redirect(url);
+				input.value = '';
+				button.value = val;
 			}, function(status) {
 				button.value = val;
 				form.querySelector('#invalidUrl').style.display = 'block';
@@ -79,6 +82,11 @@
 
 		return false;
 	});
+
+	function changeServer() {
+		document.querySelector('.rocket-app').style.display = 'none';
+		document.querySelector('.landing-page').style.display = 'block';
+	}
 
 	function urlExists(url, timeout) {
 		return new Promise(function(resolve, reject) {
@@ -110,17 +118,104 @@
 		});
 	}
 
+	function addServer(url) {
+		var hosts = localStorage.getItem(key);
+		if (hosts === null) {
+			hosts = [];
+		} else {
+			hosts = JSON.parse(hosts);
+		}
+
+		var list = document.getElementById('serverList');
+
+		var newHost = true;
+		hosts.some(function(instanceURL) {
+			if (instanceURL === url) {
+				var item = getInstanceButtonByURL(url);
+				if (item) {
+					loadServer(item);
+				}
+
+				newHost = false;
+				return true;
+			}
+		});
+
+		if (!newHost) {
+			return;
+		}
+
+		hosts.push(url);
+		localStorage.setItem(key, JSON.stringify(hosts));
+
+		clearActive();
+
+		list.appendChild(createItem(url, (list.childNodes.length + 1), true));
+	}
+
+	function getInstanceButtonByURL(url) {
+		var list = document.getElementById('serverList');
+		for (var i = 0; i < list.childNodes.length; i++) {
+			if (list.childNodes[i].dataset.host === url) {
+				return list.childNodes[i];
+			}
+		}
+	}
+
+	function createItem(url, pos, active) {
+		var item = document.createElement('li');
+		item.innerHTML = '<span>' + (pos) + '</span>';
+		item.dataset.host = url;
+		item.title = url;
+		item.classList.add('instance');
+		if (active) {
+			item.classList.add('active');
+		}
+		item.onclick = function() {
+			loadServer(this);
+		};
+		return item;
+	}
+
+	function clearActive() {
+		var activeItem = document.querySelector('.server-list li.active');
+		if (activeItem) {
+			activeItem.classList.remove('active');
+		}
+	}
+
+	function renderServers() {
+		var list = document.getElementById('serverList');
+		var hosts = localStorage.getItem(key);
+
+		if (hosts !== null) {
+			hosts = JSON.parse(hosts);
+			for (var i = 0; i < hosts.length; i++) {
+				list.appendChild(createItem(hosts[i], (i + 1)));
+			}
+		}
+	}
+	renderServers();
+	loadPreviousHost();
+
+	function loadServer(el) {
+		if (!el.classList.contains('active')) {
+			clearActive();
+
+			el.classList.add('active');
+			redirect(el.dataset.host);
+		}
+	}
+
 	function redirect(url) {
-		window.location = url;
+		localStorage.setItem('rocket.chat.currentHost', url);
+		document.getElementById('rocketAppFrame').src = url;
+		document.querySelector('.landing-page').style.display = 'none';
+		document.querySelector('.rocket-app').style.display = 'block';
 	}
 
 	function connectDefaultInstance() {
-		document.body.classList.add('connecting');
-
-		localStorage.setItem(key, defaultInstance);
-
+		addServer(defaultInstance);
 		redirect(defaultInstance);
-
 	}
-
 })();

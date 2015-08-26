@@ -1,10 +1,10 @@
 .loader {
-    display: none;
+	display: none;
 }
 
 .connecting .loader,
 .offline .loader {
-    display: block;
+	display: block;
 }
 
 .connecting header,
@@ -13,53 +13,113 @@
 .offline header,
 .offline form,
 .offline .social {
-    display: none;
+	display: none;
 }
 
 body:not(.offline) .only-offline {
-    display: none;
+	display: none;
 }
 
 .loader span {
-    color: #FFF;
-    font-size: 1.4em;
+	color: #FFF;
+	font-size: 1.4em;
 }
 
 .wrong {
-    animation: wrong 1s;
-    -webkit-animation: wrong 1s;
+	animation: wrong 1s;
+	-webkit-animation: wrong 1s;
+}
+
+div.server-list {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	height: 100%;
+	width: 80px;
+	background-color: #0F354C;
+}
+
+div.server-list li {
+	color: #FFF;
+	cursor: pointer;
+	font-size: 17pt;
+
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+div.server-list li.active {
+	box-shadow: 0px 0px 4px rgba(255,255,255,0.6);
+}
+
+div.server-list li {
+	background-color: #04436A;
+	display: block;
+	border-radius: 7px;
+	text-align: center;
+	line-height: 50px;
+	width: 50px;
+	margin: 10px auto;
+}
+
+.rocket-app {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 80px;
+	width: auto;
+	height: auto;
+}
+
+.rocket-app iframe {
+	height: 100%;
+	width: 100%;
 }
 
 @-webkit-keyframes wrong {
-  0%, 100% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
-
-  10%, 30%, 50%, 70%, 90% {
-    -webkit-transform: translate3d(-10px, 0, 0);
-    transform: translate3d(-10px, 0, 0);
-  }
-
-  20%, 40%, 60%, 80% {
-    -webkit-transform: translate3d(10px, 0, 0);
-    transform: translate3d(10px, 0, 0);
-  }
+	0%,
+	100% {
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+	10%,
+	30%,
+	50%,
+	70%,
+	90% {
+		-webkit-transform: translate3d(-10px, 0, 0);
+		transform: translate3d(-10px, 0, 0);
+	}
+	20%,
+	40%,
+	60%,
+	80% {
+		-webkit-transform: translate3d(10px, 0, 0);
+		transform: translate3d(10px, 0, 0);
+	}
 }
 
 @keyframes wrong {
-  0%, 100% {
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
-
-  10%, 30%, 50%, 70%, 90% {
-    -webkit-transform: translate3d(-10px, 0, 0);
-    transform: translate3d(-10px, 0, 0);
-  }
-
-  20%, 40%, 60%, 80% {
-    -webkit-transform: translate3d(10px, 0, 0);
-    transform: translate3d(10px, 0, 0);
-  }
+	0%,
+	100% {
+		-webkit-transform: translate3d(0, 0, 0);
+		transform: translate3d(0, 0, 0);
+	}
+	10%,
+	30%,
+	50%,
+	70%,
+	90% {
+		-webkit-transform: translate3d(-10px, 0, 0);
+		transform: translate3d(-10px, 0, 0);
+	}
+	20%,
+	40%,
+	60%,
+	80% {
+		-webkit-transform: translate3d(10px, 0, 0);
+		transform: translate3d(10px, 0, 0);
+	}
 }
+
