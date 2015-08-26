@@ -226,4 +226,10 @@
 		addServer(defaultInstance);
 		redirect(defaultInstance);
 	}
+
+	document.getElementById('rocketAppFrame').onload = function() {
+		document.getElementById('rocketAppFrame').contentWindow.addEventListener('unread-changed', function(e) {
+			window.dispatchEvent(new CustomEvent('unread-changed', { detail: e.detail }));
+		});
+	}
 })();
