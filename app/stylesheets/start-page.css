@@ -46,9 +46,11 @@ div.server-list li {
 
 	-webkit-user-select: none;
 	user-select: none;
+	opacity: 0.6;
 }
 
 div.server-list li.active {
+	opacity: 1;
 	box-shadow: 0px 0px 4px rgba(255,255,255,0.6);
 }
 
