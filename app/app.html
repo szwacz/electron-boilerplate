@@ -11,7 +11,7 @@
     <script src="vendor/require.js"></script>
     <script type="text/javascript">
         // Uncomment the script below to clear the storage
-        // localStorage.clear();
+        //localStorage.clear();
     </script>
     <script type="text/javascript">
         requirejs(['scripts/start'], function (app) {});
@@ -31,9 +31,19 @@
                 </header>
                 <div class="fields">
                     <div class="input-text active">
-                        <input type="text" name="host" placeholder="https://demo.rocket.chat" dir="auto" required>
+                        <input type="text" name="host" placeholder="https://demo.rocket.chat" dir="auto">
                     </div>
                 </div>
+
+                <div id="invalidUrl" style="display:none;" class="alert alert-danger">
+                    Not a valid instance url
+                </div>
+
+                <div id="defaultInstance" style="display: none;" class="alert alert-danger">
+                    <span>No url was provided.</span>
+                    <button class="button primary" id="connectDefaultInstance">Connect to Demo?</button>
+                </div>
+
                 <div class="submit">
                     <input type="submit" data-loading-text="Connecting..." class="button primary login" value="Connect"></input>
                 </div>
