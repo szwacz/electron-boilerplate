@@ -296,7 +296,7 @@ blockquote {
 }
 
 html {
-	overflow-y: scroll;
+	overflow-y: auto;
 	.custom-scroll(transparent, rgba(255, 255, 255, 0.05), 3px);
 	height: 100%;
 	&.noscroll {
@@ -2836,12 +2836,18 @@ a.github-fork {
 }
 
 .landing-page {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 80px;
+	width: auto;
+	height: auto;
+	overflow-y: auto;
+	.custom-scroll(transparent, rgba(255, 255, 255, 0.05));
+
 	text-align: center;
-	display: flex;
 	margin: auto;
-	flex-flow: column nowrap;
-	width: 100%;
-	min-height: 100%;
 	z-index: 101;
 	background-color: darken(@primary-background-color, 10%);
 	.background-image(linear-gradient(darken(@primary-background-color, 10%), @primary-background-color));

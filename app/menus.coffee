@@ -21,7 +21,12 @@ if process.platform is 'darwin'
 				{
 					label: 'Change server'
 					click: ->
-						window.location = 'file://' + path.join( __dirname, 'app.html?clearcache=true' );
+						document.querySelector('.rocket-app').style.display = 'none'
+						document.querySelector('.landing-page').style.display = 'block'
+						activeItem = document.querySelector('.server-list li.active')
+						localStorage.removeItem('rocket.chat.currentHost')
+						if activeItem
+							activeItem.classList.remove('active')
 				}
 				{
 					type: 'separator'
@@ -134,7 +139,12 @@ else
 				{
 					label: 'Change server'
 					click: ->
-						window.location = 'file://' + path.join( __dirname, 'app.html?clearcache=true' );
+						document.querySelector('.rocket-app').style.display = 'none'
+						document.querySelector('.landing-page').style.display = 'block'
+						activeItem = document.querySelector('.server-list li.active')
+						localStorage.removeItem('rocket.chat.currentHost')
+						if activeItem
+							activeItem.classList.remove('active')
 				}
 				{
 					label: 'Quit'
@@ -170,13 +180,39 @@ else
 		}
 	]
 
+selectedInstance = null
+instanceMenu = Menu.buildFromTemplate [
+	label: 'Remove server'
+	click: ->
+		hosts = localStorage.getItem('rocket.chat.host')
+		hosts = JSON.parse(hosts);
+
+		selectedInstance.parentNode.removeChild selectedInstance
+
+		newHosts = []
+		for instance in hosts
+			unless instance is selectedInstance.dataset.host
+				newHosts.push instance
+
+		localStorage.setItem 'rocket.chat.host', JSON.stringify newHosts
+]
+
 Menu.setApplicationMenu Menu.buildFromTemplate(template)
 
 menu = Menu.buildFromTemplate template[1].submenu
 
 window.addEventListener 'contextmenu', (e) ->
 	e.preventDefault()
-	menu.popup remote.getCurrentWindow()
+
+	if e.target.classList.contains('instance') or e.target.parentNode.classList.contains('instance')
+		if e.target.classList.contains('instance')
+			selectedInstance = e.target
+		else
+			selectedInstance = e.target.parentNode
+
+		instanceMenu.popup remote.getCurrentWindow()
+	else
+		menu.popup remote.getCurrentWindow()
 , false
 
 module.exports = [menu]
