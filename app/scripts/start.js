@@ -117,7 +117,6 @@
     function connectDefaultInstance() {
         document.body.classList.add('connecting');
 
-        form.querySelector('#defaultInstance').style.display = 'none';
         localStorage.setItem(key, defaultInstance);
 
         redirect(defaultInstance);
