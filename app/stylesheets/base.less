@@ -296,7 +296,7 @@ blockquote {
 }
 
 html {
-	overflow-y: scroll;
+	overflow-y: auto;
 	.custom-scroll(transparent, rgba(255, 255, 255, 0.05), 3px);
 	height: 100%;
 	&.noscroll {
@@ -2843,6 +2843,8 @@ a.github-fork {
 	left: 80px;
 	width: auto;
 	height: auto;
+	overflow-y: auto;
+	.custom-scroll(transparent, rgba(255, 255, 255, 0.05));
 
 	text-align: center;
 	margin: auto;
