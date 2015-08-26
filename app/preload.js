@@ -12,7 +12,7 @@ require('./menus');
 
 var shell = require('shell');
 
-var supportExternalLinks = function (e) {
+global.supportExternalLinks = function (e) {
 	var href;
 	var isExternal = false;
 
@@ -37,8 +37,6 @@ var supportExternalLinks = function (e) {
 
 	checkDomElement(e.target);
 }
-
-document.addEventListener('click', supportExternalLinks, false);
 
 windowOpen = window.open;
 window.open = function() {

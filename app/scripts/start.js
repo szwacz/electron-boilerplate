@@ -228,5 +228,6 @@
 		document.getElementById('rocketAppFrame').contentWindow.addEventListener('unread-changed', function(e) {
 			window.dispatchEvent(new CustomEvent('unread-changed', { detail: e.detail }));
 		});
+		document.getElementById('rocketAppFrame').contentWindow.document.addEventListener('click', supportExternalLinks, false);
 	}
 })();
