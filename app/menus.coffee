@@ -3,6 +3,7 @@
 remote = require 'remote'
 Menu = remote.require 'menu'
 app = remote.require 'app'
+path = remote.require 'path'
 APP_NAME = 'Rocket.Chat'
 
 if process.platform is 'darwin'
@@ -13,6 +14,14 @@ if process.platform is 'darwin'
 				{
 					label: 'About ' + APP_NAME
 					selector: 'orderFrontStandardAboutPanel:'
+				}
+				{
+					type: 'separator'
+				}
+				{
+					label: 'Connect to other server'
+					click: ->
+						window.location = 'file://' + path.join( __dirname, 'app.html?clearcache=true' );
 				}
 				{
 					type: 'separator'
