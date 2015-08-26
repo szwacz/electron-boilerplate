@@ -19,7 +19,7 @@ if process.platform is 'darwin'
 					type: 'separator'
 				}
 				{
-					label: 'Connect to other server'
+					label: 'Change server'
 					click: ->
 						window.location = 'file://' + path.join( __dirname, 'app.html?clearcache=true' );
 				}
@@ -131,6 +131,11 @@ else
 		{
 			label: APP_NAME
 			submenu: [
+				{
+					label: 'Change server'
+					click: ->
+						window.location = 'file://' + path.join( __dirname, 'app.html?clearcache=true' );
+				}
 				{
 					label: 'Quit'
 					accelerator: 'CmdOrCtrl+Q'
