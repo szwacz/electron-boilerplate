@@ -12,7 +12,7 @@ var tray = require('./tray');
 // global variable
 var APP_NAME = 'Rocket.Chat';
 //var INDEX = 'https://demo.rocket.chat';
-var INDEX = 'file://' + path.join( __dirname, 'app.html' );
+var INDEX = 'file://' + path.join(__dirname, 'app.html');
 
 let flagQuitApp = false;
 let mainWindow;
@@ -112,10 +112,10 @@ function appReady() {
             tray.minimizeMainWindow();
             event.preventDefault();
         } else {
-           mainWindowState.saveState(mainWindow);
-           if (appWindow) {
-               appWindow.close();
-           }
+            mainWindowState.saveState(mainWindow);
+            if (appWindow) {
+                appWindow.close();
+            }
         }
     });
 

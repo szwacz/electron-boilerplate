@@ -23,11 +23,22 @@ if (process.platform === 'win32') {
 
 function createAppTray(mainWindow) {
     _tray = new Tray(_iconTray);
-    var contextMenu = Menu.buildFromTemplate([
-        { label: 'Hide', click: function() { showMainWindow(false); }},
-        { label: 'Show', click: function() { showMainWindow(true); }},
-        { label: 'Quit', click: function() { doQuit(); }}
-    ]);
+    var contextMenu = Menu.buildFromTemplate([{
+        label: 'Hide',
+        click: function() {
+            showMainWindow(false);
+        }
+    }, {
+        label: 'Show',
+        click: function() {
+            showMainWindow(true);
+        }
+    }, {
+        label: 'Quit',
+        click: function() {
+            doQuit();
+        }
+    }]);
     _tray.setToolTip('Rocket.Chat');
     _tray.setContextMenu(contextMenu);
 
@@ -36,7 +47,8 @@ function createAppTray(mainWindow) {
             toggleShowMainWindow();
         });
     } else {
-        let dblClickDelay = 500, dblClickTimeoutFct = null;
+        let dblClickDelay = 500,
+            dblClickTimeoutFct = null;
         _tray.on('clicked', function() {
             if (!dblClickTimeoutFct) {
                 dblClickTimeoutFct = setTimeout(function() {
