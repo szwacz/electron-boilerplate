@@ -1,6 +1,8 @@
 'use strict';
 
 var gulp = require('gulp');
+var babel = require('gulp-babel');
+var sourcemaps = require('gulp-sourcemaps');
 var less = require('gulp-less');
 var coffee = require('gulp-coffee');
 var esperanto = require('esperanto');
@@ -63,14 +65,9 @@ gulp.task('copy-watch', copyTask);
 
 var transpileTask = function () {
     return gulp.src(paths.jsCodeToTranspile)
-    .pipe(map(function(code, filename) {
-        try {
-            var transpiled = esperanto.toAmd(code.toString(), { strict: true });
-        } catch (err) {
-            throw new Error(err.message + ' ' + filename);
-        }
-        return transpiled.code;
-    }))
+    .pipe(sourcemaps.init())
+    .pipe(babel({ modules: 'amd' }))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(destDir.path()));
 };
 gulp.task('transpile', ['clean'], transpileTask);
