@@ -296,12 +296,10 @@ blockquote {
 }
 
 html {
-	overflow-y: auto;
-	.custom-scroll(transparent, rgba(255, 255, 255, 0.05), 3px);
+	position: fixed;
+	overflow: hidden;
 	height: 100%;
-	&.noscroll {
-		overflow: hidden;
-	}
+	width: 100%;
 }
 
 body {
