@@ -196,10 +196,13 @@
             localStorage.setItem(key, JSON.stringify(hosts));
         }
 
-        for (var i = 0; i < hosts.length; i++) {
-            list.appendChild(createItem(hosts[i], (i + 1)));
+        if(hosts) {
+            for (var i = 0; i < hosts.length; i++) {
+                list.appendChild(createItem(hosts[i], (i + 1)));
+            }
         }
     }
+
     renderServers();
     loadPreviousHost();
 
