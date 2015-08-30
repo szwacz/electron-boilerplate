@@ -50,7 +50,7 @@ function initWindow() {
     var win = new BrowserWindow({
         'title': APP_NAME,
         // Standard icon looks somehow very thin in the taskbar
-        'icon': path.resolve(path.join(__dirname, 'icons', 'tray', 'icon-tray.png')),
+        'icon': path.resolve(path.join(__dirname, 'icons', 'icon.png')),
         'node-integration': false,
         'accept-first-mouse': true,
         'show': false,
