@@ -112,6 +112,16 @@ It will start the packaging process for operating system you are running this co
 
 You can create Windows installer only when running on Windows, the same is true for Linux and OSX. So to generate all three installers you need all three operating systems.
 
+## Overriding location of Electron runtime
+
+By default, the `npm run release` command will create a new build using the Electron runtime that is automatically installed by the `electron-prebuilt` package. If for some reason you need to override this behavior and explicitly specify the location of the desired runtime (e.g. you want to create a Windows build for 32-bit architecture on a 64-bit machine), you can do so by setting a value for `runtimePath` in the `package.json` file located in the root folder of this project:
+
+```
+{
+  "runtimePath": "/temp/electron/Electron.app"
+}
+```
+
 
 ## Special precautions for Windows
 As installer [NSIS](http://nsis.sourceforge.net/Main_Page) is used. You have to install it (version 3.0), and add NSIS folder to PATH in Environment Variables, so it is reachable to scripts in this project (path should look something like `C:/Program Files (x86)/NSIS`).
