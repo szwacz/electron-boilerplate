@@ -18,14 +18,12 @@ var paths = {
         '!app/main.js',
         '!app/spec.js',
         '!app/node_modules/**',
-        '!app/bower_components/**',
         '!app/vendor/**'
     ],
     copyFromAppDir: [
         './main.js',
         './spec.js',
         './node_modules/**',
-        './bower_components/**',
         './vendor/**',
         './**/*.html'
     ],
