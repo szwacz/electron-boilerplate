@@ -3,6 +3,8 @@
 // All stuff below is just to show you how it works.
 // -----------------------------------------------------
 
+'use strict';
+
 // Browser modules are imported through new ES6 syntax.
 import { greet } from './hello_world/hello_world';
 
