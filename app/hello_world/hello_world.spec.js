@@ -1,3 +1,5 @@
+"use strict";
+
 // Named imports test
 import { greet, bye } from './hello_world';
 
