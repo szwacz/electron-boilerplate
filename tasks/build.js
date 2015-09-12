@@ -16,11 +16,13 @@ var paths = {
     jsCodeToTranspile: [
         'app/**/*.js',
         '!app/main.js',
+        '!app/preloaded.js',
         '!app/spec.js',
         '!app/node_modules/**',
         '!app/vendor/**'
     ],
     copyFromAppDir: [
+        './preloaded.js',
         './main.js',
         './spec.js',
         './node_modules/**',
