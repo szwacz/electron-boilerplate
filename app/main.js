@@ -5,6 +5,7 @@ var BrowserWindow = require('browser-window');
 var env = require('./vendor/electron_boilerplate/env_config');
 var devHelper = require('./vendor/electron_boilerplate/dev_helper');
 var windowStateKeeper = require('./vendor/electron_boilerplate/window_state');
+var path = require('path');
 
 var mainWindow;
 
@@ -20,7 +21,8 @@ app.on('ready', function () {
         x: mainWindowState.x,
         y: mainWindowState.y,
         width: mainWindowState.width,
-        height: mainWindowState.height
+        height: mainWindowState.height,
+        preload: path.join(__dirname + 'preloaded.js')
     });
 
     if (mainWindowState.isMaximized) {
