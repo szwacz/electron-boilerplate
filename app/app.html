@@ -6,15 +6,6 @@
 
     <link href="./stylesheets/main.css" rel="stylesheet" type="text/css">
 
-    <script src="vendor/electron_boilerplate/env_config.js"></script>
-    <script src="vendor/electron_boilerplate/context_menu.js"></script>
-    <script src="vendor/electron_boilerplate/external_links.js"></script>
-
-    <script src="vendor/require.js"></script>
-    <script>
-        requirejs(['app'], function (app) {});
-    </script>
-
 </head>
 <body>
 
@@ -27,6 +18,17 @@
             You are in <strong id="env-name"></strong> environment.
         </p>
     </div>
+
+    <script src="vendor/requirejs/require.js"></script>
+
+    <script>
+        requirejs([
+            'app',
+            './lib/electron_boilerplate/env_config',
+            './lib/electron_boilerplate/context_menu',
+            './lib/electron_boilerplate/external_links'
+        ],function (app) {});
+    </script>
 
 </body>
 </html>

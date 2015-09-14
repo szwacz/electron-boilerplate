@@ -5,3 +5,5 @@ Thumbs.db
 /build/
 /releases/
 /tmp/
+/.idea/
+/app/vendor

@@ -1,3 +1,5 @@
+"use strict";
+
 // Default imports test
 import greet from './hello_universe';
 
