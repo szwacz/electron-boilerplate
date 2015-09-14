@@ -5,8 +5,6 @@ var babel = require('gulp-babel');
 var sourcemaps = require('gulp-sourcemaps');
 var less = require('gulp-less');
 var coffee = require('gulp-coffee');
-var esperanto = require('esperanto');
-var map = require('vinyl-map');
 var jetpack = require('fs-jetpack');
 
 var utils = require('./utils');
