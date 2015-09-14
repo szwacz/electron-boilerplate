@@ -24,7 +24,6 @@ var paths = {
         '!app/spec.js',
         '!app/tray.js',
         '!app/node_modules/**',
-        '!app/bower_components/**',
         '!app/vendor/**'
     ],
     copyFromAppDir: [
@@ -34,7 +33,6 @@ var paths = {
         './spec.js',
         './tray.js',
         './node_modules/**',
-        './bower_components/**',
         './vendor/**',
         './images/**',
         './icons/**',
