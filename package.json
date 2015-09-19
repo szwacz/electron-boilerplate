@@ -4,11 +4,10 @@
     "electron-prebuilt": "^0.32.2",
     "fs-jetpack": "^0.7.0",
     "gulp": "^3.9.0",
-    "gulp-babel": "^5.2.1",
     "gulp-less": "^3.0.3",
-    "gulp-sourcemaps": "^1.5.2",
     "gulp-util": "^3.0.6",
     "q": "^1.4.1",
+    "rollup": "^0.15.0",
     "tree-kill": "^0.1.1",
     "yargs": "^3.15.0"
   },
