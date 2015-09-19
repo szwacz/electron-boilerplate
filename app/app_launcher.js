@@ -1,4 +1,7 @@
-'use strict';
+// This is main process of Electron, started as first thing when the Electron
+// app starts. Here we're using it only to open main window of our application
+// and then move all activity there (this is the easiest approach for
+// one-window apps).
 
 var app = require('app');
 var BrowserWindow = require('browser-window');

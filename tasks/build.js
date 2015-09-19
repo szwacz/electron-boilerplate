@@ -68,7 +68,7 @@ var bundle = function (src, dest) {
 
 var bundleTask = function (done) {
     return Q.all([
-        bundle(srcDir.path('main.js'), destDir.path('main.js')),
+        bundle(srcDir.path('app_launcher.js'), destDir.path('app_launcher.js')),
         bundle(srcDir.path('app.js'), destDir.path('app.js')),
     ]);
 };
