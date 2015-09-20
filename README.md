@@ -81,14 +81,14 @@ Of course this method works also for pure-js modules, so you can use it all the 
 
 #### Working with modules
 
-Electron ecosystem (because it's a merge of node.js and browser) gives you a little trouble with work with modules. ES6 modules have nice syntax and are the future, so they're utilized in this project (thanks to [rollup](https://github.com/rollup/rollup)). But at the same time node.js and npm still rely on the CommonJS syntax. So in this project you need to use both:
+Electron ecosystem (because it's a merge of node.js and browser) gives you a little trouble while working with modules. ES6 modules have nice syntax and are the future, so they're utilized in this project (thanks to [rollup](https://github.com/rollup/rollup)). But at the same time node.js and npm still rely on the CommonJS syntax. So in this project you need to use both:
 ```js
 // Modules which you authored in this project are intended to be
 // imported through new ES6 syntax.
 import { myStuff } from './my_lib/my_stuff';
 
 // Node.js modules are loaded the old way with require().
-var os = require('fs');
+var fs = require('fs');
 
 // And all modules which you installed from npm
 // also need to be required.
