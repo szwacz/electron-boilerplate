@@ -38,6 +38,10 @@ Also here you declare the version of Electron runtime you want to use:
 #### 2. For your application
 Sits on path: `electron-boilerplate/app/package.json`. This is **real** manifest of your application. Declare your app dependencies here.
 
+#### OMG, but seriously why there are two `package.json`?
+1. Native npm modules (those written in C, not JavaScript) need to be compiled, and here we have two different compilation targets for them. Those used in application need to be compiled against electron runtime, and all `devDependencies` need to be compiled against your locally installed node.js. Thanks to having two files this is trivial.
+2. When you package the app for distribution there is no need to add up to size of the app with your `devDependencies`. Here those are always not included (because reside outside the `app` directory).
+
 ### Project's folders
 
 - `app` - code of your application goes here.
