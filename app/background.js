@@ -1,7 +1,7 @@
 // This is main process of Electron, started as first thing when the Electron
-// app starts. Here we're using it only to open main window of our application
-// and then move all activity there (this is the easiest approach for
-// one-window apps).
+// app starts, and running through entire life of your application.
+// It doesn't have any windows which you can see on screen, but we can open
+// window from here.
 
 var app = require('app');
 var BrowserWindow = require('browser-window');
@@ -30,9 +30,13 @@ app.on('ready', function () {
         mainWindow.maximize();
     }
 
-    mainWindow.loadUrl('file://' + __dirname + '/app.html');
+    if (env.name === 'test') {
+        mainWindow.loadUrl('file://' + __dirname + '/spec.html');
+    } else {
+        mainWindow.loadUrl('file://' + __dirname + '/app.html');
+    }
 
-    if (env.name === 'development') {
+    if (env.name !== 'production') {
         devHelper.setDevMenu();
         mainWindow.openDevTools();
     }

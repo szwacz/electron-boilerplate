@@ -8,6 +8,7 @@ var less = require('gulp-less');
 var jetpack = require('fs-jetpack');
 
 var utils = require('./utils');
+var generateSpecsImportFile = require('./generate_specs_import');
 
 var projectDir = jetpack;
 var srcDir = projectDir.cwd('./app');
@@ -15,7 +16,6 @@ var destDir = projectDir.cwd('./build');
 
 var paths = {
     copyFromAppDir: [
-        './spec.js',
         './node_modules/**',
         './vendor/**',
         './**/*.html'
@@ -66,11 +66,27 @@ var bundle = function (src, dest) {
     return deferred.promise;
 };
 
-var bundleTask = function (done) {
+var bundleApplication = function () {
     return Q.all([
-        bundle(srcDir.path('app_launcher.js'), destDir.path('app_launcher.js')),
+        bundle(srcDir.path('background.js'), destDir.path('background.js')),
         bundle(srcDir.path('app.js'), destDir.path('app.js')),
     ]);
+};
+
+var bundleSpecs = function () {
+    generateSpecsImportFile().then(function (specEntryPointPath) {
+        return Q.all([
+            bundle(srcDir.path('background.js'), destDir.path('background.js')),
+            bundle(specEntryPointPath, destDir.path('spec.js')),
+        ]);
+    });
+};
+
+var bundleTask = function () {
+    if (utils.getEnvName() === 'test') {
+        return bundleSpecs();
+    }
+    return bundleApplication();
 };
 gulp.task('bundle', ['clean'], bundleTask);
 gulp.task('bundle-watch', bundleTask);
@@ -87,20 +103,16 @@ gulp.task('less-watch', lessTask);
 
 gulp.task('finalize', ['clean'], function () {
     var manifest = srcDir.read('package.json', 'json');
+    // Add "dev" or "test" suffix to name, so Electron will write all data
+    // like cookies and localStorage in separate places for each environment.
     switch (utils.getEnvName()) {
         case 'development':
-            // Add "dev" suffix to name, so Electron will write all
-            // data like cookies and localStorage into separate place.
             manifest.name += '-dev';
             manifest.productName += ' Dev';
             break;
         case 'test':
-            // Add "test" suffix to name, so Electron will write all
-            // data like cookies and localStorage into separate place.
             manifest.name += '-test';
             manifest.productName += ' Test';
-            // Change the main entry to spec runner.
-            manifest.main = 'spec.js';
             break;
     }
     destDir.write('package.json', manifest);
