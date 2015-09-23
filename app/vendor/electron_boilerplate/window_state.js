@@ -10,7 +10,7 @@ var jetpack = require('fs-jetpack');
 module.exports = function (name, defaults) {
 
     var userDataDir = jetpack.cwd(app.getPath('userData'));
-    var stateStoreFile = 'window-state-' + name +'.json'
+    var stateStoreFile = 'window-state-' + name +'.json';
 
     var state = userDataDir.read(stateStoreFile, 'json') || {
         width: defaults.width,
@@ -31,11 +31,11 @@ module.exports = function (name, defaults) {
     };
 
     return {
-        get x() { return state.x },
-        get y() { return state.y },
-        get width() { return state.width },
-        get height() { return state.height },
-        get isMaximized() { return state.isMaximized },
+        get x() { return state.x; },
+        get y() { return state.y; },
+        get width() { return state.width; },
+        get height() { return state.height; },
+        get isMaximized() { return state.isMaximized; },
         saveState: saveState
     };
 };
