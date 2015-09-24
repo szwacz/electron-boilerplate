@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "appdmg": "^0.3.2",
     "asar": "^0.7.2",
     "electron-prebuilt": "^0.32.2",
     "fs-jetpack": "^0.7.0",
@@ -12,7 +13,6 @@
     "yargs": "^3.15.0"
   },
   "optionalDependencies": {
-    "appdmg": "^0.3.2",
     "rcedit": "^0.3.0"
   },
   "scripts": {
