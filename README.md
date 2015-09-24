@@ -12,6 +12,8 @@ Useful resources for creating apps with Electron
 
 https://github.com/sindresorhus/awesome-electron
 
+https://www.wagonhq.com/blog/electron-meetup
+
 # Quick start
 The only development dependency of this project is [Node.js](https://nodejs.org). So just make sure you have it installed.
 Then type few commands known to every Node developer...
