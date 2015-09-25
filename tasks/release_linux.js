@@ -86,7 +86,7 @@ var packToDebFile = function () {
     packDir.write('DEBIAN/control', control);
 
     // Build the package...
-    childProcess.exec('fakeroot dpkg-deb -Zxz --build ' + packDir.path() + ' ' + debPath,
+    childProcess.exec('fakeroot dpkg-deb -Zxz --build ' + packDir.path().replace(/\s/g, '\\ ') + ' ' + debPath.replace(/\s/g, '\\ '),
         function (error, stdout, stderr) {
             if (error || stderr) {
                 console.log("ERROR while building DEB package:");
