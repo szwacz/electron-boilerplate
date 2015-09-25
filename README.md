@@ -1,12 +1,16 @@
 electron-boilerplate
 ==============
-Comprehensive boilerplate application for [Electron](http://electron.atom.io).  
+Comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).  
 
-This project gives you mainly three things:
+Scope of this project:
 
-1. Cross-platform development environment (works the same way on OSX, Windows and Linux).
-2. Basic structure for Electron app.
-3. Scripts to generate installers of your app for all three operating systems.
+- Provide basic structure of the aplication so you can much easier grasp what goes where.
+- Give cross-platform development environment, which works the same way on OSX, Windows and Linux.
+- Generate ready for distribution installers of your app for all supported operating systems.
+
+NOT in the scope:
+
+- Imposing on you any framework (e.g. Angular, React). You can integrate the one which makes most sense for you.
 
 By the way, there is a twin project to this one: [nw-boilerplate](https://github.com/szwacz/nw-boilerplate), which is the same thing but for NW.js.
 
