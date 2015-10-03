@@ -4,8 +4,8 @@ Comprehensive boilerplate application for [Electron runtime](http://electron.ato
 
 Scope of this project:
 
-- Provide basic structure of the application so you can much easier grasp what goes where.
-- Give cross-platform development environment, which works the same way on OSX, Windows and Linux.
+- Provide basic structure of the application so you can much easier grasp what should go where.
+- Give you cross-platform development environment, which works the same way on OSX, Windows and Linux.
 - Generate ready for distribution installers of your app for all supported operating systems.
 
 NOT in the scope:
