@@ -112,5 +112,6 @@ module.exports = function () {
     .then(finalize)
     .then(renameApp)
     .then(packToDebFile)
-    .then(cleanClutter);
+    .then(cleanClutter)
+    .catch(console.error);
 };
