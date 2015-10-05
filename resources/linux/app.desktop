@@ -5,6 +5,7 @@ Encoding=UTF-8
 Name={{productName}}
 Comment={{description}}
 Exec=/opt/{{name}}/{{name}}
+Path=/opt/{{name}}/
 Icon=/opt/{{name}}/icon.png
 Terminal=false
 Categories=Application;
