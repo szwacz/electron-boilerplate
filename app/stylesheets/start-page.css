@@ -64,6 +64,10 @@ div.server-list li {
 	margin: 10px auto;
 }
 
+.hide-server-list div.server-list {
+	display: none;
+}
+
 .rocket-app {
 	position: fixed;
 	top: 0;
@@ -77,6 +81,10 @@ div.server-list li {
 .rocket-app iframe {
 	height: 100%;
 	width: 100%;
+}
+
+.hide-server-list .rocket-app {
+	left: 0;
 }
 
 @-webkit-keyframes wrong {

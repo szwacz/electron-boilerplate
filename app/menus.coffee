@@ -102,6 +102,11 @@ if process.platform is 'darwin'
 					click: -> remote.getCurrentWindow().reload()
 				}
 				{
+					label: 'Toggle server list'
+					click: ->
+						localStorage.setItem 'server-list-closed', document.body.classList.toggle('hide-server-list')
+				}
+				{
 					label: 'Toggle DevTools'
 					accelerator: 'CmdOrCtrl+Alt+I'
 					click: -> remote.getCurrentWindow().toggleDevTools()
@@ -160,6 +165,11 @@ else
 					label: 'Reload'
 					accelerator: 'CmdOrCtrl+R'
 					click: -> remote.getCurrentWindow().reload()
+				}
+				{
+					label: 'Toggle server list'
+					click: ->
+						localStorage.setItem 'server-list-closed', document.body.classList.toggle('hide-server-list')
 				}
 				{
 					label: 'Toggle DevTools'
