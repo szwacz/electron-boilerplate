@@ -1,4 +1,7 @@
-'use strict';
+// This is main process of Electron, started as first thing when the Electron
+// app starts, and running through entire life of your application.
+// It doesn't have any windows which you can see on screen, but we can open
+// window from here.
 
 var app = require('app');
 var ipc = require('ipc');
@@ -68,7 +71,13 @@ function initWindow() {
         win.maximize();
     }
 
-    if (env.name === 'development') {
+    if (env.name === 'test') {
+        mainWindow.loadUrl('file://' + __dirname + '/spec.html');
+    } else {
+        mainWindow.loadUrl('file://' + __dirname + '/app.html');
+    }
+
+    if (env.name !== 'production') {
         devHelper.setDevMenu();
         win.openDevTools();
     }
