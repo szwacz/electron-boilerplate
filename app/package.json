@@ -5,7 +5,7 @@
   "description": "Rocket.Chat Native Cross-Platform Desktop Application via Electron.",
   "version": "0.0.8",
   "author": "Rocket.Chat Support <support@rocket.chat>",
-  "main": "main.js",
+  "main": "background.js",
   "config": {
     "target": "development"
   },

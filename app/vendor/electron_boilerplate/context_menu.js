@@ -20,7 +20,7 @@
         click: function () {
             document.execCommand("copy");
         }
-    })
+    });
 
     var paste = new MenuItem({
         label: "Paste",

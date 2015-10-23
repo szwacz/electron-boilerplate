@@ -1,4 +1,4 @@
-(function() {
+export var start = function() {
     var key = 'rocket.chat.hosts',
         rocketHeader = 'X-Rocket-Chat-Version'.toLowerCase(),
         defaultInstance = 'https://demo.rocket.chat/';
@@ -239,4 +239,4 @@
             return window.open.apply(this, arguments);
         }
     };
-})();
+}
