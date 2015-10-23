@@ -71,11 +71,11 @@ function initWindow() {
         win.maximize();
     }
 
-    if (env.name === 'test') {
-        mainWindow.loadUrl('file://' + __dirname + '/spec.html');
-    } else {
-        mainWindow.loadUrl('file://' + __dirname + '/app.html');
-    }
+    // if (env.name === 'test') {
+    //     mainWindow.loadUrl('file://' + __dirname + '/spec.html');
+    // } else {
+    //     mainWindow.loadUrl('file://' + __dirname + '/app.html');
+    // }
 
     if (env.name !== 'production') {
         devHelper.setDevMenu();
