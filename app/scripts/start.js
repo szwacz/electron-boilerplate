@@ -143,6 +143,9 @@ export var start = function() {
             return;
         }
 
+        document.body.classList.remove('hide-server-list');
+        localStorage.setItem('server-list-closed', 'false');
+
         hosts.push(url);
         localStorage.setItem(key, JSON.stringify(hosts));
 
@@ -205,6 +208,10 @@ export var start = function() {
 
     renderServers();
     loadPreviousHost();
+
+    if (localStorage.getItem('server-list-closed') === 'false') {
+        document.body.classList.remove('hide-server-list');
+    }
 
     function loadServer(el) {
         if (!el.classList.contains('active')) {
