@@ -3,6 +3,7 @@
 
 // Modules which you authored in this project are intended to be
 // imported through new ES6 syntax.
+/*
 import { greet } from './hello_world/hello_world';
 
 // Node.js modules and those from npm
@@ -23,3 +24,5 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('platform-info').innerHTML = os.platform();
     document.getElementById('env-name').innerHTML = envName;
 });
+
+*/
