@@ -23,7 +23,9 @@ app.on('ready', function () {
         x: mainWindowState.x,
         y: mainWindowState.y,
         width: mainWindowState.width,
-        height: mainWindowState.height
+        height: mainWindowState.height,
+        "auto-hide-menu-bar":true,
+        "dark-theme":true
     });
 
     if (mainWindowState.isMaximized) {
