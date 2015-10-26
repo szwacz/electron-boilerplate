@@ -9,11 +9,12 @@ module.exports.setDevMenu = function () {
         label: 'Development',
         submenu: [{
             label: 'Reload',
-            accelerator: 'CmdOrCtrl+R',
+            accelerator: 'F5',
             click: function () {
                 BrowserWindow.getFocusedWindow().reloadIgnoringCache();
             }
-        },{
+        },
+            {
             label: 'Toggle DevTools',
             accelerator: 'F12',
             click: function () {
