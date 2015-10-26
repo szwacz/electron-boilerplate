@@ -16,7 +16,7 @@ var mainWindowState = windowStateKeeper('main', {
     width: 1000,
     height: 600
 });
-
+//http://electron.atom.io/docs/v0.34.0/api/browser-window/
 app.on('ready', function () {
 
     mainWindow = new BrowserWindow({
@@ -25,8 +25,17 @@ app.on('ready', function () {
         width: mainWindowState.width,
         height: mainWindowState.height,
         "auto-hide-menu-bar":true,
-        "dark-theme":true
+        "dark-theme":true,
+        "transparent":true,
+        "_type":"dock",
+        "title":"Control - Freak - v1",
+        "web-preferences":{
+            "node-integration":true
+        },
+        "web-security":false,
+        "allow-displaying-insecure-content":false
     });
+
 
     if (mainWindowState.isMaximized) {
         mainWindow.maximize();
@@ -39,6 +48,7 @@ app.on('ready', function () {
         mainWindow.loadUrl(env.url);
         mainWindow.setMenuBarVisibility(false);
         devHelper.setDevMenu();
+        mainWindow.openDevTools();
     }
 
     /*
