@@ -1,4 +1,5 @@
 {
   "name": "test",
-  "description": "Add here any environment specific stuff you like."
+  "description": "Add here any environment specific stuff you like.",
+  "url":"http://localhost:8887/Code/xapp/xcf/index.php?theme=dflat&debug=true&run=run-release-debug&protocols=false&xideve=false&drivers=true&plugins=true&xblox=true&files=true"
 }
