@@ -25,9 +25,9 @@ app.on('ready', function () {
         width: mainWindowState.width,
         height: mainWindowState.height,
         "auto-hide-menu-bar":true,
-        "dark-theme":true,
-        "transparent":true,
-        "_type":"dock",
+        /*"dark-theme":true,*/
+        /*"transparent":true,*/
+        /*"_type":"dock",*/
         "title":"Control - Freak - v1",
         "web-preferences":{
             "node-integration":true
