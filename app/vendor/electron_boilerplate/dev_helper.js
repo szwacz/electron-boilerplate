@@ -53,6 +53,31 @@ module.exports.setDevMenu = function () {
                     }
                 }
             ]
+        },
+        {
+            label: 'Tasks',
+            submenu: [
+                {
+                    label: 'Fullscreen',
+                    accelerator: 'F11 a',
+                    click: function () {
+                        var win = BrowserWindow.getFocusedWindow();
+                        win.setFullScreen(!win.isFullScreen());
+                    }
+                }
+            ]
+        },
+        {
+            label: 'Tools',
+            submenu: [
+                {
+                    label: 'Fullscreen',
+                    accelerator: 'F11 b',
+                    click: function () {
+
+                    }
+                }
+            ]
         }
     ]);
     Menu.setApplicationMenu(devMenu);
