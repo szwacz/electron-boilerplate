@@ -1,9 +1,9 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
+  "name": "Control-Freak",
+  "productName": "Control-Freak v1.0",
   "identifier": "com.example.electron-boilerplate",
   "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Mr Gumby <gumby@sillywalks.com>",
   "main": "background.js",
   "config": {
