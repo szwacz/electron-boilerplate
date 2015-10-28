@@ -3,23 +3,27 @@
 
 // Modules which you authored in this project are intended to be
 // imported through new ES6 syntax.
-import { greet } from './hello_world/hello_world';
+import { greet } from './hello_world/hello_world'
+console.log(greet())
 
 // Node.js modules and those from npm
 // are required the same way as always.
-var os = require('os');
-var app = require('remote').require('app');
-var jetpack = require('fs-jetpack').cwd(app.getAppPath());
+const app = require('remote').require('app')
+const jetpack = require('fs-jetpack').cwd(app.getAppPath())
 
 // Holy crap! This is browser window with HTML and stuff, but I can read
 // here files like it is node.js! Welcome to Electron world :)
-console.log(jetpack.read('package.json', 'json'));
+console.log(jetpack.read('package.json', 'json'))
 
-// window.env contains data from config/env_XXX.json file.
-var envName = window.env.name;
+const Vue = require('vue')
+// Vue.component('hello-world', require('./components/HelloWorld.vue'))
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('greet').innerHTML = greet();
-    document.getElementById('platform-info').innerHTML = os.platform();
-    document.getElementById('env-name').innerHTML = envName;
-});
+new Vue({
+  el: "#app",
+  data: {
+    
+  },
+  components: {
+    'hello-world': require('./components/HelloWorld.vue')
+  }
+})

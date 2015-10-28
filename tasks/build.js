@@ -1,132 +1,88 @@
-'use strict';
 
-var pathUtil = require('path');
-var Q = require('q');
-var gulp = require('gulp');
-var rollup = require('rollup');
-var less = require('gulp-less');
-var jetpack = require('fs-jetpack');
+const webpack = require('webpack')
+const webpackConfig = require('../webpack.config.js')
 
-var utils = require('./utils');
-var generateSpecsImportFile = require('./generate_specs_import');
-
-var projectDir = jetpack;
-var srcDir = projectDir.cwd('./app');
-var destDir = projectDir.cwd('./build');
-
-var paths = {
-    copyFromAppDir: [
-        './node_modules/**',
-        './vendor/**',
-        './**/*.html'
-    ],
-}
-
-// -------------------------------------
-// Tasks
-// -------------------------------------
-
-gulp.task('clean', function(callback) {
-    return destDir.dirAsync('.', { empty: true });
-});
+const gulp = require('gulp')
+const gutil = require('gulp-util')
+const source = require('vinyl-source-stream')
+const path = require('path')
+const jetpack = require('fs-jetpack')
 
 
-var copyTask = function () {
-    return projectDir.copyAsync('app', destDir.path(), {
-        overwrite: true,
-        matching: paths.copyFromAppDir
-    });
-};
-gulp.task('copy', ['clean'], copyTask);
-gulp.task('copy-watch', copyTask);
+const utils = require('./utils')
 
+const src = './app'
+const dest = './build'
 
-var bundle = function (src, dest) {
-    var deferred = Q.defer();
+const projectDir = jetpack
+const srcDir = projectDir.cwd(src)
+const destDir = projectDir.cwd(dest)
 
-    rollup.rollup({
-        entry: src
-    }).then(function (bundle) {
-        var jsFile = pathUtil.basename(dest);
-        var result = bundle.generate({
-            format: 'iife',
-            sourceMap: true,
-            sourceMapFile: jsFile,
-        });
-        return Q.all([
-            destDir.writeAsync(dest, result.code + '\n//# sourceMappingURL=' + jsFile + '.map'),
-            destDir.writeAsync(dest + '.map', result.map.toString()),
-        ]);
-    }).then(function () {
-        deferred.resolve();
-    }).catch(function (err) {
-        console.error(err);
-    });
+const filesToCopy = [
+    './app/app.html',
+    './app/stylesheets/**/*',
+    './app/background.js',
+    './app/vendor/**/*',
+]
 
-    return deferred.promise;
-};
+// Make a dev copy of the config w/ source maps and debug enabled
+const devConfig = Object.create(webpackConfig)
+devConfig.devtool = 'source-map'
+devConfig.debug = true
 
-var bundleApplication = function () {
-    return Q.all([
-        bundle(srcDir.path('background.js'), destDir.path('background.js')),
-        bundle(srcDir.path('app.js'), destDir.path('app.js')),
-    ]);
-};
+gulp.task('clean', function() {
+    return jetpack.cwd(dest).dir('.', { empty: true })
+})
 
-var bundleSpecs = function () {
-    generateSpecsImportFile().then(function (specEntryPointPath) {
-        return Q.all([
-            bundle(srcDir.path('background.js'), destDir.path('background.js')),
-            bundle(specEntryPointPath, destDir.path('spec.js')),
-        ]);
-    });
-};
+gulp.task('copy', function() {
+    return gulp.src(filesToCopy, { base: 'app' })
+        .pipe(gulp.dest(dest))
+})
 
-var bundleTask = function () {
-    if (utils.getEnvName() === 'test') {
-        return bundleSpecs();
-    }
-    return bundleApplication();
-};
-gulp.task('bundle', ['clean'], bundleTask);
-gulp.task('bundle-watch', bundleTask);
-
-
-var lessTask = function () {
-    return gulp.src('app/stylesheets/main.less')
-    .pipe(less())
-    .pipe(gulp.dest(destDir.path('stylesheets')));
-};
-gulp.task('less', ['clean'], lessTask);
-gulp.task('less-watch', lessTask);
-
+gulp.task('webpack:build-dev', function(callback) {
+    return webpack(devConfig, function(err, stats) {
+        gutil.log('[webpack:build-dev]', stats.toString({ colors: true }))
+        callback()
+    })
+})
 
 gulp.task('finalize', ['clean'], function () {
-    var manifest = srcDir.read('package.json', 'json');
-    // Add "dev" or "test" suffix to name, so Electron will write all data
-    // like cookies and localStorage in separate places for each environment.
-    switch (utils.getEnvName()) {
-        case 'development':
-            manifest.name += '-dev';
-            manifest.productName += ' Dev';
-            break;
-        case 'test':
-            manifest.name += '-test';
-            manifest.productName += ' Test';
-            break;
-    }
-    destDir.write('package.json', manifest);
+  const manifest = srcDir.read('package.json', 'json')
+  switch (utils.getEnvName()) {
+      case 'development':
+          // Add 'dev' suffix to name, so Electron will write all
+          // data like cookies and localStorage into separate place.
+          manifest.name += '-dev'
+          manifest.productName += ' Dev'
+          break
+      case 'test':
+          // Add 'test' suffix to name, so Electron will write all
+          // data like cookies and localStorage into separate place.
+          manifest.name += '-test'
+          manifest.productName += ' Test'
+          // Change the main entry to spec runner.
+          manifest.main = 'spec.js'
+          break
+  }
+  destDir.write('package.json', manifest)
 
-    var configFilePath = projectDir.path('config/env_' + utils.getEnvName() + '.json');
-    destDir.copy(configFilePath, 'env_config.json');
-});
+  const configFilePath = projectDir.path('config/env_' + utils.getEnvName() + '.json')
+  destDir.copy(configFilePath, 'env_config.json')
+})
 
+// Dev builds of assets with source maps and debug enabled
+gulp.task('build-dev', ['clean', 'copy', 'webpack:build-dev'])
+gulp.task('build', ['build-dev', 'finalize'])
 
-gulp.task('watch', function () {
-    gulp.watch('app/**/*.js', ['bundle-watch']);
-    gulp.watch(paths.copyFromAppDir, { cwd: 'app' }, ['copy-watch']);
-    gulp.watch('app/**/*.less', ['less-watch']);
-});
+const filesToWatch = [
+  './**/*.coffee', 
+  './**/*.js', 
+  './**/*.vue',
+  '!./vendor/**',
+  '!./node_modules/**',
+]
 
-
-gulp.task('build', ['bundle', 'less', 'copy', 'finalize']);
+gulp.task('watch', function() {
+  gulp.watch(filesToCopy, ['copy'])
+  gulp.watch(filesToWatch, { cwd: 'app' }, ['webpack:build-dev'])  // This is watchign too many files and making things very angry.
+})
