@@ -57,28 +57,28 @@ module.exports.setDevMenu = function () {
         {
             label: 'Tasks',
             submenu: [
-                {
-                    label: 'Fullscreen',
-                    accelerator: 'F11 a',
-                    click: function () {
-                        var win = BrowserWindow.getFocusedWindow();
-                        win.setFullScreen(!win.isFullScreen());
-                    }
-                }
+
             ]
         },
         {
             label: 'Tools',
             submenu: [
-                {
-                    label: 'Fullscreen',
-                    accelerator: 'F11 b',
-                    click: function () {
 
+            ]
+        },
+        {
+            label: 'Help',
+            submenu: [
+                {
+                    label: 'Documentation',
+                    accelerator: 'F1',
+                    click: function () {
+                        require("shell").openExternal("http://x4mm.net/Control-Freak-Documentation/daux/Getting_Started");
                     }
                 }
             ]
         }
     ]);
     Menu.setApplicationMenu(devMenu);
+
 };
