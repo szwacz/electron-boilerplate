@@ -11,16 +11,6 @@ module.exports = {
     path: './build',
     filename: '[name].js',
   },
-  plugins: [
-    new webpack.ProvidePlugin({
-      // Automtically detect jQuery and $ as free var in modules and inject the jquery library. 
-      // Requiring jQuery directly does funny things in Electron.
-      jQuery: 'jquery',
-      $: 'jquery',
-      'window.jQuery': 'jquery',
-      'window.$': 'jquery',
-    })
-  ],
   module: {
     loaders: [
       {

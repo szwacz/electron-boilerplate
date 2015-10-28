@@ -31,7 +31,7 @@ Sits on path: `electron-boilerplate-vue/package.json`. Here you declare dependen
 Also here you declare the version of Electron runtime you want to use:
 ```json
 "devDependencies": {
-  "electron-prebuilt": "^0.24.0"
+  "electron-prebuilt": "^0.34.0"
 }
 ```
 
