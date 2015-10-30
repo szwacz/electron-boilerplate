@@ -5,6 +5,7 @@ var gulpUtil = require('gulp-util');
 var jetpack = require('fs-jetpack');
 var asar = require('asar');
 var utils = require('./utils');
+var child_process = require('child_process');
 
 var projectDir;
 var releasesDir;
@@ -79,6 +80,17 @@ var renameApp = function() {
     return Q();
 }
 
+var signApp = function () {
+    var identity = utils.getSigningId();
+    if (identity) {
+        var cmd = 'codesign --deep --force --sign "' + identity + '" "' + finalAppDir.path() + '"';
+        gulpUtil.log('Signing with:', cmd);
+        return Q.nfcall(child_process.exec, cmd);
+    } else {
+        return Q();
+    }
+}
+
 var packToDmgFile = function () {
     var deferred = Q.defer();
 
@@ -127,6 +139,7 @@ module.exports = function () {
     .then(packageBuiltApp)
     .then(finalize)
     .then(renameApp)
+    .then(signApp)
     .then(packToDmgFile)
     .then(cleanClutter)
     .catch(console.error);
