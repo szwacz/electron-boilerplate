@@ -28,7 +28,7 @@
 ; Installation
 ; --------------------------------
 
-SetCompressor lzma
+SetCompressor /SOLID lzma
 
 Name "${productName}"
 Icon "${setupIcon}"
