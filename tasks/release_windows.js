@@ -24,7 +24,7 @@ var init = function () {
 };
 
 var copyRuntime = function () {
-    return projectDir.copyAsync('node_modules/electron-prebuilt/dist', readyAppDir.path(), { overwrite: true });
+    return projectDir.copyAsync(utils.getRuntimePath(), readyAppDir.path(), { overwrite: true });
 };
 
 var cleanupRuntime = function () {
