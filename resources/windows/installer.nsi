@@ -36,6 +36,7 @@ OutFile "${dest}"
 InstallDir "$PROGRAMFILES\${productName}"
 InstallDirRegKey HKLM "${regkey}" ""
 
+RequestExecutionLevel admin
 CRCCheck on
 SilentInstall normal
 
