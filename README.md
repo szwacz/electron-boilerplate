@@ -133,7 +133,7 @@ npm run release -- --sign A123456789
 
 ## Windows only
 
-The installer is built using [NSIS](http://nsis.sourceforge.net/Main_Page). You have to install NSIS version 3.0, and add its folder to PATH in Environment Variables, so it is reachable to scripts in this project. For example, `C:/Program Files (x86)/NSIS`.
+The installer is built using [NSIS](http://nsis.sourceforge.net). You have to install NSIS version 3.0, and add its folder to PATH in Environment Variables, so it is reachable to scripts in this project. For example, `C:\Program Files (x86)\NSIS`.
 
 
 # License
