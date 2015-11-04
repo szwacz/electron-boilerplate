@@ -28,6 +28,10 @@ module.exports.getEnvName = function () {
     return argv.env || 'development';
 };
 
+module.exports.getSigningId = function () {
+    return argv.sign;
+};
+
 module.exports.getElectronVersion = function () {
     var manifest = jetpack.read(__dirname + '/../package.json', 'json');
     return manifest.devDependencies['electron-prebuilt'].substring(1);
