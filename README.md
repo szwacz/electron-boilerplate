@@ -126,6 +126,8 @@ You can create Windows installer only when running on Windows, the same is true 
 
 ## Mac only
 
+#### App signing
+
 The Mac release supports [code signing](https://developer.apple.com/library/mac/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html). To sign the `.app` in the release image, include the certificate ID in the command as so,
 ```
 npm run release -- --sign A123456789
@@ -133,8 +135,19 @@ npm run release -- --sign A123456789
 
 ## Windows only
 
+#### Installer
+
 The installer is built using [NSIS](http://nsis.sourceforge.net). You have to install NSIS version 3.0, and add its folder to PATH in Environment Variables, so it is reachable to scripts in this project. For example, `C:\Program Files (x86)\NSIS`.
 
+#### 32-bit build on 64-bit Windows
+
+There are still a lot of 32-bit Windows installations in use. If you want to support those systems and have 64-bit OS on your machine you need to manually force npm to install all packages for 32-bit. Npm allowes to do that via environment variable:
+```
+SET npm_config_arch=ia32
+rmdir /S node_modules
+npm install
+```
+Note: This snippet deletes whole `node_modules` folder assuming you already had run `npm install` in the past (then fresh install is required for the trick to work).
 
 # License
 
