@@ -1,25 +1,25 @@
-![Rocket.Chat logo](https://rocket.chat/images/logo/logo-dark.svg?v3)
+electron-boilerplate
+==============
+Comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).
 
-Rocket.Chat Native Cross-Platform Desktop Application via Electron
+Scope of this project:
 
-#### Downloads
+- Provide basic structure of the application so you can much easier grasp what should go where.
+- Give you cross-platform development environment, which works the same way on OSX, Windows and Linux.
+- Generate ready for distribution installers of your app for all supported operating systems.
 
-Follow the link to [download the installer](https://github.com/RocketChat/Rocket.Chat.Electron/releases)
+NOT in the scope:
 
-#### Contributions
+- Imposing on you any framework (e.g. Angular, React). You can integrate the one which makes most sense for you.
 
-Useful resources for creating apps with Electron
-
-https://github.com/sindresorhus/awesome-electron
-
-https://www.wagonhq.com/blog/electron-meetup
+By the way, there is a twin project to this one: [nw-boilerplate](https://github.com/szwacz/nw-boilerplate), which is the same thing but for NW.js.
 
 # Quick start
 The only development dependency of this project is [Node.js](https://nodejs.org). So just make sure you have it installed.
 Then type few commands known to every Node developer...
 ```
-git clone https://github.com/RocketChat/Rocket.Chat.Electron.git
-cd Rocket.Chat.Electron
+git clone https://github.com/szwacz/electron-boilerplate.git
+cd electron-boilerplate
 npm install
 npm start
 ```
@@ -30,7 +30,7 @@ npm start
 There are **two** `package.json` files:
 
 #### 1. For development
-Sits on path: `Rocket.Chat.Electron/package.json`. Here you declare dependencies for your development environment and build scripts. **This file is not distributed with real application!**
+Sits on path: `electron-boilerplate/package.json`. Here you declare dependencies for your development environment and build scripts. **This file is not distributed with real application!**
 
 Also here you declare the version of Electron runtime you want to use:
 ```json
@@ -40,7 +40,7 @@ Also here you declare the version of Electron runtime you want to use:
 ```
 
 #### 2. For your application
-Sits on path: `Rocket.Chat.Electron/app/package.json`. This is **real** manifest of your application. Declare your app dependencies here.
+Sits on path: `electron-boilerplate/app/package.json`. This is **real** manifest of your application. Declare your app dependencies here.
 
 #### OMG, but seriously why there are two `package.json`?
 1. Native npm modules (those written in C, not JavaScript) need to be compiled, and here we have two different compilation targets for them. Those used in application need to be compiled against electron runtime, and all `devDependencies` need to be compiled against your locally installed node.js. Thanks to having two files this is trivial.
@@ -105,7 +105,7 @@ var moment = require('moment');
 
 #### Unit tests
 
-Rocket.Chat.Electron has preconfigured [jasmine](http://jasmine.github.io/2.0/introduction.html) unit test runner. To run it go with standard:
+electron-boilerplate has preconfigured [jasmine](http://jasmine.github.io/2.0/introduction.html) unit test runner. To run it go with standard:
 ```
 npm test
 ```
@@ -124,10 +124,30 @@ It will start the packaging process for operating system you are running this co
 
 You can create Windows installer only when running on Windows, the same is true for Linux and OSX. So to generate all three installers you need all three operating systems.
 
+## Mac only
 
-## Special precautions for Windows
-As installer [NSIS](http://nsis.sourceforge.net/Main_Page) is used. You have to install it (version 3.0), and add NSIS folder to PATH in Environment Variables, so it is reachable to scripts in this project (path should look something like `C:/Program Files (x86)/NSIS`).
+#### App signing
 
+The Mac release supports [code signing](https://developer.apple.com/library/mac/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html). To sign the `.app` in the release image, include the certificate ID in the command as so,
+```
+npm run release -- --sign DX85ENM22A
+```
+
+## Windows only
+
+#### Installer
+
+The installer is built using [NSIS](http://nsis.sourceforge.net). You have to install NSIS version 3.0, and add its folder to PATH in Environment Variables, so it is reachable to scripts in this project. For example, `C:\Program Files (x86)\NSIS`.
+
+#### 32-bit build on 64-bit Windows
+
+There are still a lot of 32-bit Windows installations in use. If you want to support those systems and have 64-bit OS on your machine you need to manually force npm to install all packages for 32-bit. Npm allowes to do that via environment variable:
+```
+SET npm_config_arch=ia32
+rmdir /S node_modules
+npm install
+```
+Note: This snippet deletes whole `node_modules` folder assuming you already had run `npm install` in the past (then fresh install is required for the trick to work).
 
 # License
 

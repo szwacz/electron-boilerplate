@@ -2,10 +2,10 @@
 
 var Q = require('q');
 var gulpUtil = require('gulp-util');
-var childProcess = require('child_process');
 var jetpack = require('fs-jetpack');
 var asar = require('asar');
 var utils = require('./utils');
+var child_process = require('child_process');
 
 var projectDir;
 var releasesDir;
@@ -80,21 +80,15 @@ var renameApp = function() {
     return Q();
 }
 
-var signApp = function() {
-    var deferred = Q.defer();
-
-    gulpUtil.log('Signing file...');
-    childProcess.exec('codesign --deep --force --sign "Developer ID Application: Konecty Informatica Ltda (DX85ENM22A)" ' + finalAppDir.cwd(), function (error, stdout, stderr) {
-        if (error || stderr) {
-            console.log("ERROR while signing file");
-            console.log(error);
-            console.log(stderr);
-        } else {
-            gulpUtil.log('Signing file DONE!');
-        }
-        deferred.resolve();
-    });
-    return deferred.promise;
+var signApp = function () {
+    var identity = utils.getSigningId();
+    if (identity) {
+        var cmd = 'codesign --deep --force --sign "' + identity + '" "' + finalAppDir.path() + '"';
+        gulpUtil.log('Signing with:', cmd);
+        return Q.nfcall(child_process.exec, cmd);
+    } else {
+        return Q();
+    }
 }
 
 var packToDmgFile = function () {

@@ -28,7 +28,8 @@
 ; Installation
 ; --------------------------------
 
-SetCompressor lzma
+Unicode true
+SetCompressor /SOLID lzma
 
 Name "${productName}"
 Icon "${setupIcon}"
@@ -36,6 +37,7 @@ OutFile "${dest}"
 InstallDir "$PROGRAMFILES\${productName}"
 InstallDirRegKey HKLM "${regkey}" ""
 
+RequestExecutionLevel admin
 CRCCheck on
 SilentInstall normal
 

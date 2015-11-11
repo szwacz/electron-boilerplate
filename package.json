@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "asar": "^0.7.2",
-    "electron-prebuilt": "^0.32.2",
+    "electron-prebuilt": "^0.34.0",
     "fs-jetpack": "^0.7.0",
     "gulp": "^3.9.0",
     "gulp-less": "^3.0.3",
@@ -19,8 +19,8 @@
   "scripts": {
     "postinstall": "node ./tasks/app_npm_install",
     "app-install": "node ./tasks/app_npm_install",
-    "build": "./node_modules/.bin/gulp build",
-    "release": "./node_modules/.bin/gulp release --env=production",
+    "build": "gulp build",
+    "release": "gulp release --env=production",
     "start": "node ./tasks/start",
     "test": "node ./tasks/start --env=test"
   },
