@@ -1,10 +1,8 @@
-'use strict';
+import app from 'app';
+import Menu from 'menu';
+import BrowserWindow from 'browser-window';
 
-var app = require('app');
-var Menu = require('menu');
-var BrowserWindow = require('browser-window');
-
-module.exports.setDevMenu = function () {
+var setDevMenu = function () {
     var devMenu = Menu.buildFromTemplate([{
         label: 'Development',
         submenu: [{
@@ -29,3 +27,7 @@ module.exports.setDevMenu = function () {
     }]);
     Menu.setApplicationMenu(devMenu);
 };
+
+export default {
+    setDevMenu: setDevMenu,
+}

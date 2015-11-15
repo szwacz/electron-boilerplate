@@ -3,11 +3,12 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-var app = require('app');
-var BrowserWindow = require('browser-window');
+import app from 'app';
+import BrowserWindow from 'browser-window';
+import devHelper from './vendor/electron_boilerplate/dev_helper';
+import windowStateKeeper from './vendor/electron_boilerplate/window_state';
+
 var env = require('./vendor/electron_boilerplate/env_config');
-var devHelper = require('./vendor/electron_boilerplate/dev_helper');
-var windowStateKeeper = require('./vendor/electron_boilerplate/window_state');
 
 var mainWindow;
 
