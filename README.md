@@ -6,7 +6,7 @@ Scope of this project:
 
 - Provide basic structure of the application so you can much easier grasp what should go where.
 - Give you cross-platform development environment, which works the same way on OSX, Windows and Linux.
-- Generate ready for distribution installers of your app for all supported operating systems.
+- Generate ready for distribution installers of your app for all three operating systems.
 
 NOT in the scope:
 
@@ -35,7 +35,7 @@ Sits on path: `electron-boilerplate/package.json`. Here you declare dependencies
 Also here you declare the version of Electron runtime you want to use:
 ```json
 "devDependencies": {
-  "electron-prebuilt": "^0.24.0"
+  "electron-prebuilt": "^0.34.0"
 }
 ```
 
@@ -89,18 +89,18 @@ Of course this method works also for pure-js modules, so you can use it all the 
 
 #### Working with modules
 
-Electron ecosystem (because it's a merge of node.js and browser) gives you a little trouble while working with modules. ES6 modules have nice syntax and are the future, so they're utilized in this project (thanks to [rollup](https://github.com/rollup/rollup)). But at the same time node.js and npm still rely on the CommonJS syntax. So in this project you need to use both:
+How about being future proof and using ES6 modules all the time in your app? Thanks to [rollup](https://github.com/rollup/rollup) you can do that. It will transpile the imports to proper `require()` statements, so even though ES6 modules aren't natively supported yet you can start using them today.
 ```js
-// Modules which you authored in this project are intended to be
-// imported through new ES6 syntax.
+// You can use it on those kinds of modules:
+
+// Modules authored by you
 import { myStuff } from './my_lib/my_stuff';
-
-// Node.js modules are loaded the old way with require().
-var fs = require('fs');
-
-// And all modules which you installed from npm
-// also need to be required.
-var moment = require('moment');
+// Node.js native
+import fs from 'fs';
+// Electron native
+import app from 'app';
+// Loaded from npm
+import moment from 'moment';
 ```
 
 #### Unit tests
