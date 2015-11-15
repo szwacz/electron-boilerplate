@@ -8,8 +8,6 @@ import BrowserWindow from 'browser-window';
 import devHelper from './vendor/electron_boilerplate/dev_helper';
 import windowStateKeeper from './vendor/electron_boilerplate/window_state';
 
-var env = require('./vendor/electron_boilerplate/env_config');
-
 var mainWindow;
 
 // Preserver of the window size and position between app launches.

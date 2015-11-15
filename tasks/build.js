@@ -4,6 +4,8 @@ var pathUtil = require('path');
 var Q = require('q');
 var gulp = require('gulp');
 var rollup = require('rollup');
+var rollupInject = require('rollup-plugin-inject');
+var rollupJson = require('rollup-plugin-json');
 var less = require('gulp-less');
 var jetpack = require('fs-jetpack');
 
@@ -45,7 +47,11 @@ var bundle = function (src, dest) {
     var deferred = Q.defer();
 
     rollup.rollup({
-        entry: src
+        entry: src,
+        plugins: [
+            rollupInject({ env: projectDir.path('config/env_' + utils.getEnvName() + '.json') }),
+            rollupJson()
+        ]
     }).then(function (bundle) {
         var jsFile = pathUtil.basename(dest);
         var result = bundle.generate({
@@ -116,9 +122,6 @@ gulp.task('finalize', ['clean'], function () {
             break;
     }
     destDir.write('package.json', manifest);
-
-    var configFilePath = projectDir.path('config/env_' + utils.getEnvName() + '.json');
-    destDir.copy(configFilePath, 'env_config.json');
 });
 
 

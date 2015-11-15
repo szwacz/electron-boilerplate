@@ -6,9 +6,6 @@
   "version": "0.1.0",
   "author": "Mr Gumby <gumby@sillywalks.com>",
   "main": "background.js",
-  "config": {
-    "target": "development"
-  },
   "dependencies": {
     "fs-jetpack": "^0.7.0"
   }
