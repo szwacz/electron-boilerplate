@@ -4,7 +4,7 @@
 
 'use strict';
 
-var app = require('app');
+var app = require('electron').app;
 var jetpack = require('fs-jetpack');
 
 module.exports = function (name, defaults) {

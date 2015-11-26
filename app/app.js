@@ -8,7 +8,7 @@ import { greet } from './hello_world/hello_world';
 // Node.js modules and those from npm
 // are required the same way as always.
 var os = require('os');
-var app = require('remote').require('app');
+var app = require('electron').remote.app;
 var jetpack = require('fs-jetpack').cwd(app.getAppPath());
 
 // Holy crap! This is browser window with HTML and stuff, but I can read
