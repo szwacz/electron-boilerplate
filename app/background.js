@@ -3,8 +3,9 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-var app = require('app');
-var BrowserWindow = require('browser-window');
+var electron = require('electron');
+var app = electron.app;
+var BrowserWindow = electron.BrowserWindow;
 var env = require('./vendor/electron_boilerplate/env_config');
 var devHelper = require('./vendor/electron_boilerplate/dev_helper');
 var windowStateKeeper = require('./vendor/electron_boilerplate/window_state');
@@ -31,9 +32,9 @@ app.on('ready', function () {
     }
 
     if (env.name === 'test') {
-        mainWindow.loadUrl('file://' + __dirname + '/spec.html');
+        mainWindow.loadURL('file://' + __dirname + '/spec.html');
     } else {
-        mainWindow.loadUrl('file://' + __dirname + '/app.html');
+        mainWindow.loadURL('file://' + __dirname + '/app.html');
     }
 
     if (env.name !== 'production') {
