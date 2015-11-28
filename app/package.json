@@ -1,8 +1,8 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
-  "identifier": "com.example.electron-boilerplate",
-  "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
+  "name": "electron-boilerplate-vue",
+  "productName": "Electron Boilerplate Vue",
+  "identifier": "com.example.electron-boilerplate-vue",
+  "description": "Starter for your Electron application with Vue.js. Out of the box ready for serious stuff.",
   "version": "0.1.0",
   "author": "Mr Gumby <gumby@sillywalks.com>",
   "main": "background.js",
@@ -10,6 +10,8 @@
     "target": "development"
   },
   "dependencies": {
-    "fs-jetpack": "^0.7.0"
+    "fs-jetpack": "^0.7.0",
+    "vue": "^1.0.1",
+    "vue-loader": "^6.0.0"
   }
 }

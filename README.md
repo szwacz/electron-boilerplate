@@ -1,25 +1,21 @@
-electron-boilerplate
+electron-boilerplate-vue
 ==============
-Comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).  
+Comprehensive boilerplate application for [Electron runtime](http://electron.atom.io) and [Vue.js](http://vuejs.org). The majority of this project is the awesome work by @szwacz on his original electron-boilerplate. I simply changed a few bits to make Vue work.
 
 Scope of this project:
 
 - Provide basic structure of the application so you can much easier grasp what should go where.
 - Give you cross-platform development environment, which works the same way on OSX, Windows and Linux.
 - Generate ready for distribution installers of your app for all supported operating systems.
+- Set up build scripts for Vue.js and .vue components.
 
-NOT in the scope:
-
-- Imposing on you any framework (e.g. Angular, React). You can integrate the one which makes most sense for you.
-
-By the way, there is a twin project to this one: [nw-boilerplate](https://github.com/szwacz/nw-boilerplate), which is the same thing but for NW.js.
 
 # Quick start
 The only development dependency of this project is [Node.js](https://nodejs.org). So just make sure you have it installed.
 Then type few commands known to every Node developer...
 ```
-git clone https://github.com/szwacz/electron-boilerplate.git
-cd electron-boilerplate
+git clone https://github.com/bradstewart/electron-boilerplate-vue.git
+cd electron-boilerplate-vue
 npm install
 npm start
 ```
@@ -30,17 +26,17 @@ npm start
 There are **two** `package.json` files:  
 
 #### 1. For development
-Sits on path: `electron-boilerplate/package.json`. Here you declare dependencies for your development environment and build scripts. **This file is not distributed with real application!**
+Sits on path: `electron-boilerplate-vue/package.json`. Here you declare dependencies for your development environment and build scripts. **This file is not distributed with real application!**
 
 Also here you declare the version of Electron runtime you want to use:
 ```json
 "devDependencies": {
-  "electron-prebuilt": "^0.24.0"
+  "electron-prebuilt": "^0.34.0"
 }
 ```
 
 #### 2. For your application
-Sits on path: `electron-boilerplate/app/package.json`. This is **real** manifest of your application. Declare your app dependencies here.
+Sits on path: `electron-boilerplate-vue/app/package.json`. This is **real** manifest of your application. Declare your app dependencies here.
 
 #### OMG, but seriously why there are two `package.json`?
 1. Native npm modules (those written in C, not JavaScript) need to be compiled, and here we have two different compilation targets for them. Those used in application need to be compiled against electron runtime, and all `devDependencies` need to be compiled against your locally installed node.js. Thanks to having two files this is trivial.
@@ -89,7 +85,7 @@ Of course this method works also for pure-js modules, so you can use it all the 
 
 #### Working with modules
 
-Electron ecosystem (because it's a merge of node.js and browser) gives you a little trouble while working with modules. ES6 modules have nice syntax and are the future, so they're utilized in this project (thanks to [rollup](https://github.com/rollup/rollup)). But at the same time node.js and npm still rely on the CommonJS syntax. So in this project you need to use both:
+Electron ecosystem (because it's a merge of node.js and browser) gives you a little trouble while working with modules. ES6 modules have nice syntax and are the future, so they're utilized in this project (via webpack). But at the same time node.js and npm still rely on the CommonJS syntax. So in this project you need to use both:
 ```js
 // Modules which you authored in this project are intended to be
 // imported through new ES6 syntax.
@@ -105,7 +101,7 @@ var moment = require('moment');
 
 #### Unit tests
 
-electron-boilerplate has preconfigured [jasmine](http://jasmine.github.io/2.0/introduction.html) unit test runner. To run it go with standard:
+electron-boilerplate-vue has preconfigured [jasmine](http://jasmine.github.io/2.0/introduction.html) unit test runner. To run it go with standard:
 ```
 npm test
 ```
