@@ -8,8 +8,8 @@ console.log(greet())
 
 // Node.js modules and those from npm
 // are required the same way as always.
-const app = require('remote').require('app')
-const jetpack = require('fs-jetpack').cwd(app.getAppPath())
+var app = require('electron').remote.app;
+var jetpack = require('fs-jetpack').cwd(app.getAppPath());
 
 // Holy crap! This is browser window with HTML and stuff, but I can read
 // here files like it is node.js! Welcome to Electron world :)

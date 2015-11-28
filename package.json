@@ -3,6 +3,7 @@
     "asar": "^0.7.2",
     "babel-loader": "^5.3.2",
     "electron-prebuilt": "^0.34.2",
+    "electron-prebuilt": "^0.35.1",
     "fs-jetpack": "^0.7.0",
     "gulp": "^3.9.0",
     "gulp-util": "^3.0.7",
