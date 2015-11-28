@@ -1,13 +1,13 @@
 {
   "devDependencies": {
     "asar": "^0.7.2",
-    "electron-prebuilt": "^0.34.0",
+    "electron-prebuilt": "^0.35.1",
     "fs-jetpack": "^0.7.0",
     "gulp": "^3.9.0",
     "gulp-less": "^3.0.3",
     "gulp-util": "^3.0.6",
     "q": "^1.4.1",
-    "rollup": "^0.20.5",
+    "rollup": "^0.21.0",
     "rollup-plugin-inject": "^1.2.0",
     "rollup-plugin-json": "^2.0.0",
     "tree-kill": "^0.1.1",

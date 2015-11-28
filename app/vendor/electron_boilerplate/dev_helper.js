@@ -1,6 +1,4 @@
-import app from 'app';
-import Menu from 'menu';
-import BrowserWindow from 'browser-window';
+import { app, Menu, BrowserWindow } from 'electron';
 
 var setDevMenu = function () {
     var devMenu = Menu.buildFromTemplate([{

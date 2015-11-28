@@ -2,7 +2,7 @@
 // Can be used for more than one window, just construct many
 // instances of it and give each different name.
 
-import app from 'app';
+import { app } from 'electron';
 import jetpack from 'fs-jetpack';
 
 export default function (name, defaults) {

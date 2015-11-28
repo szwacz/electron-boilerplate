@@ -3,8 +3,7 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-import app from 'app';
-import BrowserWindow from 'browser-window';
+import { app, BrowserWindow } from 'electron';
 import devHelper from './vendor/electron_boilerplate/dev_helper';
 import windowStateKeeper from './vendor/electron_boilerplate/window_state';
 
@@ -30,9 +29,9 @@ app.on('ready', function () {
     }
 
     if (env.name === 'test') {
-        mainWindow.loadUrl('file://' + __dirname + '/spec.html');
+        mainWindow.loadURL('file://' + __dirname + '/spec.html');
     } else {
-        mainWindow.loadUrl('file://' + __dirname + '/app.html');
+        mainWindow.loadURL('file://' + __dirname + '/app.html');
     }
 
     if (env.name !== 'production') {
