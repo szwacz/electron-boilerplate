@@ -144,7 +144,7 @@ There is a possibility to build the installer using the [WiX] (http://wixtoolset
 For building a WIX installer:
 
 ```
-npm run wix
+npm run release -- --wix
 ```
 
 #### 32-bit build on 64-bit Windows

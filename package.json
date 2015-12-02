@@ -21,7 +21,6 @@
     "app-install": "node ./tasks/app_npm_install",
     "build": "gulp build",
     "release": "gulp release --env=production",
-    "wix": "gulp release --env=production --wix" ,
     "start": "node ./tasks/start",
     "test": "node ./tasks/start --env=test"
   }
