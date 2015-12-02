@@ -41,3 +41,6 @@ module.exports.getElectronVersion = function () {
     var manifest = jetpack.read(__dirname + '/../package.json', 'json');
     return manifest.devDependencies['electron-prebuilt'].substring(1);
 };
+module.exports.useWix = function () {
+    return !(argv.wix === undefined);
+};

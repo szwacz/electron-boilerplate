@@ -7,15 +7,12 @@ var jetpack = require('fs-jetpack');
 var asar = require('asar');
 var utils = require('./utils');
 var uuid = require('node-uuid');
-var argv = require('yargs').argv;
 
 var projectDir;
 var tmpDir;
 var releasesDir;
 var readyAppDir;
 var manifest;
-
-var useWix = (argv.wix === undefined) ? false : true;
 
 var init = function () {
     projectDir = jetpack;
@@ -72,8 +69,8 @@ var renameApp = function () {
 };
 
 var createInstaller = function (){
-    return useWix ? createWixInstaller() : createNsisInstaller();
-}
+    return utils.useWix() ? createWixInstaller() : createNsisInstaller();
+};
 
 var createNsisInstaller = function () {
     var deferred = Q.defer();
