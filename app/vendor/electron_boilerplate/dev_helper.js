@@ -12,7 +12,7 @@ module.exports.setDevMenu = function () {
             label: 'Reload',
             accelerator: 'CmdOrCtrl+R',
             click: function () {
-                BrowserWindow.getFocusedWindow().reloadIgnoringCache();
+                BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache();
             }
         },{
             label: 'Toggle DevTools',
