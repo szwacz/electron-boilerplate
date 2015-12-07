@@ -103,6 +103,20 @@ var fs = require('fs');
 var moment = require('moment');
 ```
 
+#### Adding paths in build task
+
+If you add new files or folders in your app, build process will working correctly after add paths in `tasks/build.js`
+```javascript
+var paths = {
+    copyFromAppDir: [
+        './node_modules/**',
+        './vendor/**',
+        './**/*.html',
+        './newfolder/**' // add here
+    ],
+}
+```
+
 #### Unit tests
 
 electron-boilerplate has preconfigured [jasmine](http://jasmine.github.io/2.0/introduction.html) unit test runner. To run it go with standard:
