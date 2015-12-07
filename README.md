@@ -90,15 +90,15 @@ Of course this method works also for pure-js modules, so you can use it all the 
 #### Working with modules
 
 How about being future proof and using ES6 modules all the time in your app? Thanks to [rollup](https://github.com/rollup/rollup) you can do that. It will transpile the imports to proper `require()` statements, so even though ES6 modules aren't natively supported yet you can start using them today.
-```js
-// You can use it on those kinds of modules:
 
+You can use it on those kinds of modules:
+```js
 // Modules authored by you
 import { myStuff } from './my_lib/my_stuff';
 // Node.js native
 import fs from 'fs';
 // Electron native
-import app from 'app';
+import { app } from 'electron';
 // Loaded from npm
 import moment from 'moment';
 ```
