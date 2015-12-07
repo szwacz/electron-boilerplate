@@ -3,12 +3,13 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-var electron = require('electron');
-var app = electron.app;
-var BrowserWindow = electron.BrowserWindow;
-var env = require('./vendor/electron_boilerplate/env_config');
-var devHelper = require('./vendor/electron_boilerplate/dev_helper');
-var windowStateKeeper = require('./vendor/electron_boilerplate/window_state');
+import { app, BrowserWindow } from 'electron';
+import devHelper from './vendor/electron_boilerplate/dev_helper';
+import windowStateKeeper from './vendor/electron_boilerplate/window_state';
+
+// Special module holding environment variables which you declared
+// in config/env_xxx.json file.
+import env from './env';
 
 var mainWindow;
 

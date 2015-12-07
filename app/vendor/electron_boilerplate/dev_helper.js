@@ -1,11 +1,6 @@
-'use strict';
+import { app, Menu, BrowserWindow } from 'electron';
 
-var electron = require('electron');
-var app = electron.app;
-var Menu = electron.Menu;
-var BrowserWindow = electron.BrowserWindow;
-
-module.exports.setDevMenu = function () {
+var setDevMenu = function () {
     var devMenu = Menu.buildFromTemplate([{
         label: 'Development',
         submenu: [{
@@ -30,3 +25,7 @@ module.exports.setDevMenu = function () {
     }]);
     Menu.setApplicationMenu(devMenu);
 };
+
+export default {
+    setDevMenu: setDevMenu,
+}
