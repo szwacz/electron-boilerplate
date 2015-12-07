@@ -7,6 +7,10 @@ import { app, BrowserWindow } from 'electron';
 import devHelper from './vendor/electron_boilerplate/dev_helper';
 import windowStateKeeper from './vendor/electron_boilerplate/window_state';
 
+// Special module holding environment variables which you declared
+// in config/env_xxx.json file.
+import env from './env';
+
 var mainWindow;
 
 // Preserver of the window size and position between app launches.

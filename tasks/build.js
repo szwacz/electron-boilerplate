@@ -4,8 +4,6 @@ var pathUtil = require('path');
 var Q = require('q');
 var gulp = require('gulp');
 var rollup = require('rollup');
-var rollupInject = require('rollup-plugin-inject');
-var rollupJson = require('rollup-plugin-json');
 var less = require('gulp-less');
 var jetpack = require('fs-jetpack');
 
@@ -48,10 +46,6 @@ var bundle = function (src, dest) {
 
     rollup.rollup({
         entry: src,
-        plugins: [
-            rollupInject({ env: projectDir.path('config/env_' + utils.getEnvName() + '.json') }),
-            rollupJson()
-        ]
     }).then(function (bundle) {
         var jsFile = pathUtil.basename(dest);
         var result = bundle.generate({
@@ -69,7 +63,7 @@ var bundle = function (src, dest) {
     }).then(function () {
         deferred.resolve();
     }).catch(function (err) {
-        console.error('build: Error during rollup', err.stack);
+        console.error('Build: Error during rollup', err.stack);
     });
 
     return deferred.promise;
@@ -112,6 +106,7 @@ gulp.task('less-watch', lessTask);
 
 gulp.task('finalize', ['clean'], function () {
     var manifest = srcDir.read('package.json', 'json');
+
     // Add "dev" or "test" suffix to name, so Electron will write all data
     // like cookies and localStorage in separate places for each environment.
     switch (utils.getEnvName()) {
@@ -124,6 +119,12 @@ gulp.task('finalize', ['clean'], function () {
             manifest.productName += ' Test';
             break;
     }
+
+    // Copy environment variables to package.json file for easy use
+    // in the running application. This is not official way of doing
+    // things, but also isn't prohibited ;)
+    manifest.env = projectDir.read('config/env_' + utils.getEnvName() + '.json', 'json');
+
     destDir.write('package.json', manifest);
 });
 
