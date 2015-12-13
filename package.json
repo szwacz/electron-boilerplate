@@ -16,8 +16,7 @@
     "rcedit": "^0.3.0"
   },
   "scripts": {
-    "postinstall": "node ./tasks/app_npm_install",
-    "app-install": "node ./tasks/app_npm_install",
+    "postinstall": "cd app && npm install",
     "build": "gulp build",
     "release": "gulp release --env=production",
     "start": "node ./tasks/start",
