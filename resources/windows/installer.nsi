@@ -100,6 +100,7 @@ Section "Install"
     File /r "${src}\*"
 
     ; Create start menu shortcut
+    SetShellVarContext all
     CreateShortCut "$SMPROGRAMS\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
 
     WriteUninstaller "${uninstaller}"
@@ -149,6 +150,7 @@ Section "Uninstall"
     DeleteRegKey HKLM "${uninstkey}"
     DeleteRegKey HKLM "${regkey}"
 
+    SetShellVarContext all
     Delete "$SMPROGRAMS\${productName}.lnk"
 
     ; Remove whole directory from Program Files
