@@ -73,28 +73,10 @@ var createInstaller = function () {
     var finalPackageName = manifest.name + '_' + manifest.version + '.exe';
     var installScript = projectDir.read('resources/windows/installer.nsi');
 
-    var finalAuthorName = function(rawAuthorValue) {
-        var defaultEmptyAuthorValue = "";
-
-        if (!rawAuthorValue) {
-            return defaultEmptyAuthorValue;
-        } else {
-            switch (typeof rawAuthorValue) {
-                case 'string':
-                    return rawAuthorValue;
-                case 'object':
-                    // Extracting name from "author" object
-                    return rawAuthorValue.name || defaultEmptyAuthorValue;
-                default:
-                    return defaultEmptyAuthorValue;
-            }
-        }
-    }(manifest.author);
-
     installScript = utils.replace(installScript, {
         name: manifest.name,
         productName: manifest.productName,
-        author: finalAuthorName,
+        author: manifest.author,
         version: manifest.version,
         src: readyAppDir.path(),
         dest: releasesDir.path(finalPackageName),
