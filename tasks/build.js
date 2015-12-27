@@ -27,7 +27,7 @@ var paths = {
 // Tasks
 // -------------------------------------
 
-gulp.task('clean', function(callback) {
+gulp.task('clean', function (callback) {
     return destDir.dirAsync('.', { empty: true });
 });
 
