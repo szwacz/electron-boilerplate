@@ -34,7 +34,7 @@
     textMenu.append(copy);
     textMenu.append(paste);
 
-    document.addEventListener('contextmenu', function(e) {
+    document.addEventListener('contextmenu', function (e) {
 
         switch (e.target.nodeName) {
             case 'TEXTAREA':

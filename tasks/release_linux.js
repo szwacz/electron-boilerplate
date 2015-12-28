@@ -34,7 +34,7 @@ var copyRuntime = function () {
 var packageBuiltApp = function () {
     var deferred = Q.defer();
 
-    asar.createPackage(projectDir.path('build'), readyAppDir.path('resources/app.asar'), function() {
+    asar.createPackage(projectDir.path('build'), readyAppDir.path('resources/app.asar'), function () {
         deferred.resolve();
     });
 
@@ -59,7 +59,7 @@ var finalize = function () {
     return Q();
 };
 
-var renameApp = function() {
+var renameApp = function () {
     return readyAppDir.renameAsync("electron", manifest.name);
 };
 

@@ -27,16 +27,16 @@ var copyRuntime = function () {
     return projectDir.copyAsync('node_modules/electron-prebuilt/dist/Electron.app', finalAppDir.path());
 };
 
-var cleanupRuntime = function() {
+var cleanupRuntime = function () {
     finalAppDir.remove('Contents/Resources/default_app');
     finalAppDir.remove('Contents/Resources/atom.icns');
     return Q();
-}
+};
 
 var packageBuiltApp = function () {
     var deferred = Q.defer();
 
-    asar.createPackage(projectDir.path('build'), finalAppDir.path('Contents/Resources/app.asar'), function() {
+    asar.createPackage(projectDir.path('build'), finalAppDir.path('Contents/Resources/app.asar'), function () {
         deferred.resolve();
     });
 
@@ -69,7 +69,7 @@ var finalize = function () {
     return Q();
 };
 
-var renameApp = function() {
+var renameApp = function () {
     // Rename helpers
     [' Helper EH', ' Helper NP', ' Helper'].forEach(function (helper_suffix) {
         finalAppDir.rename('Contents/Frameworks/Electron' + helper_suffix + '.app/Contents/MacOS/Electron' + helper_suffix, manifest.productName + helper_suffix );
@@ -78,7 +78,7 @@ var renameApp = function() {
     // Rename application
     finalAppDir.rename('Contents/MacOS/Electron', manifest.productName);
     return Q();
-}
+};
 
 var signApp = function () {
     var identity = utils.getSigningId();
@@ -89,7 +89,7 @@ var signApp = function () {
     } else {
         return Q();
     }
-}
+};
 
 var packToDmgFile = function () {
     var deferred = Q.defer();
