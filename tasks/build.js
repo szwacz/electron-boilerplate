@@ -56,7 +56,7 @@ var bundle = function (src, dest) {
         });
         // Wrap code in self invoking function so the variables don't
         // pollute the global namespace.
-        var isolatedCode = '(function () {' + result.code + '}());';
+        var isolatedCode = '(function () {' + result.code + '\n}());';
         return Q.all([
             destDir.writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
             destDir.writeAsync(dest + '.map', result.map.toString()),
