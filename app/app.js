@@ -15,7 +15,7 @@ var appDir = jetpack.cwd(app.getAppPath());
 
 // Holy crap! This is browser window with HTML and stuff, but I can read
 // here files like it is node.js! Welcome to Electron world :)
-console.log('The author if this app is:', appDir.read('package.json', 'json').author);
+console.log('The author of this app is:', appDir.read('package.json', 'json').author);
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('greet').innerHTML = greet();
