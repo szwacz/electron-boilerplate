@@ -105,6 +105,8 @@ Section "Install"
     ; Create start menu shortcut
     SetShellVarContext all
     CreateShortCut "$SMPROGRAMS\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
+    ; Create desktop shortcut
+    CreateShortCut "$DESKTOP\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
 
     WriteUninstaller "${uninstaller}"
 
@@ -155,7 +157,8 @@ Section "Uninstall"
 
     SetShellVarContext all
     Delete "$SMPROGRAMS\${productName}.lnk"
-
+    ; Remove desktop shortcut
+    Delete "$DESKTOP\${productName}.lnk"
     ; Remove whole directory from Program Files
     RMDir /r "$INSTDIR"
 
