@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?define ProductVersion = "{{version}}"?>
+<?define ProductId = "{{productId}}"?>
+<?define ProductUpgradeCode = "{{upgradeCode}}"?>
+<?define ProductName = "{{productName}}"?>
+<?define Manufacturer = "{{manufacturer}}"?>
+<?define Icon = "{{icon}}"?>
+<?define License = "{{license}}"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	 xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+	 xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
+	<Product Id="$(var.ProductId)" UpgradeCode="$(var.ProductUpgradeCode)" Name="$(var.ProductName)" Version="$(var.ProductVersion)" Manufacturer="$(var.Manufacturer)" Language="1033" >
+
+
+		<Package InstallerVersion="200" Compressed="yes" InstallScope = "perMachine"/>
+		<Media Id="1" Cabinet="product.cab" EmbedCab="yes"/>
+
+		<Icon Id="ProductIcon" SourceFile="$(var.Icon)"/>
+        <Property Id="ARPPRODUCTICON" Value="ProductIcon"/>
+
+		<Property Id="ARPNOREPAIR" Value="1"/>
+
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.License)" />
+
+		<Upgrade Id="$(var.ProductUpgradeCode)">
+			<UpgradeVersion Minimum="$(var.ProductVersion)" IncludeMinimum="no" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
+			<UpgradeVersion Minimum="0.0.0" Maximum="$(var.ProductVersion)" IncludeMinimum="yes" IncludeMaximum="yes"
+							Property="OLDERVERSIONBEINGUPGRADED"/>
+		</Upgrade>
+
+		<Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLDIR" Name="$(var.ProductName)">
+				</Directory>
+			</Directory>
+
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ProgramMenuSubfolder" Name="$(var.ProductName)">
+					<Component Id="ProgramMenuShortcuts" Guid="4EF42B6C-123E-4ECA-A879-B8497745C57C">
+						<Shortcut Id="ProgramMenuShortcut" Name="$(var.ProductName)" Icon="ProductIcon" Target="[INSTALLDIR]$(var.ProductName).exe" WorkingDirectory="INSTALLDIR"/>
+                        <RegistryValue KeyPath="yes"
+                                       Root="HKCU"
+                                       Key="Software\$(var.ProductName)"
+                                       Name="installed"
+                                       Type="integer"
+                                       Value="1"/>
+                        <RemoveFolder Id="ProgramMenuSubfolder" On="uninstall"/>
+					</Component>
+				</Directory>
+			</Directory>
+
+			<Directory Id="DesktopFolder" Name="Desktop">
+				<Component Id="DekstopShortcuts" Guid="3AFDDA03-2698-4D7E-BA8D-CD0E5C79CE0B">
+                <Shortcut Id="DesktopShortcut" Name="$(var.ProductName)"
+                Target="[INSTALLDIR]$(var.ProductName).exe"
+                Icon="ProductIcon"/>
+                    <RegistryValue KeyPath="yes"
+                                   Root="HKCU"
+                                   Key="Software\$(var.ProductName)"
+                                   Name="installed"
+                                   Type="integer"
+                                   Value="1"/>
+					<RemoveFolder Id="DesktopFolder" On="uninstall"/>
+				</Component>
+			</Directory>
+		</Directory>
+
+		<InstallExecuteSequence>
+			<RemoveExistingProducts After="InstallValidate"/>
+		</InstallExecuteSequence>
+
+		<UI>
+			<UIRef Id="WixUI_InstallDir" />
+		</UI>
+
+		<Feature Id="DefaultFeature" Level="1">
+            <ComponentGroupRef Id="ApplicationFiles"/>
+			<ComponentRef Id="ProgramMenuShortcuts"/>
+			<ComponentRef Id="DekstopShortcuts"/>
+		</Feature>
+	</Product>
+</Wix>

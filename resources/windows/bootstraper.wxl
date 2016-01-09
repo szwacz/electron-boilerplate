@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?define ProductVersion = "{{version}}"?>
+<?define ProductUpgradeCode = "{{upgradeCode}}"?>
+<?define Name = "{{name}}"?>
+<?define Manufacturer = "{{manufacturer}}"?>
+<?define Icon = "{{icon}}"?>
+<?define License = "{{license}}"?>
+<?define MSI = "{{msi}}"?>
+
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Bundle UpgradeCode="$(var.ProductUpgradeCode)" Version="$(var.ProductVersion)" Name="$(var.Name)" Manufacturer="$(var.Manufacturer)"  DisableRemove="no" DisableModify="yes" IconSourceFile="$(var.Icon)">
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" >
+		<bal:WixStandardBootstrapperApplication
+    LicenseFile="$(var.License)"
+	SuppressRepair="yes"
+	xmlns:bal="http://schemas.microsoft.com/wix/BalExtension" />
+		</BootstrapperApplicationRef>
+		<Chain>
+			<MsiPackage Id="msi1" SourceFile="$(var.MSI)" DisplayInternalUI="yes" Compressed="yes" Vital="yes" Visible="no" >
+			</MsiPackage>
+		</Chain>
+	</Bundle>
+</Wix>

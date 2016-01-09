@@ -146,6 +146,14 @@ npm run release -- --sign A123456789
 
 The installer is built using [NSIS](http://nsis.sourceforge.net). You have to install NSIS version 3.0, and add its folder to PATH in Environment Variables, so it is reachable to scripts in this project. For example, `C:\Program Files (x86)\NSIS`.
 
+There is a possibility to build the installer using the [WiX] (http://wixtoolset.org/).  You have to install the latest WiX version, and add its bin folder to PATH in Environment Variables, so it is reachable to scripts in this project. For example, `C:\Program Files (x86)\WiX Toolset v3.9\bin\`.
+
+For building a WIX installer:
+
+```
+npm run release -- --wix
+```
+
 #### 32-bit build on 64-bit Windows
 
 There are still a lot of 32-bit Windows installations in use. If you want to support those systems and have 64-bit OS make sure you've installed 32-bit (instead of 64-bit) Node version. There are [versions managers](https://github.com/coreybutler/nvm-windows) if you feel the need for both architectures on the same machine.
