@@ -49,7 +49,8 @@ var finalize = function () {
     info = utils.replace(info, {
         productName: manifest.productName,
         identifier: manifest.identifier,
-        version: manifest.version
+        version: manifest.version,
+        copyright: manifest.copyright
     });
     finalAppDir.write('Contents/Info.plist', info);
 

@@ -53,6 +53,10 @@ var finalize = function () {
         'version-string': {
             'ProductName': manifest.productName,
             'FileDescription': manifest.description,
+            'ProductVersion': manifest.version,
+            'CompanyName': manifest.author, // it might be better to add another field to package.json for this
+            'LegalCopyright': manifest.copyright,
+            'OriginalFilename': manifest.productName + '.exe'
         }
     }, function (err) {
         if (!err) {
