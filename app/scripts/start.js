@@ -1,3 +1,5 @@
+/* globals $ */
+
 export var start = function() {
     var key = 'rocket.chat.hosts',
         rocketHeader = 'X-Rocket-Chat-Version'.toLowerCase(),
@@ -10,7 +12,7 @@ export var start = function() {
         var http = new XMLHttpRequest();
         http.open('GET', src);
         http.onreadystatechange = function() {
-            if (this.readyState == this.DONE) {
+            if (this.readyState === this.DONE) {
                 if (this.response) {
                     loader.innerHTML = this.response + loader.innerHTML;
                 }
@@ -30,7 +32,9 @@ export var start = function() {
     }
 
     // connection check
-    if (!navigator.onLine) offline();
+    if (!navigator.onLine) {
+        offline();
+    }
     window.addEventListener('online', online);
     window.addEventListener('offline', offline);
 
@@ -45,7 +49,7 @@ export var start = function() {
 
     var form = document.querySelector('form');
     form.addEventListener('submit', function(ev) {
-        console.log('trying to connect')
+        console.log('trying to connect');
         ev.preventDefault();
         ev.stopPropagation();
         var input = form.querySelector('[name="host"]');
@@ -68,7 +72,7 @@ export var start = function() {
                 redirect(url);
                 input.value = '';
                 button.value = val;
-            }, function(status) {
+            }, function(/*status*/) {
                 button.value = val;
                 form.querySelector('#invalidUrl').style.display = 'block';
                 console.debug('url wrong');
@@ -79,10 +83,10 @@ export var start = function() {
         return false;
     });
 
-    function changeServer() {
-        document.querySelector('.rocket-app').style.display = 'none';
-        document.querySelector('.landing-page').style.display = 'block';
-    }
+    // function changeServer() {
+    //     document.querySelector('.rocket-app').style.display = 'none';
+    //     document.querySelector('.landing-page').style.display = 'block';
+    // }
 
     function urlExists(url, timeout) {
         return new Promise(function(resolve, reject) {
@@ -90,7 +94,7 @@ export var start = function() {
             var resolved = false;
             http.open('HEAD', url);
             http.onreadystatechange = function() {
-                if (this.readyState == this.DONE) {
+                if (this.readyState === this.DONE) {
                     if (!resolved) {
                         resolved = true;
                         var headers = this.getAllResponseHeaders().toLowerCase();
@@ -224,7 +228,50 @@ export var start = function() {
 
     function redirect(url) {
         localStorage.setItem('rocket.chat.currentHost', url);
-        document.getElementById('rocketAppFrame').src = url;
+        // document.getElementById('rocketAppFrame').src = url;
+        console.log(`webview[server="${url}"]`);
+        var webview = document.querySelector(`webview[server="${url}"]`);
+        if (!webview) {
+            console.log(1);
+            webview = document.createElement('webview');
+            webview.setAttribute('server', url);
+            webview.setAttribute('preload', './preload.js');
+            webview.setAttribute('allowpopups', 'on');
+
+            // webview.onload = function () {
+            //     rocketAppFrame.contentWindow.addEventListener('unread-changed', function (e) {
+            //         window.dispatchEvent(new CustomEvent('unread-changed', {
+            //             detail: e.detail
+            //         }));
+            //     });
+            // };
+            // webview.addEventListener('did-start-loading', function() {
+            //     console.log('did-start-loading');
+            // });
+            // webview.addEventListener('did-stop-loading', function() {
+            //     console.log('did-stop-loading');
+            // });
+            // webview.addEventListener('did-frame-finish-load', function() {
+            //     console.log('did-frame-finish-load');
+            // });
+            webview.addEventListener('console-message', function(e) {
+                console.log('webview:', e.message);
+            });
+            webview.addEventListener('ipc-message', function(event) {
+                window.dispatchEvent(new CustomEvent(event.channel, {
+                   detail: event.args[0]
+                }));
+            });
+            document.querySelector('.rocket-app').appendChild(webview);
+            webview.src = url;
+        } else {
+            webview.style.display = 'initial';
+        }
+
+        $(`webview:not([server="${url}"])`).css('display', 'none');
+
+        // servers[url] = webview;
+
         document.querySelector('.landing-page').style.display = 'none';
         document.querySelector('.rocket-app').style.display = 'block';
     }
@@ -233,17 +280,4 @@ export var start = function() {
         addServer(defaultInstance);
         redirect(defaultInstance);
     }
-
-    var rocketAppFrame = document.getElementById('rocketAppFrame');
-    rocketAppFrame.onload = function () {
-        rocketAppFrame.contentWindow.addEventListener('unread-changed', function (e) {
-            window.dispatchEvent(new CustomEvent('unread-changed', {
-                detail: e.detail
-            }));
-        });
-        rocketAppFrame.contentWindow.document.addEventListener('click', supportExternalLinks, false);
-        rocketAppFrame.contentWindow.open = function() {
-            return window.open.apply(this, arguments);
-        }
-    };
-}
+};
