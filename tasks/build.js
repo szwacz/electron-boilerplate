@@ -5,7 +5,6 @@ var Q = require('q');
 var gulp = require('gulp');
 var rollup = require('rollup');
 var less = require('gulp-less');
-var coffee = require('gulp-coffee');
 var jetpack = require('fs-jetpack');
 
 var utils = require('./utils');
@@ -31,13 +30,13 @@ var paths = {
         './**/*.html',
         './**/*.+(jpg|png|svg)'
     ],
-}
+};
 
 // -------------------------------------
 // Tasks
 // -------------------------------------
 
-gulp.task('clean', function (callback) {
+gulp.task('clean', function () {
     return destDir.dirAsync('.', { empty: true });
 });
 
@@ -115,16 +114,6 @@ gulp.task('less', ['clean'], lessTask);
 gulp.task('less-watch', lessTask);
 
 
-var coffeeTask = function () {
-    return gulp.src('app/*.coffee')
-    .pipe(coffee({bare: true}))
-    .pipe(gulp.dest(destDir.path()));
-};
-gulp.task('coffee', ['clean'], coffeeTask);
-gulp.task('coffee-watch', coffeeTask);
-
-
-
 gulp.task('finalize', ['clean'], function () {
     var manifest = srcDir.read('package.json', 'json');
 
@@ -157,4 +146,4 @@ gulp.task('watch', function () {
 });
 
 
-gulp.task('build', ['coffee', 'bundle', 'less', 'copy', 'finalize']);
+gulp.task('build', ['bundle', 'less', 'copy', 'finalize']);
