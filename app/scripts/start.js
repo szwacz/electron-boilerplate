@@ -1,9 +1,12 @@
 /* globals $ */
 
+import { remote } from 'electron';
+
 export var start = function() {
     var key = 'rocket.chat.hosts',
         rocketHeader = 'X-Rocket-Chat-Version'.toLowerCase(),
         defaultInstance = 'https://demo.rocket.chat/';
+
 
     //init loader
     var loader = document.querySelector('.loader');
@@ -228,23 +231,13 @@ export var start = function() {
 
     function redirect(url) {
         localStorage.setItem('rocket.chat.currentHost', url);
-        // document.getElementById('rocketAppFrame').src = url;
-        console.log(`webview[server="${url}"]`);
         var webview = document.querySelector(`webview[server="${url}"]`);
         if (!webview) {
-            console.log(1);
             webview = document.createElement('webview');
             webview.setAttribute('server', url);
             webview.setAttribute('preload', './preload.js');
             webview.setAttribute('allowpopups', 'on');
 
-            // webview.onload = function () {
-            //     rocketAppFrame.contentWindow.addEventListener('unread-changed', function (e) {
-            //         window.dispatchEvent(new CustomEvent('unread-changed', {
-            //             detail: e.detail
-            //         }));
-            //     });
-            // };
             // webview.addEventListener('did-start-loading', function() {
             //     console.log('did-start-loading');
             // });
@@ -270,8 +263,6 @@ export var start = function() {
 
         $(`webview:not([server="${url}"])`).css('display', 'none');
 
-        // servers[url] = webview;
-
         document.querySelector('.landing-page').style.display = 'none';
         document.querySelector('.rocket-app').style.display = 'block';
     }
@@ -280,4 +271,13 @@ export var start = function() {
         addServer(defaultInstance);
         redirect(defaultInstance);
     }
+
+    window.addEventListener('unread-changed', function(event) {
+        var unread = event.detail;
+        // let showAlert = (unread !== null && unread !== undefined && unread !== '');
+        if (process.platform === 'darwin') {
+            remote.app.dock.setBadge(String(unread || ''));
+        }
+        // remote.Tray.showTrayAlert(showAlert, String(unread));
+    });
 };
