@@ -34,7 +34,7 @@ var cleanupRuntime = function () {
 var packageBuiltApp = function () {
     var deferred = Q.defer();
 
-    asar.createPackage(projectDir.path('build'), readyAppDir.path('resources/app.asar'), function() {
+    asar.createPackage(projectDir.path('build'), readyAppDir.path('resources/app.asar'), function () {
         deferred.resolve();
     });
 
@@ -53,6 +53,10 @@ var finalize = function () {
         'version-string': {
             'ProductName': manifest.productName,
             'FileDescription': manifest.description,
+            'ProductVersion': manifest.version,
+            'CompanyName': manifest.author, // it might be better to add another field to package.json for this
+            'LegalCopyright': manifest.copyright,
+            'OriginalFilename': manifest.productName + '.exe'
         }
     }, function (err) {
         if (!err) {
@@ -72,9 +76,11 @@ var createInstaller = function () {
 
     var finalPackageName = manifest.name + '_' + manifest.version + '.exe';
     var installScript = projectDir.read('resources/windows/installer.nsi');
+
     installScript = utils.replace(installScript, {
         name: manifest.name,
         productName: manifest.productName,
+        author: manifest.author,
         version: manifest.version,
         src: readyAppDir.path(),
         dest: releasesDir.path(finalPackageName),

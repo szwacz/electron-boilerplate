@@ -12,6 +12,7 @@
 !define src "{{src}}"
 !define name "{{name}}"
 !define productName "{{productName}}"
+!define author "{{author}}"
 !define version "{{version}}"
 !define icon "{{icon}}"
 !define setupIcon "{{setupIcon}}"
@@ -90,6 +91,8 @@ Section "Install"
     WriteRegStr HKLM "${uninstkey}" "DisplayName" "${productName}"
     WriteRegStr HKLM "${uninstkey}" "DisplayIcon" '"$INSTDIR\icon.ico"'
     WriteRegStr HKLM "${uninstkey}" "UninstallString" '"$INSTDIR\${uninstaller}"'
+    WriteRegStr HKLM "${uninstkey}" "Publisher" "${author}"
+    WriteRegStr HKLM "${uninstkey}" "DisplayVersion" "${version}"
 
     ; Remove all application files copied by previous installation
     RMDir /r "$INSTDIR"
@@ -100,7 +103,10 @@ Section "Install"
     File /r "${src}\*"
 
     ; Create start menu shortcut
+    SetShellVarContext all
     CreateShortCut "$SMPROGRAMS\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
+    ; Create desktop shortcut
+    CreateShortCut "$DESKTOP\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
 
     WriteUninstaller "${uninstaller}"
 
@@ -149,8 +155,10 @@ Section "Uninstall"
     DeleteRegKey HKLM "${uninstkey}"
     DeleteRegKey HKLM "${regkey}"
 
+    SetShellVarContext all
     Delete "$SMPROGRAMS\${productName}.lnk"
-
+    ; Remove desktop shortcut
+    Delete "$DESKTOP\${productName}.lnk"
     ; Remove whole directory from Program Files
     RMDir /r "$INSTDIR"
 

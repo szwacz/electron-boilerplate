@@ -5,10 +5,8 @@
   "description": "Rocket.Chat Native Cross-Platform Desktop Application via Electron.",
   "version": "0.0.10",
   "author": "Rocket.Chat Support <support@rocket.chat>",
+  "copyright": "© 2016, Rocket.Chat",
   "main": "background.js",
-  "config": {
-    "target": "development"
-  },
   "dependencies": {
     "fs-jetpack": "^0.7.0"
   }

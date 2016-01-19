@@ -16,7 +16,7 @@
 (function () {
     'use strict';
 
-    var shell = require('shell');
+    var shell = require('electron').shell;
 
     var supportExternalLinks = function (e) {
         var href;
