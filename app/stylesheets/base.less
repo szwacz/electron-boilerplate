@@ -267,13 +267,15 @@ input[type='password'] {
 	right: 0;
 	bottom: 0;
 	left: 80px;
-	width: auto;
-	height: auto;
 	overflow-y: auto;
 	text-align: center;
-	margin: auto;
 	background-color: darken(@primary-background-color, 10%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10000;
 	.wrapper {
+		min-width: 600px;
 		text-align: center;
 		padding: 45px 0 35px;
 		z-index: 10;

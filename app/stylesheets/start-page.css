@@ -39,6 +39,10 @@ div.server-list {
 	background-color: #0F354C;
 }
 
+div.server-list ul {
+	padding-left: 0px;
+}
+
 div.server-list li {
 	color: #FFF;
 	cursor: pointer;
@@ -132,4 +136,3 @@ div.server-list li {
 		transform: translate3d(10px, 0, 0);
 	}
 }
-
