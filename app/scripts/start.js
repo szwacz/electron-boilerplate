@@ -172,7 +172,7 @@ export var start = function() {
         clearActive();
 
         var lastLi = document.querySelector('#serverList .add-server');
-        list.insertBefore(createItem(url, (list.childNodes.length + 1), true), lastLi);
+        list.insertBefore(createItem(servers.hosts[url], true), lastLi);
     }
 
     $('.add-server').on('click', function() {
@@ -189,8 +189,9 @@ export var start = function() {
         return document.querySelector(`#serverList .instance[server="${url}"]`);
     }
 
-    function createItem(url, pos, active) {
-        var name = url.replace(/^https?:\/\/(?:www\.)?([^\/]+)(.*)/, '$1');
+    function createItem(host, active) {
+        var url = host.url;
+        var name = host.title.replace(/^https?:\/\/(?:www\.)?([^\/]+)(.*)/, '$1');
         name = name.split('.');
         name = name[0][0] + (name[1] ? name[1][0] : '');
         name = name.toUpperCase();
@@ -201,7 +202,7 @@ export var start = function() {
         initials.innerHTML = name;
 
         var tooltip = document.createElement('div');
-        tooltip.innerHTML = url;
+        tooltip.innerHTML = host.title;
 
         item.appendChild(initials);
         item.appendChild(tooltip);
@@ -237,8 +238,10 @@ export var start = function() {
         var lastLi = document.querySelector('#serverList .add-server');
         var hosts = servers.hosts;
 
-        for (var i = 0; i < hosts.length; i++) {
-            list.insertBefore(createItem(hosts[i], (i + 1)), lastLi);
+        for (var host in hosts) {
+            if (hosts.hasOwnProperty(host)) {
+                list.insertBefore(createItem(hosts[host]), lastLi);
+            }
         }
     }
 
@@ -283,7 +286,14 @@ export var start = function() {
 
                 switch (event.channel) {
                     case 'title-changed':
-                        $(`li[server="${url}"] div`).html(event.args[0]);
+                        var hosts = servers.hosts;
+                        var title = event.args[0];
+                        if (title === 'Rocket.Chat' && /https?:\/\/demo\.rocket\.chat/.test(url) === false) {
+                            title += ' - ' + url;
+                        }
+                        hosts[url].title = title;
+                        servers.hosts = hosts;
+                        $(`li[server="${url}"] div`).html(title);
                         break;
                 }
             });
