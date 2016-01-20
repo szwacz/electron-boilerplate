@@ -50,3 +50,82 @@ var supportExternalLinks = function(e) {
 };
 
 document.addEventListener('click', supportExternalLinks, false);
+
+var webFrame = require('web-frame');
+var checker = require('spellchecker');
+var remote = require('remote');
+var webContents = remote.getCurrentWebContents();
+var Menu = remote.require('menu');
+var menu = new Menu();
+
+// set the initial context menu so that a context menu exists even before spellcheck is called
+var getTemplate = function() {
+    return [
+        {
+            label: 'Undo',
+            selector: 'undo:'
+        },
+        {
+            label: 'Redo',
+            selector: 'redo:'
+        },
+        {
+            type: 'separator'
+        },
+        {
+            label: 'Cut',
+            selector: 'cut:'
+        },
+        {
+            label: 'Copy',
+            selector: 'copy:'
+        },
+        {
+            label: 'Paste',
+            selector: 'paste:'
+        },
+        {
+            label: 'Select All',
+            selector: 'selectAll:'
+        }
+    ];
+};
+
+var template = getTemplate();
+menu = Menu.buildFromTemplate(getTemplate());
+
+webFrame.setSpellCheckProvider((localStorage.getItem('userLanguage') || 'en'), false, {
+    spellCheck: function(text) {
+        if (localStorage.getItem('userLanguage')) {
+            checker.setDictionary(localStorage.getItem('userLanguage'));
+        }
+
+        var isMisspelled = checker.isMisspelled(text);
+
+        if (isMisspelled) {
+            var options = checker.getCorrectionsForMisspelling(text);
+            var maxItems = Math.min(options.length, 5);
+            template.unshift({type: 'separator'});
+            if (maxItems > 0) {
+                var onClick = function(menuItem) {
+                    webContents.replaceMisspelling(menuItem.label);
+                };
+                for (var i = maxItems-1; i >= 0; i--) {
+                    var item = options[i];
+                    template.unshift({ label: item, click: onClick});
+                }
+            } else {
+                template.unshift({ label: 'no suggestions', click: function() { } });
+            }
+        }
+        menu = Menu.buildFromTemplate(template);
+        template = getTemplate();
+
+        return !isMisspelled;
+    }
+});
+
+window.addEventListener('contextmenu', function(){
+    menu.popup(remote.getCurrentWindow());
+    menu = Menu.buildFromTemplate(template);
+}, false);

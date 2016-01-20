@@ -217,17 +217,17 @@ var selectedInstance = null;
 var instanceMenu = Menu.buildFromTemplate([{
 	label: 'Remove server',
 	click: function() {
-		console.log('Remove server');
 		var $selectedInstance = $(selectedInstance);
-		if ($selectedInstance.hasClass('active')) {
-			console.log('has class');
-		}
-
 		servers.remove(selectedInstance.dataset.host);
 		$(`webview[server="${selectedInstance.dataset.host}"]`).remove();
 		document.querySelector('.rocket-app').style.display = 'none';
 		document.querySelector('.landing-page').style.display = null;
 		$selectedInstance.remove();
+	}
+}, {
+	label: 'Open DevTools',
+	click: function() {
+		$(`webview[server="${selectedInstance.dataset.host}"]`)[0].openDevTools();
 	}
 }]);
 
@@ -236,9 +236,8 @@ Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 var menu = Menu.buildFromTemplate(template[1].submenu);
 
 window.addEventListener('contextmenu', function(e) {
-	e.preventDefault();
-
 	if (e.target.classList.contains('instance') || e.target.parentNode.classList.contains('instance')) {
+		e.preventDefault();
 		if (e.target.classList.contains('instance')) {
 			selectedInstance = e.target;
 		} else {
@@ -246,8 +245,6 @@ window.addEventListener('contextmenu', function(e) {
 		}
 
 		instanceMenu.popup(remote.getCurrentWindow());
-	} else {
-		menu.popup(remote.getCurrentWindow());
 	}
 }, false);
 
