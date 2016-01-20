@@ -30,14 +30,30 @@ class Servers {
 			hosts = JSON.parse(hosts);
 		} catch (e) {
 			if (typeof hosts === 'string' && hosts.match(/^https?:\/\//)) {
-				hosts = [hosts];
+				hosts = {};
+				hosts[hosts] = {
+					title: hosts,
+					url: hosts
+				};
 			}
 
 			localStorage.setItem(this.hostsKey, JSON.stringify(hosts));
 		}
 
 		if (hosts === null) {
-			hosts = [];
+			hosts = {};
+		}
+
+		if (Array.isArray(hosts)) {
+			var oldHosts = hosts;
+			hosts = {};
+			oldHosts.forEach(function(item) {
+				hosts[item] = {
+					title: item,
+					url: item
+				};
+			});
+			localStorage.setItem(this.hostsKey, JSON.stringify(hosts));
 		}
 
 		this._hosts = hosts;
@@ -83,11 +99,7 @@ class Servers {
 	hostExists(host) {
 		var hosts = this.hosts;
 
-		return hosts.some(function(item) {
-			if (item === host) {
-				return true;
-			}
-		});
+		return !!hosts[host];
 	}
 
 	addHost(host) {
@@ -97,7 +109,10 @@ class Servers {
 			return false;
 		}
 
-		hosts.push(host);
+		hosts[host] = {
+			title: host,
+			url: host
+		};
 		this.hosts = hosts;
 
 		return true;
@@ -105,14 +120,9 @@ class Servers {
 
 	remove(host) {
 		var hosts = this.hosts;
-		var newHosts = [];
-		hosts.forEach(function(instance) {
-			if (instance !== host) {
-				newHosts.push(instance);
-			}
-		});
+		delete hosts[host];
 
-		this.hosts = newHosts;
+		this.hosts = hosts;
 	}
 
 	get active() {
