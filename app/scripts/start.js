@@ -53,52 +53,60 @@ export var start = function() {
     var button = form.querySelector('[type="submit"]');
     var invalidUrl = form.querySelector('#invalidUrl');
     function validateHost() {
-        invalidUrl.style.display = 'none';
-        hostField.classList.remove('wrong');
+        return new Promise(function(resolve, reject) {
+            var execValidation = function() {
+                invalidUrl.style.display = 'none';
+                hostField.classList.remove('wrong');
 
-        var host = hostField.value.trim();
-        host = host.replace(/\/$/, '');
-        hostField.value = host;
+                var host = hostField.value.trim();
+                host = host.replace(/\/$/, '');
+                hostField.value = host;
 
-        if (host.length === 0) {
-            button.value = 'Connect';
-            button.disabled = false;
-            return;
-        }
+                if (host.length === 0) {
+                    button.value = 'Connect';
+                    button.disabled = false;
+                    resolve();
+                    return;
+                }
 
-        button.value = 'Validating...';
-        button.disabled = true;
+                button.value = 'Validating...';
+                button.disabled = true;
 
-        servers.validateHost(host, 2000).then(function() {
-            button.value = 'Connect';
-            button.disabled = false;
-        }, function() {
-            // If the url begins with HTTP, mark as invalid
-            if (/^http:\/\/.+/.test(host)) {
-                button.value = 'Invalid url';
-                invalidUrl.style.display = 'block';
-                hostField.classList.add('wrong');
-                return;
-            }
+                servers.validateHost(host, 2000).then(function() {
+                    button.value = 'Connect';
+                    button.disabled = false;
+                    resolve();
+                }, function() {
+                    // If the url begins with HTTP, mark as invalid
+                    if (/^http:\/\/.+/.test(host)) {
+                        button.value = 'Invalid url';
+                        invalidUrl.style.display = 'block';
+                        hostField.classList.add('wrong');
+                        reject();
+                        return;
+                    }
 
-            // If the url begins with HTTPS, fallback to HTTP
-            if (/^https:\/\/.+/.test(host)) {
-                hostField.value = host.replace('https://', 'http://');
-                return validateHost();
-            }
+                    // If the url begins with HTTPS, fallback to HTTP
+                    if (/^https:\/\/.+/.test(host)) {
+                        hostField.value = host.replace('https://', 'http://');
+                        return execValidation();
+                    }
 
-            // If the url isn't localhost, don't have dots and don't have protocol
-            // try as a .rocket.chat subdomain
-            if (!/(^https?:\/\/)|(\.)|(^localhost$)/.test(host)) {
-                hostField.value = `https://${host}.rocket.chat`;
-                return validateHost();
-            }
+                    // If the url isn't localhost, don't have dots and don't have protocol
+                    // try as a .rocket.chat subdomain
+                    if (!/(^https?:\/\/)|(\.)|(^localhost$)/.test(host)) {
+                        hostField.value = `https://${host}.rocket.chat`;
+                        return execValidation();
+                    }
 
-            // If the url don't start with protocol try HTTPS
-            if (!/^https?:\/\//.test(host)) {
-                hostField.value = `https://${host}`;
-                return validateHost();
-            }
+                    // If the url don't start with protocol try HTTPS
+                    if (!/^https?:\/\//.test(host)) {
+                        hostField.value = `https://${host}`;
+                        return execValidation();
+                    }
+                });
+            };
+            execValidation();
         });
     }
 
@@ -108,20 +116,21 @@ export var start = function() {
 
 
     form.addEventListener('submit', function(ev) {
-        console.log('trying to connect');
         ev.preventDefault();
         ev.stopPropagation();
-        var input = form.querySelector('[name="host"]');
-        var url = input.value;
-        url = url.replace(/\/$/, '');
+        validateHost().then(function() {
+            var input = form.querySelector('[name="host"]');
+            var url = input.value;
+            console.log(url);
 
-        if (url.length === 0) {
-            connectDefaultInstance();
-        } else {
-            addServer(url);
-            redirect(url);
-            input.value = '';
-        }
+            if (url.length === 0) {
+                connectDefaultInstance();
+            } else {
+                addServer(url);
+                redirect(url);
+                input.value = '';
+            }
+        });
 
         return false;
     });
