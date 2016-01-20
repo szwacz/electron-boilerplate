@@ -2,22 +2,16 @@
 	display: none;
 }
 
-.connecting .loader,
-.offline .loader {
+.only-offline {
+	display: none;
+}
+
+body.offline #login-card *:not(.only-offline) {
+	display: none;
+}
+
+body.offline .only-offline {
 	display: block;
-}
-
-.connecting header,
-.connecting form,
-.connecting .social,
-.offline header,
-.offline form,
-.offline .social {
-	display: none;
-}
-
-body:not(.offline) .only-offline {
-	display: none;
 }
 
 .loader span {
