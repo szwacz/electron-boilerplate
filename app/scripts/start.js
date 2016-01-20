@@ -1,12 +1,10 @@
 /* globals $ */
 
 import { remote } from 'electron';
+import { servers } from './servers';
 
 export var start = function() {
-    var key = 'rocket.chat.hosts',
-        rocketHeader = 'X-Rocket-Chat-Version'.toLowerCase(),
-        defaultInstance = 'https://demo.rocket.chat/';
-
+    var defaultInstance = 'https://demo.rocket.chat/';
 
     //init loader
     var loader = document.querySelector('.loader');
@@ -69,7 +67,7 @@ export var start = function() {
 
             console.debug('checking', url);
             input.classList.remove('wrong');
-            urlExists(url, 5000).then(function() {
+            servers.validateHost(url, 5000).then(function() {
                 console.debug('url found!');
                 addServer(url);
                 redirect(url);
@@ -91,70 +89,23 @@ export var start = function() {
     //     document.querySelector('.landing-page').style.display = 'block';
     // }
 
-    function urlExists(url, timeout) {
-        return new Promise(function(resolve, reject) {
-            var http = new XMLHttpRequest();
-            var resolved = false;
-            http.open('HEAD', url);
-            http.onreadystatechange = function() {
-                if (this.readyState === this.DONE) {
-                    if (!resolved) {
-                        resolved = true;
-                        var headers = this.getAllResponseHeaders().toLowerCase();
-                        if (headers.indexOf(rocketHeader) !== -1) {
-                            resolve();
-                        } else {
-                            reject(this.status);
-                        }
-                    }
-                }
-            };
-            if (timeout) {
-                setTimeout(function() {
-                    if (!resolved) {
-                        resolved = true;
-                        reject();
-                    }
-                }, timeout);
-            }
-            http.send();
-        });
-    }
-
     function addServer(url) {
-        var hosts = localStorage.getItem(key);
-        if (hosts === null) {
-            hosts = [];
-        } else {
-            try {
-                hosts = JSON.parse(hosts);
-            } catch (e) {}
+        if (servers.hostExists(url)) {
+            var item = getInstanceButtonByURL(url);
+            if (item) {
+                loadServer(item);
+            }
+            return;
+        }
+
+        if (servers.addHost(url) === false) {
+            return;
         }
 
         var list = document.getElementById('serverList');
 
-        var newHost = true;
-        hosts.some(function(instanceURL) {
-            if (instanceURL === url) {
-                var item = getInstanceButtonByURL(url);
-                if (item) {
-                    loadServer(item);
-                }
-
-                newHost = false;
-                return true;
-            }
-        });
-
-        if (!newHost) {
-            return;
-        }
-
         document.body.classList.remove('hide-server-list');
         localStorage.setItem('server-list-closed', 'false');
-
-        hosts.push(url);
-        localStorage.setItem(key, JSON.stringify(hosts));
 
         clearActive();
 
@@ -194,22 +145,10 @@ export var start = function() {
 
     function renderServers() {
         var list = document.getElementById('serverList');
-        var hosts = localStorage.getItem(key);
+        var hosts = servers.hosts;
 
-        try {
-            hosts = JSON.parse(hosts);
-        } catch (e) {
-            if (hosts.match(/^https?:\/\//)) {
-                hosts = [hosts];
-            }
-
-            localStorage.setItem(key, JSON.stringify(hosts));
-        }
-
-        if(hosts) {
-            for (var i = 0; i < hosts.length; i++) {
-                list.appendChild(createItem(hosts[i], (i + 1)));
-            }
+        for (var i = 0; i < hosts.length; i++) {
+            list.appendChild(createItem(hosts[i], (i + 1)));
         }
     }
 
@@ -243,9 +182,6 @@ export var start = function() {
             // });
             // webview.addEventListener('did-stop-loading', function() {
             //     console.log('did-stop-loading');
-            // });
-            // webview.addEventListener('did-frame-finish-load', function() {
-            //     console.log('did-frame-finish-load');
             // });
             webview.addEventListener('console-message', function(e) {
                 console.log('webview:', e.message);
