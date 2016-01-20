@@ -1,3 +1,5 @@
+/* globals Meteor, Tracker, RocketChat */
+
 var IPC = require('electron').ipcRenderer;
 
 var events = ['unread-changed'];
@@ -5,6 +7,17 @@ var events = ['unread-changed'];
 events.forEach(function(e) {
     window.addEventListener(e, function(event) {
         IPC.sendToHost(e, event.detail);
+    });
+});
+
+window.addEventListener('load', function() {
+    Meteor.startup(function() {
+        Tracker.autorun(function() {
+            var siteName = RocketChat.settings.get('Site_Name');
+            if (siteName) {
+                IPC.sendToHost('title-changed', siteName);
+            }
+        });
     });
 });
 

@@ -280,6 +280,12 @@ export var start = function() {
                 window.dispatchEvent(new CustomEvent(event.channel, {
                    detail: event.args[0]
                 }));
+
+                switch (event.channel) {
+                    case 'title-changed':
+                        $(`li[server="${url}"] div`).html(event.args[0]);
+                        break;
+                }
             });
             document.querySelector('.rocket-app').appendChild(webview);
             webview.src = url;
