@@ -4,7 +4,7 @@ import { remote } from 'electron';
 import { servers } from './servers';
 
 export var start = function() {
-    var defaultInstance = 'https://demo.rocket.chat/';
+    var defaultInstance = 'https://demo.rocket.chat';
 
     //init loader
     var loader = document.querySelector('.loader');
@@ -58,6 +58,7 @@ export var start = function() {
         var val = button.value;
         button.value = button.getAttribute('data-loading-text');
         var url = input.value;
+        url = url.replace(/\/$/, '');
 
         if (url.length === 0) {
             connectDefaultInstance();
@@ -109,20 +110,25 @@ export var start = function() {
 
         clearActive();
 
-        list.appendChild(createItem(url, (list.childNodes.length + 1), true));
+        var lastLi = document.querySelector('#serverList .add-server');
+        list.insertBefore(createItem(url, (list.childNodes.length + 1), true), lastLi);
     }
 
-    function getInstanceButtonByURL(url) {
-        var list = document.getElementById('serverList');
-        for (var i = 0; i < list.childNodes.length; i++) {
-            if (list.childNodes[i].dataset.host === url) {
-                return list.childNodes[i];
-            }
+    $('.add-server').on('click', function() {
+        document.querySelector('.rocket-app').style.display = 'none';
+        document.querySelector('.landing-page').style.display = 'block';
+        var activeItem = document.querySelector('.server-list li.active');
+        localStorage.removeItem('rocket.chat.currentHost');
+        if (activeItem) {
+            activeItem.classList.remove('active');
         }
+    });
+
+    function getInstanceButtonByURL(url) {
+        return document.querySelector(`#serverList .instance[server="${url}"]`);
     }
 
     function createItem(url, pos, active) {
-        url = url.replace(/\/$/, '');
         var name = url.replace(/^https?:\/\/(?:www\.)?([^\/]+)(.*)/, '$1');
         name = name.split('.');
         name = name[0][0] + (name[1] ? name[1][0] : '');
@@ -147,6 +153,7 @@ export var start = function() {
         img.src = `${url}/assets/favicon.svg?v=3`;
         item.appendChild(img);
         item.dataset.host = url;
+        item.setAttribute('server', url);
         item.classList.add('instance');
         if (active) {
             item.classList.add('active');
@@ -166,10 +173,11 @@ export var start = function() {
 
     function renderServers() {
         var list = document.getElementById('serverList');
+        var lastLi = document.querySelector('#serverList .add-server');
         var hosts = servers.hosts;
 
         for (var i = 0; i < hosts.length; i++) {
-            list.appendChild(createItem(hosts[i], (i + 1)));
+            list.insertBefore(createItem(hosts[i], (i + 1)), lastLi);
         }
     }
 

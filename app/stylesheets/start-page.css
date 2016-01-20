@@ -37,7 +37,7 @@ div.server-list {
 	height: 100%;
 	width: 80px;
 	background-color: #0F354C;
-	z-index: 100;
+	z-index: 100000;
 }
 
 div.server-list ul {
@@ -116,6 +116,7 @@ div.server-list li:before {
 	display: none;
 	top: 15px;
 	font-size: 14px;
+	white-space: nowrap;
 }
 
 .server-list li:hover span {
@@ -128,6 +129,11 @@ div.server-list li:before {
 
 .server-list li:hover div {
 	display: block;
+}
+
+.add-server span {
+	font-size: 40px;
+	opacity: 0.3;
 }
 
 .hide-server-list div.server-list {

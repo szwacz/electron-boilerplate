@@ -79,12 +79,11 @@ class Servers {
 	hostExists(host) {
 		var hosts = this.hosts;
 
-		hosts.some(function(item) {
+		return hosts.some(function(item) {
 			if (item === host) {
 				return true;
 			}
 		});
-		return false;
 	}
 
 	addHost(host) {
