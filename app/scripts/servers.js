@@ -103,6 +103,18 @@ class Servers {
 		return true;
 	}
 
+	remove(host) {
+		var hosts = this.hosts;
+		var newHosts = [];
+		hosts.forEach(function(instance) {
+			if (instance !== host) {
+				newHosts.push(instance);
+			}
+		});
+
+		this.hosts = newHosts;
+	}
+
 	get active() {
 		localStorage.getItem(this.activeKey);
 	}

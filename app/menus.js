@@ -1,6 +1,7 @@
 'use strict';
 
 import { remote } from 'electron';
+import { servers } from './scripts/servers';
 
 var Menu = remote.Menu;
 var app = remote.App;
@@ -219,14 +220,7 @@ var instanceMenu = Menu.buildFromTemplate([{
 
 		selectedInstance.parentNode.removeChild(selectedInstance);
 
-		var newHosts = [];
-		hosts.forEach(function(instance) {
-			if (instance !== selectedInstance.dataset.host) {
-				newHosts.push(instance);
-			}
-		});
-
-		localStorage.setItem('rocket.chat.hosts', JSON.stringify(newHosts));
+		servers.remove(selectedInstance.dataset.host);
 	}
 }]);
 
