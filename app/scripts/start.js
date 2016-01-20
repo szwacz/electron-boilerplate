@@ -123,7 +123,6 @@ export var start = function() {
         validateHost().then(function() {
             var input = form.querySelector('[name="host"]');
             var url = input.value;
-            console.log(url);
 
             if (url.length === 0) {
                 connectDefaultInstance();
@@ -268,7 +267,6 @@ export var start = function() {
     }
 
     function createWebview(url) {
-        console.log('createWebview', url);
         var webview = document.querySelector(`webview[server="${url}"]`);
         if (webview) {
             return webview;
@@ -319,6 +317,28 @@ export var start = function() {
                         $(`li[server="${url}"]`).removeClass('unread');
                         $(`li[server="${url}"] .badge`).html('');
                     }
+
+                    var count = 0;
+                    var alert = false;
+                    $(`li.instance .badge`).each(function(index, item) {
+                        var text = $(item).html();
+                        if (!isNaN(parseInt(text))) {
+                            count += parseInt(text);
+                        }
+                        if (!alert) {
+                            alert = text === '•';
+                        }
+                    });
+
+                    if (process.platform === 'darwin') {
+                        if (count > 0) {
+                            remote.app.dock.setBadge(String(count));
+                        } else if (alert === true) {
+                            remote.app.dock.setBadge('•');
+                        } else {
+                            remote.app.dock.setBadge('');
+                        }
+                    }
                     break;
             }
         });
@@ -349,12 +369,12 @@ export var start = function() {
         redirect(defaultInstance);
     }
 
-    window.addEventListener('unread-changed', function(event) {
-        var unread = event.detail;
-        // let showAlert = (unread !== null && unread !== undefined && unread !== '');
-        if (process.platform === 'darwin') {
-            remote.app.dock.setBadge(String(unread || ''));
-        }
-        // remote.Tray.showTrayAlert(showAlert, String(unread));
-    });
+    // window.addEventListener('unread-changed', function(event) {
+    //     var unread = event.detail;
+    //     // let showAlert = (unread !== null && unread !== undefined && unread !== '');
+    //     if (process.platform === 'darwin') {
+    //         remote.app.dock.setBadge(String(unread || ''));
+    //     }
+    //     // remote.Tray.showTrayAlert(showAlert, String(unread));
+    // });
 };
