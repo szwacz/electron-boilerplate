@@ -56,9 +56,16 @@ div.server-list li.active span {
 	opacity: 1;
 }
 
+div.server-list li.unread:before {
+	width: 5px;
+	height: 6px;
+	opacity: .6;
+}
+
 div.server-list li.active:before {
 	width: 5px;
 	height: 30px;
+	opacity: 1;
 }
 
 div.server-list li {
@@ -74,8 +81,9 @@ div.server-list li:before {
 	width: 0px;
 	height: 0px;
 	background-color: #fff;
-	transition: height .2s;
+	transition: height .2s, opacity .2s;
 	border-radius: 0 3px 3px 0;
+	opacity: 1;
 }
 
 .server-list img {
@@ -99,7 +107,7 @@ div.server-list li:before {
 	transition: opacity .2s;
 }
 
-.server-list li div {
+.server-list li .tooltip {
 	line-height: 30px;
 	left: 72px;
 	position: absolute;
@@ -113,6 +121,23 @@ div.server-list li:before {
 	white-space: nowrap;
 }
 
+.server-list li .badge {
+	position: absolute;
+	right: 10px;
+	top: 5px;
+	background-color: #e43325;
+	border-radius: 20px;
+	min-width: 18px;
+	line-height: 18px;
+	font-size: 12px;
+	text-align: center;
+	z-index: 1;
+	font-family: Helvetica;
+	font-weight: bold;
+	padding: 0 5px;
+	box-shadow: 0px 1px 2px rgba(0,0,0,.6);
+}
+
 .server-list li:hover span {
 	opacity: 0.8;
 }
@@ -121,7 +146,7 @@ div.server-list li:before {
 	opacity: 0.8;
 }
 
-.server-list li:hover div {
+.server-list li:hover .tooltip {
 	display: block;
 }
 

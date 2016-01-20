@@ -202,10 +202,15 @@ export var start = function() {
         initials.innerHTML = name;
 
         var tooltip = document.createElement('div');
+        tooltip.classList.add('tooltip');
         tooltip.innerHTML = host.title;
+
+        var badge = document.createElement('div');
+        badge.classList.add('badge');
 
         item.appendChild(initials);
         item.appendChild(tooltip);
+        item.appendChild(badge);
 
         var img = document.createElement('img');
         img.onload = function() {
@@ -293,7 +298,18 @@ export var start = function() {
                         }
                         hosts[url].title = title;
                         servers.hosts = hosts;
-                        $(`li[server="${url}"] div`).html(title);
+                        $(`li[server="${url}"] .tootip`).html(title);
+                        break;
+                    case 'unread-changed':
+                        var unread = event.args[0];
+                        var showAlert = (unread !== null && unread !== undefined && unread !== '');
+                        if (showAlert) {
+                            $(`li[server="${url}"]`).addClass('unread');
+                            $(`li[server="${url}"] .badge`).html(unread);
+                        } else {
+                            $(`li[server="${url}"]`).removeClass('unread');
+                            $(`li[server="${url}"] .badge`).html('');
+                        }
                         break;
                 }
             });
