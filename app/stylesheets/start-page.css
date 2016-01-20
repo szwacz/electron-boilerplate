@@ -223,3 +223,16 @@ div.server-list li:before {
 		transform: translate3d(10px, 0, 0);
 	}
 }
+
+webview {
+	z-index: -1;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+webview.active {
+	z-index: 1;
+}

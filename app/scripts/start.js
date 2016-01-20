@@ -23,7 +23,7 @@ export var start = function() {
     }
 
     function loadPreviousHost() {
-        var current = localStorage.getItem('rocket.chat.currentHost');
+        var current = servers.active;
         if (current) {
             var item = getInstanceButtonByURL(current);
             if (item) {
@@ -179,7 +179,7 @@ export var start = function() {
         document.querySelector('.rocket-app').style.display = 'none';
         document.querySelector('.landing-page').style.display = null;
         var activeItem = document.querySelector('.server-list li.active');
-        localStorage.removeItem('rocket.chat.currentHost');
+        servers.clearActive();
         if (activeItem) {
             activeItem.classList.remove('active');
         }
@@ -246,6 +246,7 @@ export var start = function() {
         for (var host in hosts) {
             if (hosts.hasOwnProperty(host)) {
                 list.insertBefore(createItem(hosts[host]), lastLi);
+                createWebview(hosts[host].url);
             }
         }
     }
@@ -266,70 +267,78 @@ export var start = function() {
         }
     }
 
-    function redirect(url) {
-        localStorage.setItem('rocket.chat.currentHost', url);
+    function createWebview(url) {
+        console.log('createWebview', url);
         var webview = document.querySelector(`webview[server="${url}"]`);
-        if (!webview) {
-            webview = document.createElement('webview');
-            webview.setAttribute('server', url);
-            webview.setAttribute('preload', './preload.js');
-            webview.setAttribute('allowpopups', 'on');
-
-            // webview.addEventListener('did-start-loading', function() {
-            //     console.log('did-start-loading');
-            // });
-            // webview.addEventListener('did-stop-loading', function() {
-            //     console.log('did-stop-loading');
-            // });
-            webview.addEventListener('did-navigate-in-page', function(lastPath) {
-                var hosts = servers.hosts;
-                hosts[url].lastPath = lastPath.url;
-                servers.hosts = hosts;
-            });
-            webview.addEventListener('console-message', function(e) {
-                console.log('webview:', e.message);
-            });
-            webview.addEventListener('ipc-message', function(event) {
-                window.dispatchEvent(new CustomEvent(event.channel, {
-                   detail: event.args[0]
-                }));
-
-                switch (event.channel) {
-                    case 'title-changed':
-                        var hosts = servers.hosts;
-                        var title = event.args[0];
-                        if (title === 'Rocket.Chat' && /https?:\/\/demo\.rocket\.chat/.test(url) === false) {
-                            title += ' - ' + url;
-                        }
-                        hosts[url].title = title;
-                        servers.hosts = hosts;
-                        $(`li[server="${url}"] .tootip`).html(title);
-                        break;
-                    case 'unread-changed':
-                        var unread = event.args[0];
-                        var showAlert = (unread !== null && unread !== undefined && unread !== '');
-                        if (showAlert) {
-                            $(`li[server="${url}"]`).addClass('unread');
-                            $(`li[server="${url}"] .badge`).html(unread);
-                        } else {
-                            $(`li[server="${url}"]`).removeClass('unread');
-                            $(`li[server="${url}"] .badge`).html('');
-                        }
-                        break;
-                }
-            });
-            document.querySelector('.rocket-app').appendChild(webview);
-            var hosts = servers.hosts;
-            if (hosts[url].lastPath) {
-                webview.src = hosts[url].lastPath;
-            } else {
-                webview.src = url;
-            }
-        } else {
-            webview.style.display = 'initial';
+        if (webview) {
+            return webview;
         }
 
-        $(`webview:not([server="${url}"])`).css('display', 'none');
+        webview = document.createElement('webview');
+        webview.setAttribute('server', url);
+        webview.setAttribute('preload', './preload.js');
+        webview.setAttribute('allowpopups', 'on');
+
+        // webview.addEventListener('did-start-loading', function() {
+        //     console.log('did-start-loading');
+        // });
+        // webview.addEventListener('did-stop-loading', function() {
+        //     console.log('did-stop-loading');
+        // });
+        webview.addEventListener('did-navigate-in-page', function(lastPath) {
+            var hosts = servers.hosts;
+            hosts[url].lastPath = lastPath.url;
+            servers.hosts = hosts;
+        });
+        webview.addEventListener('console-message', function(e) {
+            console.log('webview:', e.message);
+        });
+        webview.addEventListener('ipc-message', function(event) {
+            window.dispatchEvent(new CustomEvent(event.channel, {
+               detail: event.args[0]
+            }));
+
+            switch (event.channel) {
+                case 'title-changed':
+                    var hosts = servers.hosts;
+                    var title = event.args[0];
+                    if (title === 'Rocket.Chat' && /https?:\/\/demo\.rocket\.chat/.test(url) === false) {
+                        title += ' - ' + url;
+                    }
+                    hosts[url].title = title;
+                    servers.hosts = hosts;
+                    $(`li[server="${url}"] .tootip`).html(title);
+                    break;
+                case 'unread-changed':
+                    var unread = event.args[0];
+                    var showAlert = (unread !== null && unread !== undefined && unread !== '');
+                    if (showAlert) {
+                        $(`li[server="${url}"]`).addClass('unread');
+                        $(`li[server="${url}"] .badge`).html(unread);
+                    } else {
+                        $(`li[server="${url}"]`).removeClass('unread');
+                        $(`li[server="${url}"] .badge`).html('');
+                    }
+                    break;
+            }
+        });
+        document.querySelector('.rocket-app').appendChild(webview);
+        var hosts = servers.hosts;
+        if (hosts[url].lastPath) {
+            webview.src = hosts[url].lastPath;
+        } else {
+            webview.src = url;
+        }
+
+        return webview;
+    }
+
+    function redirect(url) {
+        servers.setActive(url);
+        var webview = createWebview(url);
+        webview.classList.add('active');
+
+        $(`webview:not([server="${url}"])`).removeClass('active');
 
         document.querySelector('.landing-page').style.display = 'none';
         document.querySelector('.rocket-app').style.display = 'block';

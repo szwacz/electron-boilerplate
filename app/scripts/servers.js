@@ -126,7 +126,7 @@ class Servers {
 	}
 
 	get active() {
-		localStorage.getItem(this.activeKey);
+		return localStorage.getItem(this.activeKey);
 	}
 
 	setActive(host) {
@@ -135,6 +135,11 @@ class Servers {
 			return true;
 		}
 		return false;
+	}
+
+	clearActive() {
+		localStorage.removeItem(this.activeKey);
+		return true;
 	}
 }
 
