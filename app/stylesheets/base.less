@@ -167,6 +167,14 @@ input[type='password'] {
 	&.meteor-developer {
 		background-color: #de4f4f;
 	}
+
+	&:disabled {
+		color: #888;
+		box-shadow: none;
+		cursor: not-allowed;
+		pointer-events: none;
+		background-color: #ddd;
+	}
 }
 
 #login-card {

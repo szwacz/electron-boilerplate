@@ -49,37 +49,78 @@ export var start = function() {
     // end connection check
 
     var form = document.querySelector('form');
+    var hostField = form.querySelector('[name="host"]');
+    var button = form.querySelector('[type="submit"]');
+    var invalidUrl = form.querySelector('#invalidUrl');
+    function validateHost() {
+        invalidUrl.style.display = 'none';
+        hostField.classList.remove('wrong');
+
+        var host = hostField.value.trim();
+        host = host.replace(/\/$/, '');
+        hostField.value = host;
+
+        if (host.length === 0) {
+            button.value = 'Connect';
+            button.disabled = false;
+            return;
+        }
+
+        button.value = 'Validating...';
+        button.disabled = true;
+
+        servers.validateHost(host, 2000).then(function() {
+            button.value = 'Connect';
+            button.disabled = false;
+        }, function() {
+            // If the url begins with HTTP, mark as invalid
+            if (/^http:\/\/.+/.test(host)) {
+                button.value = 'Invalid url';
+                invalidUrl.style.display = 'block';
+                hostField.classList.add('wrong');
+                return;
+            }
+
+            // If the url begins with HTTPS, fallback to HTTP
+            if (/^https:\/\/.+/.test(host)) {
+                hostField.value = host.replace('https://', 'http://');
+                return validateHost();
+            }
+
+            // If the url isn't localhost, don't have dots and don't have protocol
+            // try as a .rocket.chat subdomain
+            if (!/(^https?:\/\/)|(\.)|(^localhost$)/.test(host)) {
+                hostField.value = `https://${host}.rocket.chat`;
+                return validateHost();
+            }
+
+            // If the url don't start with protocol try HTTPS
+            if (!/^https?:\/\//.test(host)) {
+                hostField.value = `https://${host}`;
+                return validateHost();
+            }
+        });
+    }
+
+    hostField.addEventListener('blur', function() {
+        validateHost();
+    });
+
+
     form.addEventListener('submit', function(ev) {
         console.log('trying to connect');
         ev.preventDefault();
         ev.stopPropagation();
         var input = form.querySelector('[name="host"]');
-        var button = form.querySelector('[type="submit"]');
-        var val = button.value;
-        button.value = button.getAttribute('data-loading-text');
         var url = input.value;
         url = url.replace(/\/$/, '');
 
         if (url.length === 0) {
             connectDefaultInstance();
-            input.value = '';
-            button.value = val;
         } else {
-
-            console.debug('checking', url);
-            input.classList.remove('wrong');
-            servers.validateHost(url, 5000).then(function() {
-                console.debug('url found!');
-                addServer(url);
-                redirect(url);
-                input.value = '';
-                button.value = val;
-            }, function(/*status*/) {
-                button.value = val;
-                form.querySelector('#invalidUrl').style.display = 'block';
-                console.debug('url wrong');
-                input.classList.add('wrong');
-            });
+            addServer(url);
+            redirect(url);
+            input.value = '';
         }
 
         return false;

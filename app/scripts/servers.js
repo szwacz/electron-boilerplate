@@ -48,6 +48,7 @@ class Servers {
 	}
 
 	validateHost(host, timeout) {
+		console.log('Validating host', host);
 		timeout = timeout || 5000;
 		return new Promise(function(resolve, reject) {
 			var resolved = false;
@@ -56,20 +57,23 @@ class Servers {
 					return;
 				}
 				resolved = true;
+				console.log('Host valid', host);
 				resolve();
 			},function(request) {
 				if (resolved) {
 					return;
 				}
 				resolved = true;
+				console.log('Host invalid', host);
 				reject(request.status);
 			});
 			if (timeout) {
 				setTimeout(function() {
-					if (!resolved) {
+					if (resolved) {
 						return;
 					}
 					resolved = true;
+					console.log('Validating host TIMEOUT', host);
 					reject();
 				}, timeout);
 			}
