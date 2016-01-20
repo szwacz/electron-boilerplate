@@ -122,10 +122,31 @@ export var start = function() {
     }
 
     function createItem(url, pos, active) {
+        url = url.replace(/\/$/, '');
+        var name = url.replace(/^https?:\/\/(?:www\.)?([^\/]+)(.*)/, '$1');
+        name = name.split('.');
+        name = name[0][0] + (name[1] ? name[1][0] : '');
+        name = name.toUpperCase();
+
         var item = document.createElement('li');
-        item.innerHTML = '<span>' + (pos) + '</span>';
+
+        var initials = document.createElement('span');
+        initials.innerHTML = name;
+
+        var tooltip = document.createElement('div');
+        tooltip.innerHTML = url;
+
+        item.appendChild(initials);
+        item.appendChild(tooltip);
+
+        var img = document.createElement('img');
+        img.onload = function() {
+            img.style.display = 'initial';
+            initials.style.display = 'none';
+        };
+        img.src = `${url}/assets/favicon.svg?v=3`;
+        item.appendChild(img);
         item.dataset.host = url;
-        item.title = url;
         item.classList.add('instance');
         if (active) {
             item.classList.add('active');

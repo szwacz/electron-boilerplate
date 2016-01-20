@@ -37,10 +37,12 @@ div.server-list {
 	height: 100%;
 	width: 80px;
 	background-color: #0F354C;
+	z-index: 100;
 }
 
 div.server-list ul {
 	padding-left: 0px;
+	margin-top: 5px;
 }
 
 div.server-list li {
@@ -50,22 +52,82 @@ div.server-list li {
 
 	-webkit-user-select: none;
 	user-select: none;
-	opacity: 0.6;
 }
 
-div.server-list li.active {
+div.server-list li.active img {
 	opacity: 1;
-	box-shadow: 0px 0px 4px rgba(255,255,255,0.6);
+}
+
+div.server-list li.active span {
+	opacity: 1;
+}
+
+div.server-list li.active:before {
+	width: 5px;
+	height: 30px;
 }
 
 div.server-list li {
-	background-color: #04436A;
-	display: block;
-	border-radius: 7px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	height: 60px;
+	position: relative;
+}
+
+div.server-list li:before {
+	content: "";
+	width: 0px;
+	height: 0px;
+	background-color: #fff;
+	transition: height .2s;
+	border-radius: 0 3px 3px 0;
+}
+
+.server-list img {
+	width: 70px;
+	height: 50px;
+	top: 5px;
+	left: 5px;
+	position: absolute;
+	display: none;
+	opacity: 0.6;
+	transition: opacity .2s;
+}
+
+.server-list span {
+	width: 70px;
 	text-align: center;
-	line-height: 50px;
-	width: 50px;
-	margin: 10px auto;
+	line-height: 60px;
+	left: 5px;
+	position: absolute;
+	opacity: 0.6;
+	transition: opacity .2s;
+}
+
+.server-list li div {
+	line-height: 30px;
+	left: 72px;
+	position: absolute;
+	background-color: #000;
+	color: #fff;
+	border-radius: 6px;
+	padding: 0px 15px;
+	display: none;
+	top: 15px;
+	font-size: 14px;
+}
+
+.server-list li:hover span {
+	opacity: 0.8;
+}
+
+.server-list li:hover img {
+	opacity: 0.8;
+}
+
+.server-list li:hover div {
+	display: block;
 }
 
 .hide-server-list div.server-list {
