@@ -281,6 +281,11 @@ export var start = function() {
             // webview.addEventListener('did-stop-loading', function() {
             //     console.log('did-stop-loading');
             // });
+            webview.addEventListener('did-navigate-in-page', function(lastPath) {
+                var hosts = servers.hosts;
+                hosts[url].lastPath = lastPath.url;
+                servers.hosts = hosts;
+            });
             webview.addEventListener('console-message', function(e) {
                 console.log('webview:', e.message);
             });
@@ -314,7 +319,12 @@ export var start = function() {
                 }
             });
             document.querySelector('.rocket-app').appendChild(webview);
-            webview.src = url;
+            var hosts = servers.hosts;
+            if (hosts[url].lastPath) {
+                webview.src = hosts[url].lastPath;
+            } else {
+                webview.src = url;
+            }
         } else {
             webview.style.display = 'initial';
         }
