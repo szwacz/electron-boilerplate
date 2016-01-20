@@ -1,3 +1,5 @@
+/* globals $ */
+
 'use strict';
 
 import { remote } from 'electron';
@@ -24,7 +26,7 @@ if (process.platform === 'darwin') {
 					label: 'Change server',
 					click: function() {
 						document.querySelector('.rocket-app').style.display = 'none';
-						document.querySelector('.landing-page').style.display = 'block';
+						document.querySelector('.landing-page').style.display = null;
 						var activeItem = document.querySelector('.server-list li.active');
 						localStorage.removeItem('rocket.chat.currentHost');
 						if (activeItem) {
@@ -154,7 +156,7 @@ if (process.platform === 'darwin') {
 					label: 'Change server',
 					click: function() {
 						document.querySelector('.rocket-app').style.display = 'none';
-						document.querySelector('.landing-page').style.display = 'block';
+						document.querySelector('.landing-page').style.display = null;
 						var activeItem = document.querySelector('.server-list li.active');
 						localStorage.removeItem('rocket.chat.currentHost');
 						if (activeItem) {
@@ -215,12 +217,17 @@ var selectedInstance = null;
 var instanceMenu = Menu.buildFromTemplate([{
 	label: 'Remove server',
 	click: function() {
-		var hosts = localStorage.getItem('rocket.chat.hosts');
-		hosts = JSON.parse(hosts);
-
-		selectedInstance.parentNode.removeChild(selectedInstance);
+		console.log('Remove server');
+		var $selectedInstance = $(selectedInstance);
+		if ($selectedInstance.hasClass('active')) {
+			console.log('has class');
+		}
 
 		servers.remove(selectedInstance.dataset.host);
+		$(`webview[server="${selectedInstance.dataset.host}"]`).remove();
+		document.querySelector('.rocket-app').style.display = 'none';
+		document.querySelector('.landing-page').style.display = null;
+		$selectedInstance.remove();
 	}
 }]);
 

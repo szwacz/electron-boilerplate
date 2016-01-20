@@ -166,7 +166,7 @@ export var start = function() {
 
     $('.add-server').on('click', function() {
         document.querySelector('.rocket-app').style.display = 'none';
-        document.querySelector('.landing-page').style.display = 'block';
+        document.querySelector('.landing-page').style.display = null;
         var activeItem = document.querySelector('.server-list li.active');
         localStorage.removeItem('rocket.chat.currentHost');
         if (activeItem) {
