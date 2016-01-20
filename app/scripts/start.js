@@ -52,6 +52,11 @@ export var start = function() {
     var hostField = form.querySelector('[name="host"]');
     var button = form.querySelector('[type="submit"]');
     var invalidUrl = form.querySelector('#invalidUrl');
+
+    window.addEventListener('load', function() {
+        hostField.focus();
+    });
+
     function validateHost() {
         return new Promise(function(resolve, reject) {
             var execValidation = function() {
@@ -111,13 +116,10 @@ export var start = function() {
     }
 
     hostField.addEventListener('blur', function() {
-        validateHost();
+        validateHost().then(function() {}, function() {});
     });
 
-
-    form.addEventListener('submit', function(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
+    var submit = function() {
         validateHost().then(function() {
             var input = form.querySelector('[name="host"]');
             var url = input.value;
@@ -130,15 +132,24 @@ export var start = function() {
                 redirect(url);
                 input.value = '';
             }
-        });
+        }, function() {});
+    };
 
-        return false;
+    hostField.addEventListener('keydown', function(ev) {
+        if (ev.which === 13) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            submit();
+            return false;
+        }
     });
 
-    // function changeServer() {
-    //     document.querySelector('.rocket-app').style.display = 'none';
-    //     document.querySelector('.landing-page').style.display = 'block';
-    // }
+    form.addEventListener('submit', function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        submit();
+        return false;
+    });
 
     function addServer(url) {
         if (servers.hostExists(url)) {
