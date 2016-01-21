@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import { remote } from 'electron';
 import { servers } from './servers';
 
 class SideBar extends EventEmitter {
@@ -160,9 +161,44 @@ class SideBar extends EventEmitter {
 		this.emit('show');
 	}
 
+	toggle() {
+		if (this.isHidden()) {
+			this.show();
+		} else {
+			this.hide();
+		}
+	}
+
 	isHidden() {
 		return localStorage.getItem('sidebar-closed') === 'true';
 	}
 }
 
 export var sidebar = new SideBar();
+
+
+var selectedInstance = null;
+var instanceMenu = remote.Menu.buildFromTemplate([{
+	label: 'Remove server',
+	click: function() {
+		servers.removeHost(selectedInstance.dataset.host);
+	}
+}, {
+	label: 'Open DevTools',
+	click: function() {
+		document.querySelector(`webview[server="${selectedInstance.dataset.host}"]`).openDevTools();
+	}
+}]);
+
+window.addEventListener('contextmenu', function(e) {
+	if (e.target.classList.contains('instance') || e.target.parentNode.classList.contains('instance')) {
+		e.preventDefault();
+		if (e.target.classList.contains('instance')) {
+			selectedInstance = e.target;
+		} else {
+			selectedInstance = e.target.parentNode;
+		}
+
+		instanceMenu.popup(remote.getCurrentWindow());
+	}
+}, false);

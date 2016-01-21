@@ -86,7 +86,7 @@ export var start = function() {
 
                     // If the url isn't localhost, don't have dots and don't have protocol
                     // try as a .rocket.chat subdomain
-                    if (!/(^https?:\/\/)|(\.)|(^localhost(:d+)?$)/.test(host)) {
+                    if (!/(^https?:\/\/)|(\.)|(^localhost(:\d+)?$)/.test(host)) {
                         hostField.value = `https://${host}.rocket.chat`;
                         return execValidation();
                     }

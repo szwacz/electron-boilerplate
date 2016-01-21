@@ -1,9 +1,8 @@
-/* globals $ */
-
 'use strict';
 
 import { remote } from 'electron';
 import { servers } from './servers';
+import { sidebar } from './sidebar';
 
 var Menu = remote.Menu;
 var app = remote.App;
@@ -25,11 +24,7 @@ if (process.platform === 'darwin') {
 				{
 					label: 'Change server',
 					click: function() {
-						var activeItem = document.querySelector('.server-list li.active');
-						localStorage.removeItem('rocket.chat.currentHost');
-						if (activeItem) {
-							activeItem.classList.remove('active');
-						}
+						servers.clearActive();
 					}
 				},
 				{
@@ -110,7 +105,7 @@ if (process.platform === 'darwin') {
 				{
 					label: 'Toggle server list',
 					click: function() {
-						localStorage.setItem('server-list-closed', document.body.classList.toggle('hide-server-list'));
+						sidebar.toggle();
 					}
 				},
 				{
@@ -153,11 +148,7 @@ if (process.platform === 'darwin') {
 				{
 					label: 'Change server',
 					click: function() {
-						document.querySelector('.rocket-app').style.display = 'none';
-						document.querySelector('.landing-page').style.display = null;
-						if (activeItem) {
-							activeItem.classList.remove('active');
-						}
+						servers.clearActive();
 					}
 				},
 				{
@@ -182,7 +173,7 @@ if (process.platform === 'darwin') {
 				{
 					label: 'Toggle server list',
 					click: function() {
-						localStorage.setItem('server-list-closed', document.body.classList.toggle('hide-server-list'));
+						sidebar.toggle();
 					}
 				},
 				{
@@ -209,37 +200,4 @@ if (process.platform === 'darwin') {
 	];
 }
 
-var selectedInstance = null;
-var instanceMenu = Menu.buildFromTemplate([{
-	label: 'Remove server',
-	click: function() {
-		var $selectedInstance = $(selectedInstance);
-		servers.removeHost(selectedInstance.dataset.host);
-		$(`webview[server="${selectedInstance.dataset.host}"]`).remove();
-		$selectedInstance.remove();
-	}
-}, {
-	label: 'Open DevTools',
-	click: function() {
-		$(`webview[server="${selectedInstance.dataset.host}"]`)[0].openDevTools();
-	}
-}]);
-
 Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-
-var menu = Menu.buildFromTemplate(template[1].submenu);
-
-window.addEventListener('contextmenu', function(e) {
-	if (e.target.classList.contains('instance') || e.target.parentNode.classList.contains('instance')) {
-		e.preventDefault();
-		if (e.target.classList.contains('instance')) {
-			selectedInstance = e.target;
-		} else {
-			selectedInstance = e.target.parentNode;
-		}
-
-		instanceMenu.popup(remote.getCurrentWindow());
-	}
-}, false);
-
-module.exports = [menu];
