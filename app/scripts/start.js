@@ -330,14 +330,21 @@ export var start = function() {
                         }
                     });
 
-                    if (process.platform === 'darwin') {
-                        if (count > 0) {
+                    if (count > 0) {
+                        if (process.platform === 'darwin') {
                             remote.app.dock.setBadge(String(count));
-                        } else if (alert === true) {
+                        }
+                        tray.showTrayAlert(true, String(count));
+                    } else if (alert === true) {
+                        if (process.platform === 'darwin') {
                             remote.app.dock.setBadge('•');
-                        } else {
+                        }
+                        tray.showTrayAlert(true, '');
+                    } else {
+                        if (process.platform === 'darwin') {
                             remote.app.dock.setBadge('');
                         }
+                        tray.showTrayAlert(false, '');
                     }
                     break;
             }

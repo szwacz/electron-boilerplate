@@ -1,8 +1,11 @@
 'use strict';
 
-var Tray = require('tray');
-var Menu = require('menu');
-var path = require('path');
+import { remote } from 'electron';
+import path from 'path';
+
+var Tray = remote.Tray;
+var Menu = remote.Menu;
+
 
 let _tray;
 let _mainWindow = null;
@@ -87,15 +90,15 @@ function showTrayAlert(showAlert, title) {
         _mainWindow.flashFrame(showAlert);
         if (showAlert) {
             _tray.setImage(_iconTrayAlert);
-            // if (process.platform === 'darwin') {
+            if (process.platform === 'darwin') {
+                _tray.setTitle(title);
             //     _tray.setTitle(title);
-            //     _tray.setTitle(title);
-            // }
+            }
         } else {
             _tray.setImage(_iconTray);
-            // if (process.platform === 'darwin') {
-            //     _tray.setTitle('');
-            // }
+            if (process.platform === 'darwin') {
+                _tray.setTitle('');
+            }
         }
     }
 }
@@ -131,7 +134,17 @@ function bindOnQuit(callback) {
     _callbackOnQuit = callback;
 }
 
-module.exports = {
+createAppTray(remote.getCurrentWindow());
+
+bindOnQuit(function() {
+    remote.app.quit();
+});
+
+window.addEventListener('beforeunload', function() {
+    destroy();
+});
+
+export default {
     createAppTray: createAppTray,
     showTrayAlert: showTrayAlert,
     minimizeMainWindow: minimizeMainWindow,
