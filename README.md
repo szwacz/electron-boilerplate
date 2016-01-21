@@ -79,6 +79,10 @@ cd app
 npm install name_of_npm_module --save
 ```
 
+#### Native npm modules
+
+Want to use them? See [this file](./tasks/rebuild_native.js) for instructions.
+
 #### Working with modules
 
 How about being future proof and using ES6 modules all the time in your app? Thanks to [rollup](https://github.com/rollup/rollup) you can do that. It will transpile the imports to proper `require()` statements, so even though ES6 modules aren't natively supported yet you can start using them today.
