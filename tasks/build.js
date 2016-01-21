@@ -5,7 +5,6 @@ var Q = require('q');
 var gulp = require('gulp');
 var rollup = require('rollup');
 var less = require('gulp-less');
-var coffee = require('gulp-coffee');
 var jetpack = require('fs-jetpack');
 
 var utils = require('./utils');
@@ -28,16 +27,16 @@ var paths = {
         './icons/**',
         './stylesheets/**/*.css',
         './fonts/**',
-        './**/*.html'
-
+        './**/*.html',
+        './**/*.+(jpg|png|svg)'
     ],
-}
+};
 
 // -------------------------------------
 // Tasks
 // -------------------------------------
 
-gulp.task('clean', function(callback) {
+gulp.task('clean', function () {
     return destDir.dirAsync('.', { empty: true });
 });
 
@@ -56,22 +55,25 @@ var bundle = function (src, dest) {
     var deferred = Q.defer();
 
     rollup.rollup({
-        entry: src
+        entry: src,
     }).then(function (bundle) {
         var jsFile = pathUtil.basename(dest);
         var result = bundle.generate({
-            format: 'iife',
+            format: 'cjs',
             sourceMap: true,
             sourceMapFile: jsFile,
         });
+        // Wrap code in self invoking function so the variables don't
+        // pollute the global namespace.
+        var isolatedCode = '(function () {' + result.code + '\n}());';
         return Q.all([
-            destDir.writeAsync(dest, result.code + '\n//# sourceMappingURL=' + jsFile + '.map'),
+            destDir.writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
             destDir.writeAsync(dest + '.map', result.map.toString()),
         ]);
     }).then(function () {
         deferred.resolve();
     }).catch(function (err) {
-        console.error(err);
+        console.error('Build: Error during rollup', err.stack);
     });
 
     return deferred.promise;
@@ -112,18 +114,9 @@ gulp.task('less', ['clean'], lessTask);
 gulp.task('less-watch', lessTask);
 
 
-var coffeeTask = function () {
-    return gulp.src('app/*.coffee')
-    .pipe(coffee({bare: true}))
-    .pipe(gulp.dest(destDir.path()));
-};
-gulp.task('coffee', ['clean'], coffeeTask);
-gulp.task('coffee-watch', coffeeTask);
-
-
-
 gulp.task('finalize', ['clean'], function () {
     var manifest = srcDir.read('package.json', 'json');
+
     // Add "dev" or "test" suffix to name, so Electron will write all data
     // like cookies and localStorage in separate places for each environment.
     switch (utils.getEnvName()) {
@@ -136,10 +129,13 @@ gulp.task('finalize', ['clean'], function () {
             manifest.productName += ' Test';
             break;
     }
-    destDir.write('package.json', manifest);
 
-    var configFilePath = projectDir.path('config/env_' + utils.getEnvName() + '.json');
-    destDir.copy(configFilePath, 'env_config.json');
+    // Copy environment variables to package.json file for easy use
+    // in the running application. This is not official way of doing
+    // things, but also isn't prohibited ;)
+    manifest.env = projectDir.read('config/env_' + utils.getEnvName() + '.json', 'json');
+
+    destDir.write('package.json', manifest);
 });
 
 
@@ -150,4 +146,4 @@ gulp.task('watch', function () {
 });
 
 
-gulp.task('build', ['coffee', 'bundle', 'less', 'copy', 'finalize']);
+gulp.task('build', ['bundle', 'less', 'copy', 'finalize']);

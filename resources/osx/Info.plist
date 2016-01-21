@@ -28,5 +28,7 @@
 	<string>AtomApplication</string>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>{{copyright}}</string>
 </dict>
 </plist>

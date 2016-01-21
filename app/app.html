@@ -11,7 +11,12 @@
 </head>
 <body class="hide-server-list">
 	<div class="server-list">
-		<ul id="serverList"></ul>
+		<ul id="serverList">
+			<li class="add-server">
+				<span>+</span>
+				<div class="tooltip">Add new server</div>
+			</li>
+		</ul>
 	</div>
 
 	<section class="landing-page">
@@ -35,13 +40,12 @@
 					Not a valid instance url
 				</div>
 
+				<div class="alert alert-danger only-offline">Check your Internet connection!</div>
+
 				<div class="submit">
 					<input type="submit" data-loading-text="Connecting..." class="button primary login" value="Connect"></input>
 				</div>
 			</form>
-			<div class="loader" data-src="images/loader.svg">
-				<span class="only-offline">Check your Internet connection!</span>
-			</div>
 			<footer>
 				<div class="social">
 					<nav>
@@ -58,7 +62,7 @@
 	</section>
 
 	<div class="rocket-app">
-		<iframe id="rocketAppFrame"></iframe>
+		<!-- <iframe id="rocketAppFrame"></iframe> -->
 	</div>
 
 	<script src="app.js"></script>

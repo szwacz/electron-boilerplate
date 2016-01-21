@@ -1,7 +1,10 @@
+/* globals $ */
+
+import { remote } from 'electron';
+import { servers } from './servers';
+
 export var start = function() {
-    var key = 'rocket.chat.hosts',
-        rocketHeader = 'X-Rocket-Chat-Version'.toLowerCase(),
-        defaultInstance = 'https://demo.rocket.chat/';
+    var defaultInstance = 'https://demo.rocket.chat';
 
     //init loader
     var loader = document.querySelector('.loader');
@@ -10,7 +13,7 @@ export var start = function() {
         var http = new XMLHttpRequest();
         http.open('GET', src);
         http.onreadystatechange = function() {
-            if (this.readyState == this.DONE) {
+            if (this.readyState === this.DONE) {
                 if (this.response) {
                     loader.innerHTML = this.response + loader.innerHTML;
                 }
@@ -20,7 +23,7 @@ export var start = function() {
     }
 
     function loadPreviousHost() {
-        var current = localStorage.getItem('rocket.chat.currentHost');
+        var current = servers.active;
         if (current) {
             var item = getInstanceButtonByURL(current);
             if (item) {
@@ -30,7 +33,9 @@ export var start = function() {
     }
 
     // connection check
-    if (!navigator.onLine) offline();
+    if (!navigator.onLine) {
+        offline();
+    }
     window.addEventListener('online', online);
     window.addEventListener('offline', offline);
 
@@ -44,130 +49,177 @@ export var start = function() {
     // end connection check
 
     var form = document.querySelector('form');
-    form.addEventListener('submit', function(ev) {
-        console.log('trying to connect')
-        ev.preventDefault();
-        ev.stopPropagation();
-        var input = form.querySelector('[name="host"]');
-        var button = form.querySelector('[type="submit"]');
-        var val = button.value;
-        button.value = button.getAttribute('data-loading-text');
-        var url = input.value;
+    var hostField = form.querySelector('[name="host"]');
+    var button = form.querySelector('[type="submit"]');
+    var invalidUrl = form.querySelector('#invalidUrl');
 
-        if (url.length === 0) {
-            connectDefaultInstance();
-            input.value = '';
-            button.value = val;
-        } else {
+    window.addEventListener('load', function() {
+        hostField.focus();
+    });
 
-            console.debug('checking', url);
-            input.classList.remove('wrong');
-            urlExists(url, 5000).then(function() {
-                console.debug('url found!');
+    function validateHost() {
+        return new Promise(function(resolve, reject) {
+            var execValidation = function() {
+                invalidUrl.style.display = 'none';
+                hostField.classList.remove('wrong');
+
+                var host = hostField.value.trim();
+                host = host.replace(/\/$/, '');
+                hostField.value = host;
+
+                if (host.length === 0) {
+                    button.value = 'Connect';
+                    button.disabled = false;
+                    resolve();
+                    return;
+                }
+
+                button.value = 'Validating...';
+                button.disabled = true;
+
+                servers.validateHost(host, 2000).then(function() {
+                    button.value = 'Connect';
+                    button.disabled = false;
+                    resolve();
+                }, function() {
+                    // If the url begins with HTTP, mark as invalid
+                    if (/^http:\/\/.+/.test(host)) {
+                        button.value = 'Invalid url';
+                        invalidUrl.style.display = 'block';
+                        hostField.classList.add('wrong');
+                        reject();
+                        return;
+                    }
+
+                    // If the url begins with HTTPS, fallback to HTTP
+                    if (/^https:\/\/.+/.test(host)) {
+                        hostField.value = host.replace('https://', 'http://');
+                        return execValidation();
+                    }
+
+                    // If the url isn't localhost, don't have dots and don't have protocol
+                    // try as a .rocket.chat subdomain
+                    if (!/(^https?:\/\/)|(\.)|(^localhost$)/.test(host)) {
+                        hostField.value = `https://${host}.rocket.chat`;
+                        return execValidation();
+                    }
+
+                    // If the url don't start with protocol try HTTPS
+                    if (!/^https?:\/\//.test(host)) {
+                        hostField.value = `https://${host}`;
+                        return execValidation();
+                    }
+                });
+            };
+            execValidation();
+        });
+    }
+
+    hostField.addEventListener('blur', function() {
+        validateHost().then(function() {}, function() {});
+    });
+
+    var submit = function() {
+        validateHost().then(function() {
+            var input = form.querySelector('[name="host"]');
+            var url = input.value;
+
+            if (url.length === 0) {
+                connectDefaultInstance();
+            } else {
                 addServer(url);
                 redirect(url);
                 input.value = '';
-                button.value = val;
-            }, function(status) {
-                button.value = val;
-                form.querySelector('#invalidUrl').style.display = 'block';
-                console.debug('url wrong');
-                input.classList.add('wrong');
-            });
-        }
+            }
+        }, function() {});
+    };
 
+    hostField.addEventListener('keydown', function(ev) {
+        if (ev.which === 13) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            submit();
+            return false;
+        }
+    });
+
+    form.addEventListener('submit', function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        submit();
         return false;
     });
 
-    function changeServer() {
-        document.querySelector('.rocket-app').style.display = 'none';
-        document.querySelector('.landing-page').style.display = 'block';
-    }
-
-    function urlExists(url, timeout) {
-        return new Promise(function(resolve, reject) {
-            var http = new XMLHttpRequest();
-            var resolved = false;
-            http.open('HEAD', url);
-            http.onreadystatechange = function() {
-                if (this.readyState == this.DONE) {
-                    if (!resolved) {
-                        resolved = true;
-                        var headers = this.getAllResponseHeaders().toLowerCase();
-                        if (headers.indexOf(rocketHeader) !== -1) {
-                            resolve();
-                        } else {
-                            reject(this.status);
-                        }
-                    }
-                }
-            };
-            if (timeout) {
-                setTimeout(function() {
-                    if (!resolved) {
-                        resolved = true;
-                        reject();
-                    }
-                }, timeout);
-            }
-            http.send();
-        });
-    }
-
     function addServer(url) {
-        var hosts = localStorage.getItem(key);
-        if (hosts === null) {
-            hosts = [];
-        } else {
-            try {
-                hosts = JSON.parse(hosts);
-            } catch (e) {}
+        if (servers.hostExists(url)) {
+            var item = getInstanceButtonByURL(url);
+            if (item) {
+                loadServer(item);
+            }
+            return;
+        }
+
+        if (servers.addHost(url) === false) {
+            return;
         }
 
         var list = document.getElementById('serverList');
-
-        var newHost = true;
-        hosts.some(function(instanceURL) {
-            if (instanceURL === url) {
-                var item = getInstanceButtonByURL(url);
-                if (item) {
-                    loadServer(item);
-                }
-
-                newHost = false;
-                return true;
-            }
-        });
-
-        if (!newHost) {
-            return;
-        }
 
         document.body.classList.remove('hide-server-list');
         localStorage.setItem('server-list-closed', 'false');
 
-        hosts.push(url);
-        localStorage.setItem(key, JSON.stringify(hosts));
-
         clearActive();
 
-        list.appendChild(createItem(url, (list.childNodes.length + 1), true));
+        var lastLi = document.querySelector('#serverList .add-server');
+        list.insertBefore(createItem(servers.hosts[url], true), lastLi);
     }
+
+    $('.add-server').on('click', function() {
+        document.querySelector('.rocket-app').style.display = 'none';
+        document.querySelector('.landing-page').style.display = null;
+        var activeItem = document.querySelector('.server-list li.active');
+        servers.clearActive();
+        if (activeItem) {
+            activeItem.classList.remove('active');
+        }
+    });
 
     function getInstanceButtonByURL(url) {
-        var list = document.getElementById('serverList');
-        for (var i = 0; i < list.childNodes.length; i++) {
-            if (list.childNodes[i].dataset.host === url) {
-                return list.childNodes[i];
-            }
-        }
+        return document.querySelector(`#serverList .instance[server="${url}"]`);
     }
 
-    function createItem(url, pos, active) {
+    function createItem(host, active) {
+        var url = host.url;
+        var name = host.title.replace(/^https?:\/\/(?:www\.)?([^\/]+)(.*)/, '$1');
+        name = name.split('.');
+        name = name[0][0] + (name[1] ? name[1][0] : '');
+        name = name.toUpperCase();
+
         var item = document.createElement('li');
-        item.innerHTML = '<span>' + (pos) + '</span>';
+
+        var initials = document.createElement('span');
+        initials.innerHTML = name;
+
+        var tooltip = document.createElement('div');
+        tooltip.classList.add('tooltip');
+        tooltip.innerHTML = host.title;
+
+        var badge = document.createElement('div');
+        badge.classList.add('badge');
+
+        item.appendChild(initials);
+        item.appendChild(tooltip);
+        item.appendChild(badge);
+
+        var img = document.createElement('img');
+        img.onload = function() {
+            img.style.display = 'initial';
+            initials.style.display = 'none';
+        };
+        img.src = `${url}/assets/favicon.svg?v=3`;
+        item.appendChild(img);
         item.dataset.host = url;
-        item.title = url;
+        item.setAttribute('server', url);
         item.classList.add('instance');
         if (active) {
             item.classList.add('active');
@@ -187,21 +239,13 @@ export var start = function() {
 
     function renderServers() {
         var list = document.getElementById('serverList');
-        var hosts = localStorage.getItem(key);
+        var lastLi = document.querySelector('#serverList .add-server');
+        var hosts = servers.hosts;
 
-        try {
-            hosts = JSON.parse(hosts);
-        } catch (e) {
-            if (hosts.match(/^https?:\/\//)) {
-                hosts = [hosts];
-            }
-
-            localStorage.setItem(key, JSON.stringify(hosts));
-        }
-
-        if(hosts) {
-            for (var i = 0; i < hosts.length; i++) {
-                list.appendChild(createItem(hosts[i], (i + 1)));
+        for (var host in hosts) {
+            if (hosts.hasOwnProperty(host)) {
+                list.insertBefore(createItem(hosts[host]), lastLi);
+                createWebview(hosts[host].url);
             }
         }
     }
@@ -222,9 +266,100 @@ export var start = function() {
         }
     }
 
+    function createWebview(url) {
+        var webview = document.querySelector(`webview[server="${url}"]`);
+        if (webview) {
+            return webview;
+        }
+
+        webview = document.createElement('webview');
+        webview.setAttribute('server', url);
+        webview.setAttribute('preload', './preload.js');
+        webview.setAttribute('allowpopups', 'on');
+
+        // webview.addEventListener('did-start-loading', function() {
+        //     console.log('did-start-loading');
+        // });
+        // webview.addEventListener('did-stop-loading', function() {
+        //     console.log('did-stop-loading');
+        // });
+        webview.addEventListener('did-navigate-in-page', function(lastPath) {
+            var hosts = servers.hosts;
+            hosts[url].lastPath = lastPath.url;
+            servers.hosts = hosts;
+        });
+        webview.addEventListener('console-message', function(e) {
+            console.log('webview:', e.message);
+        });
+        webview.addEventListener('ipc-message', function(event) {
+            window.dispatchEvent(new CustomEvent(event.channel, {
+               detail: event.args[0]
+            }));
+
+            switch (event.channel) {
+                case 'title-changed':
+                    var hosts = servers.hosts;
+                    var title = event.args[0];
+                    if (title === 'Rocket.Chat' && /https?:\/\/demo\.rocket\.chat/.test(url) === false) {
+                        title += ' - ' + url;
+                    }
+                    hosts[url].title = title;
+                    servers.hosts = hosts;
+                    $(`li[server="${url}"] .tootip`).html(title);
+                    break;
+                case 'unread-changed':
+                    var unread = event.args[0];
+                    var showAlert = (unread !== null && unread !== undefined && unread !== '');
+                    if (showAlert) {
+                        $(`li[server="${url}"]`).addClass('unread');
+                        $(`li[server="${url}"] .badge`).html(unread);
+                    } else {
+                        $(`li[server="${url}"]`).removeClass('unread');
+                        $(`li[server="${url}"] .badge`).html('');
+                    }
+
+                    var count = 0;
+                    var alert = false;
+                    $(`li.instance .badge`).each(function(index, item) {
+                        var text = $(item).html();
+                        if (!isNaN(parseInt(text))) {
+                            count += parseInt(text);
+                        }
+                        if (!alert) {
+                            alert = text === '•';
+                        }
+                    });
+
+                    if (process.platform === 'darwin') {
+                        if (count > 0) {
+                            remote.app.dock.setBadge(String(count));
+                        } else if (alert === true) {
+                            remote.app.dock.setBadge('•');
+                        } else {
+                            remote.app.dock.setBadge('');
+                        }
+                    }
+                    break;
+            }
+        });
+        document.querySelector('.rocket-app').appendChild(webview);
+        var hosts = servers.hosts;
+        if (hosts[url].lastPath) {
+            webview.src = hosts[url].lastPath;
+        } else {
+            webview.src = url;
+        }
+
+        return webview;
+    }
+
     function redirect(url) {
-        localStorage.setItem('rocket.chat.currentHost', url);
-        document.getElementById('rocketAppFrame').src = url;
+        servers.setActive(url);
+        var webview = createWebview(url);
+        webview.classList.add('active');
+
+        $(`webview:not([server="${url}"])`).removeClass('active');
+
         document.querySelector('.landing-page').style.display = 'none';
         document.querySelector('.rocket-app').style.display = 'block';
     }
@@ -234,16 +369,12 @@ export var start = function() {
         redirect(defaultInstance);
     }
 
-    var rocketAppFrame = document.getElementById('rocketAppFrame');
-    rocketAppFrame.onload = function () {
-        rocketAppFrame.contentWindow.addEventListener('unread-changed', function (e) {
-            window.dispatchEvent(new CustomEvent('unread-changed', {
-                detail: e.detail
-            }));
-        });
-        rocketAppFrame.contentWindow.document.addEventListener('click', supportExternalLinks, false);
-        rocketAppFrame.contentWindow.open = function() {
-            return window.open.apply(this, arguments);
-        }
-    };
-}
+    // window.addEventListener('unread-changed', function(event) {
+    //     var unread = event.detail;
+    //     // let showAlert = (unread !== null && unread !== undefined && unread !== '');
+    //     if (process.platform === 'darwin') {
+    //         remote.app.dock.setBadge(String(unread || ''));
+    //     }
+    //     // remote.Tray.showTrayAlert(showAlert, String(unread));
+    // });
+};
