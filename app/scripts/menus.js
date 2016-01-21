@@ -3,10 +3,12 @@
 import { remote } from 'electron';
 import { servers } from './servers';
 import { sidebar } from './sidebar';
+import config from './config';
+import '../branding/branding.js';
 
 var Menu = remote.Menu;
 var app = remote.App;
-var APP_NAME = 'Rocket.Chat';
+var APP_NAME = config.name;
 var template;
 
 if (process.platform === 'darwin') {
