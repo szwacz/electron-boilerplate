@@ -3,7 +3,7 @@
 'use strict';
 
 import { remote } from 'electron';
-import { servers } from './scripts/servers';
+import { servers } from './servers';
 
 var Menu = remote.Menu;
 var app = remote.App;

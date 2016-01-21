@@ -3,6 +3,7 @@
 import { remote } from 'electron';
 import { servers } from './servers';
 import tray from './tray';
+import './menus';
 
 export var start = function() {
     var defaultInstance = 'https://demo.rocket.chat';
@@ -275,7 +276,7 @@ export var start = function() {
 
         webview = document.createElement('webview');
         webview.setAttribute('server', url);
-        webview.setAttribute('preload', './preload.js');
+        webview.setAttribute('preload', './scripts/preload.js');
         webview.setAttribute('allowpopups', 'on');
         webview.setAttribute('disablewebsecurity', 'on');
 
