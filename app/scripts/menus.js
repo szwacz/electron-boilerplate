@@ -218,7 +218,7 @@ var instanceMenu = Menu.buildFromTemplate([{
 	label: 'Remove server',
 	click: function() {
 		var $selectedInstance = $(selectedInstance);
-		servers.remove(selectedInstance.dataset.host);
+		servers.removeHost(selectedInstance.dataset.host);
 		$(`webview[server="${selectedInstance.dataset.host}"]`).remove();
 		document.querySelector('.rocket-app').style.display = 'none';
 		document.querySelector('.landing-page').style.display = null;

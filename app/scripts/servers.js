@@ -1,7 +1,10 @@
 /* globals $ */
 
-class Servers {
+import { EventEmitter } from 'events';
+
+class Servers extends EventEmitter {
 	constructor() {
+		super();
 		this.load();
 	}
 
@@ -57,30 +60,32 @@ class Servers {
 		}
 
 		this._hosts = hosts;
+		this.emit('loaded');
 	}
 
 	save() {
 		localStorage.setItem(this.hostsKey, JSON.stringify(this._hosts));
+		this.emit('saved');
 	}
 
-	validateHost(host, timeout) {
-		console.log('Validating host', host);
+	validateHost(hostUrl, timeout) {
+		console.log('Validating hostUrl', hostUrl);
 		timeout = timeout || 5000;
 		return new Promise(function(resolve, reject) {
 			var resolved = false;
-			$.getJSON(`${host}/api/info`).then(function() {
+			$.getJSON(`${hostUrl}/api/info`).then(function() {
 				if (resolved) {
 					return;
 				}
 				resolved = true;
-				console.log('Host valid', host);
+				console.log('HostUrl valid', hostUrl);
 				resolve();
 			},function(request) {
 				if (resolved) {
 					return;
 				}
 				resolved = true;
-				console.log('Host invalid', host);
+				console.log('HostUrl invalid', hostUrl);
 				reject(request.status);
 			});
 			if (timeout) {
@@ -89,49 +94,54 @@ class Servers {
 						return;
 					}
 					resolved = true;
-					console.log('Validating host TIMEOUT', host);
+					console.log('Validating hostUrl TIMEOUT', hostUrl);
 					reject();
 				}, timeout);
 			}
 		});
 	}
 
-	hostExists(host) {
+	hostExists(hostUrl) {
 		var hosts = this.hosts;
 
-		return !!hosts[host];
+		return !!hosts[hostUrl];
 	}
 
-	addHost(host) {
+	addHost(hostUrl) {
 		var hosts = this.hosts;
 
-		if (this.hostExists(host) === true) {
+		if (this.hostExists(hostUrl) === true) {
 			return false;
 		}
 
-		hosts[host] = {
-			title: host,
-			url: host
+		hosts[hostUrl] = {
+			title: hostUrl,
+			url: hostUrl
 		};
 		this.hosts = hosts;
+
+		this.emit('host-added', hostUrl);
 
 		return true;
 	}
 
-	remove(host) {
+	removeHost(hostUrl) {
 		var hosts = this.hosts;
-		delete hosts[host];
-
-		this.hosts = hosts;
+		if (hosts[hostUrl]) {
+			delete hosts[hostUrl];
+			this.hosts = hosts;
+			this.emit('host-removed', hostUrl);
+		}
 	}
 
 	get active() {
 		return localStorage.getItem(this.activeKey);
 	}
 
-	setActive(host) {
-		if (this.hostExists(host)) {
-			localStorage.setItem(this.activeKey, host);
+	setActive(hostUrl) {
+		if (this.hostExists(hostUrl)) {
+			localStorage.setItem(this.activeKey, hostUrl);
+			this.emit('active-changed', hostUrl);
 			return true;
 		}
 		return false;
@@ -139,6 +149,7 @@ class Servers {
 
 	clearActive() {
 		localStorage.removeItem(this.activeKey);
+		this.emit('active-cleared');
 		return true;
 	}
 }
