@@ -1,5 +1,3 @@
-
-
 import { EventEmitter } from 'events';
 import { servers } from './servers';
 
@@ -20,6 +18,20 @@ class SideBar extends EventEmitter {
 		servers.on('active-setted', (hostUrl) => {
 			this.setActive(hostUrl);
 		});
+
+		servers.on('active-cleared', (hostUrl) => {
+			this.deactiveAll(hostUrl);
+		});
+
+		servers.on('title-setted', (hostUrl, title) => {
+			this.setLabel(hostUrl, title);
+		});
+
+		if (this.isHidden()) {
+			this.hide();
+		} else {
+			this.show();
+		}
 	}
 
 	add(host) {
@@ -58,6 +70,7 @@ class SideBar extends EventEmitter {
 
 		item.onclick = () => {
 			this.emit('click', host.url);
+			servers.setActive(host.url);
 		};
 
 		this.listElement.appendChild(item);
@@ -80,18 +93,75 @@ class SideBar extends EventEmitter {
 			return;
 		}
 
-		this.deativeAll();
+		this.deactiveAll();
 		var item = this.getByUrl(hostUrl);
 		if (item) {
 			item.classList.add('active');
 		}
 	}
 
-	deativeAll() {
+	deactiveAll() {
 		var item;
 		while (!!(item = this.getActive())) {
 			item.classList.remove('active');
 		}
+	}
+
+	setLabel(hostUrl, label) {
+		this.listElement.querySelector(`.instance[server="${hostUrl}"] .tooltip`).innerHTML = label;
+	}
+
+	setBadge(hostUrl, badge) {
+		var item = this.getByUrl(hostUrl);
+		var badgeEl = item.querySelector('.badge');
+
+		if (badge !== null && badge !== undefined && badge !== '') {
+			item.classList.add('unread');
+			badgeEl.innerHTML = badge;
+		} else {
+			badge = undefined;
+			item.classList.remove('unread');
+			badgeEl.innerHTML = '';
+		}
+		this.emit('badge-setted', hostUrl, badge);
+	}
+
+	getGlobalBadge() {
+		var count = 0;
+		var alert = '';
+		var badgeEls = this.listElement.querySelectorAll(`li.instance .badge`);
+		for (var i = badgeEls.length - 1; i >= 0; i--) {
+			var badgeEl = badgeEls[i];
+			var text = badgeEl.innerHTML;
+			if (!isNaN(parseInt(text))) {
+				count += parseInt(text);
+			}
+			if (alert === '' && text === '•') {
+				alert = text;
+			}
+		}
+
+		if (count > 0) {
+			return String(count);
+		} else {
+			return alert;
+		}
+	}
+
+	hide() {
+		document.body.classList.add('hide-server-list');
+		localStorage.setItem('sidebar-closed', 'true');
+		this.emit('hide');
+	}
+
+	show() {
+		document.body.classList.remove('hide-server-list');
+		localStorage.setItem('sidebar-closed', 'false');
+		this.emit('show');
+	}
+
+	isHidden() {
+		return localStorage.getItem('sidebar-closed') === 'true';
 	}
 }
 

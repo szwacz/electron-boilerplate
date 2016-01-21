@@ -25,8 +25,6 @@ if (process.platform === 'darwin') {
 				{
 					label: 'Change server',
 					click: function() {
-						document.querySelector('.rocket-app').style.display = 'none';
-						document.querySelector('.landing-page').style.display = null;
 						var activeItem = document.querySelector('.server-list li.active');
 						localStorage.removeItem('rocket.chat.currentHost');
 						if (activeItem) {
@@ -157,8 +155,6 @@ if (process.platform === 'darwin') {
 					click: function() {
 						document.querySelector('.rocket-app').style.display = 'none';
 						document.querySelector('.landing-page').style.display = null;
-						var activeItem = document.querySelector('.server-list li.active');
-						localStorage.removeItem('rocket.chat.currentHost');
 						if (activeItem) {
 							activeItem.classList.remove('active');
 						}
@@ -220,8 +216,6 @@ var instanceMenu = Menu.buildFromTemplate([{
 		var $selectedInstance = $(selectedInstance);
 		servers.removeHost(selectedInstance.dataset.host);
 		$(`webview[server="${selectedInstance.dataset.host}"]`).remove();
-		document.querySelector('.rocket-app').style.display = 'none';
-		document.querySelector('.landing-page').style.display = null;
 		$selectedInstance.remove();
 	}
 }, {

@@ -160,22 +160,7 @@ div.server-list li:before {
 	display: none;
 }
 
-.rocket-app {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 80px;
-	width: auto;
-	height: auto;
-}
-
-.rocket-app iframe {
-	height: 100%;
-	width: 100%;
-}
-
-.hide-server-list .rocket-app {
+.hide-server-list webview {
 	left: 0;
 }
 
@@ -226,14 +211,18 @@ div.server-list li:before {
 }
 
 webview {
-	z-index: -1;
-	position: absolute;
+	z-index: 0;
+	position: fixed;
 	top: 0;
-	left: 0;
+	left: 80px;
 	right: 0;
 	bottom: 0;
 }
 
 webview.active {
+	z-index: 2;
+}
+
+.landing-page {
 	z-index: 1;
 }

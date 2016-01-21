@@ -160,10 +160,24 @@ class Servers extends EventEmitter {
 		return false;
 	}
 
+	restoreActive() {
+		servers.setActive(servers.active);
+	}
+
 	clearActive() {
 		localStorage.removeItem(this.activeKey);
 		this.emit('active-cleared');
 		return true;
+	}
+
+	setHostTitle(hostUrl, title) {
+		if (title === 'Rocket.Chat' && /https?:\/\/demo\.rocket\.chat/.test(hostUrl) === false) {
+			title += ' - ' + hostUrl;
+		}
+		var hosts = this.hosts;
+		hosts[hostUrl].title = title;
+		this.hosts = hosts;
+		this.emit('title-setted', hostUrl, title);
 	}
 }
 

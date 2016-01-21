@@ -3,34 +3,21 @@
 import { remote } from 'electron';
 import { servers } from './servers';
 import { sidebar } from './sidebar';
+import './webview';
 import tray from './tray';
 import './menus';
 
+sidebar.on('badge-setted', function() {
+    var badge = sidebar.getGlobalBadge();
+
+    if (process.platform === 'darwin') {
+        remote.app.dock.setBadge(badge);
+    }
+    tray.showTrayAlert(badge !== '', badge);
+});
+
 export var start = function() {
     var defaultInstance = 'https://demo.rocket.chat';
-
-    //init loader
-    var loader = document.querySelector('.loader');
-    if (loader) {
-        var src = loader.getAttribute('data-src');
-        var http = new XMLHttpRequest();
-        http.open('GET', src);
-        http.onreadystatechange = function() {
-            if (this.readyState === this.DONE) {
-                if (this.response) {
-                    loader.innerHTML = this.response + loader.innerHTML;
-                }
-            }
-        };
-        http.send();
-    }
-
-    function loadPreviousHost() {
-        var current = servers.active;
-        if (current) {
-            loadServer(current);
-        }
-    }
 
     // connection check
     if (!navigator.onLine) {
@@ -125,12 +112,16 @@ export var start = function() {
             var url = input.value;
 
             if (url.length === 0) {
-                connectDefaultInstance();
-            } else {
-                addServer(url);
-                redirect(url);
-                input.value = '';
+                url = defaultInstance;
             }
+
+            if (servers.addHost(url) === true) {
+                sidebar.show();
+            }
+
+            servers.setActive(url);
+
+            input.value = '';
         }, function() {});
     };
 
@@ -150,167 +141,9 @@ export var start = function() {
         return false;
     });
 
-    function addServer(url) {
-        if (servers.hostExists(url)) {
-            loadServer(url);
-            return;
-        }
-
-        if (servers.addHost(url) === false) {
-            return;
-        }
-
-        document.body.classList.remove('hide-server-list');
-        localStorage.setItem('server-list-closed', 'false');
-
-        sidebar.setActive(url);
-    }
-
     $('.add-server').on('click', function() {
-        document.querySelector('.rocket-app').style.display = 'none';
-        document.querySelector('.landing-page').style.display = null;
-        var activeItem = document.querySelector('.server-list li.active');
         servers.clearActive();
-        if (activeItem) {
-            activeItem.classList.remove('active');
-        }
     });
 
-    function renderServers() {
-        var hosts = servers.hosts;
-
-        for (var host in hosts) {
-            if (hosts.hasOwnProperty(host)) {
-                createWebview(hosts[host].url);
-            }
-        }
-    }
-
-    renderServers();
-    loadPreviousHost();
-
-    if (localStorage.getItem('server-list-closed') === 'false') {
-        document.body.classList.remove('hide-server-list');
-    }
-
-    sidebar.on('click', function(hostUrl) {
-        loadServer(hostUrl);
-    });
-
-    function loadServer(hostUrl) {
-        sidebar.setActive(hostUrl);
-        redirect(hostUrl);
-    }
-
-    function createWebview(url) {
-        var webview = document.querySelector(`webview[server="${url}"]`);
-        if (webview) {
-            return webview;
-        }
-
-        webview = document.createElement('webview');
-        webview.setAttribute('server', url);
-        webview.setAttribute('preload', './scripts/preload.js');
-        webview.setAttribute('allowpopups', 'on');
-        webview.setAttribute('disablewebsecurity', 'on');
-
-        // webview.addEventListener('did-start-loading', function() {
-        //     console.log('did-start-loading');
-        // });
-        // webview.addEventListener('did-stop-loading', function() {
-        //     console.log('did-stop-loading');
-        // });
-        webview.addEventListener('did-navigate-in-page', function(lastPath) {
-            var hosts = servers.hosts;
-            hosts[url].lastPath = lastPath.url;
-            servers.hosts = hosts;
-        });
-        webview.addEventListener('console-message', function(e) {
-            console.log('webview:', e.message);
-        });
-        webview.addEventListener('ipc-message', function(event) {
-            window.dispatchEvent(new CustomEvent(event.channel, {
-               detail: event.args[0]
-            }));
-
-            switch (event.channel) {
-                case 'title-changed':
-                    var hosts = servers.hosts;
-                    var title = event.args[0];
-                    if (title === 'Rocket.Chat' && /https?:\/\/demo\.rocket\.chat/.test(url) === false) {
-                        title += ' - ' + url;
-                    }
-                    hosts[url].title = title;
-                    servers.hosts = hosts;
-                    $(`li[server="${url}"] .tootip`).html(title);
-                    break;
-                case 'unread-changed':
-                    var unread = event.args[0];
-                    var showAlert = (unread !== null && unread !== undefined && unread !== '');
-                    if (showAlert) {
-                        $(`li[server="${url}"]`).addClass('unread');
-                        $(`li[server="${url}"] .badge`).html(unread);
-                    } else {
-                        $(`li[server="${url}"]`).removeClass('unread');
-                        $(`li[server="${url}"] .badge`).html('');
-                    }
-
-                    var count = 0;
-                    var alert = false;
-                    $(`li.instance .badge`).each(function(index, item) {
-                        var text = $(item).html();
-                        if (!isNaN(parseInt(text))) {
-                            count += parseInt(text);
-                        }
-                        if (!alert) {
-                            alert = text === '•';
-                        }
-                    });
-
-                    if (count > 0) {
-                        if (process.platform === 'darwin') {
-                            remote.app.dock.setBadge(String(count));
-                        }
-                        tray.showTrayAlert(true, String(count));
-                    } else if (alert === true) {
-                        if (process.platform === 'darwin') {
-                            remote.app.dock.setBadge('•');
-                        }
-                        tray.showTrayAlert(true, '');
-                    } else {
-                        if (process.platform === 'darwin') {
-                            remote.app.dock.setBadge('');
-                        }
-                        tray.showTrayAlert(false, '');
-                    }
-                    break;
-            }
-        });
-        document.querySelector('.rocket-app').appendChild(webview);
-        var hosts = servers.hosts;
-        if (hosts[url].lastPath) {
-            webview.src = hosts[url].lastPath;
-        } else {
-            webview.src = url;
-        }
-
-        return webview;
-    }
-
-    function redirect(url) {
-        servers.setActive(url);
-        var webview = createWebview(url);
-        webview.classList.add('active');
-
-        $(`webview:not([server="${url}"])`).removeClass('active');
-
-        document.querySelector('.landing-page').style.display = 'none';
-        document.querySelector('.rocket-app').style.display = 'block';
-    }
-
-    function connectDefaultInstance() {
-        addServer(defaultInstance);
-        redirect(defaultInstance);
-    }
-
+    servers.restoreActive();
 };
