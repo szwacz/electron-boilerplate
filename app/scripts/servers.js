@@ -51,6 +51,7 @@ class Servers extends EventEmitter {
 			var oldHosts = hosts;
 			hosts = {};
 			oldHosts.forEach(function(item) {
+				item = item.replace(/\/$/, '');
 				hosts[item] = {
 					title: item,
 					url: item
