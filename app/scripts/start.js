@@ -2,6 +2,7 @@
 
 import { remote } from 'electron';
 import { servers } from './servers';
+import { sidebar } from './sidebar';
 import tray from './tray';
 import './menus';
 
@@ -27,10 +28,7 @@ export var start = function() {
     function loadPreviousHost() {
         var current = servers.active;
         if (current) {
-            var item = getInstanceButtonByURL(current);
-            if (item) {
-                loadServer(item);
-            }
+            loadServer(current);
         }
     }
 
@@ -101,7 +99,7 @@ export var start = function() {
 
                     // If the url isn't localhost, don't have dots and don't have protocol
                     // try as a .rocket.chat subdomain
-                    if (!/(^https?:\/\/)|(\.)|(^localhost$)/.test(host)) {
+                    if (!/(^https?:\/\/)|(\.)|(^localhost(:d+)?$)/.test(host)) {
                         hostField.value = `https://${host}.rocket.chat`;
                         return execValidation();
                     }
@@ -154,10 +152,7 @@ export var start = function() {
 
     function addServer(url) {
         if (servers.hostExists(url)) {
-            var item = getInstanceButtonByURL(url);
-            if (item) {
-                loadServer(item);
-            }
+            loadServer(url);
             return;
         }
 
@@ -165,15 +160,10 @@ export var start = function() {
             return;
         }
 
-        var list = document.getElementById('serverList');
-
         document.body.classList.remove('hide-server-list');
         localStorage.setItem('server-list-closed', 'false');
 
-        clearActive();
-
-        var lastLi = document.querySelector('#serverList .add-server');
-        list.insertBefore(createItem(servers.hosts[url], true), lastLi);
+        sidebar.setActive(url);
     }
 
     $('.add-server').on('click', function() {
@@ -186,67 +176,11 @@ export var start = function() {
         }
     });
 
-    function getInstanceButtonByURL(url) {
-        return document.querySelector(`#serverList .instance[server="${url}"]`);
-    }
-
-    function createItem(host, active) {
-        var url = host.url;
-        var name = host.title.replace(/^https?:\/\/(?:www\.)?([^\/]+)(.*)/, '$1');
-        name = name.split('.');
-        name = name[0][0] + (name[1] ? name[1][0] : '');
-        name = name.toUpperCase();
-
-        var item = document.createElement('li');
-
-        var initials = document.createElement('span');
-        initials.innerHTML = name;
-
-        var tooltip = document.createElement('div');
-        tooltip.classList.add('tooltip');
-        tooltip.innerHTML = host.title;
-
-        var badge = document.createElement('div');
-        badge.classList.add('badge');
-
-        item.appendChild(initials);
-        item.appendChild(tooltip);
-        item.appendChild(badge);
-
-        var img = document.createElement('img');
-        img.onload = function() {
-            img.style.display = 'initial';
-            initials.style.display = 'none';
-        };
-        img.src = `${url}/assets/favicon.svg?v=3`;
-        item.appendChild(img);
-        item.dataset.host = url;
-        item.setAttribute('server', url);
-        item.classList.add('instance');
-        if (active) {
-            item.classList.add('active');
-        }
-        item.onclick = function() {
-            loadServer(this);
-        };
-        return item;
-    }
-
-    function clearActive() {
-        var activeItem = document.querySelector('.server-list li.active');
-        if (activeItem) {
-            activeItem.classList.remove('active');
-        }
-    }
-
     function renderServers() {
-        var list = document.getElementById('serverList');
-        var lastLi = document.querySelector('#serverList .add-server');
         var hosts = servers.hosts;
 
         for (var host in hosts) {
             if (hosts.hasOwnProperty(host)) {
-                list.insertBefore(createItem(hosts[host]), lastLi);
                 createWebview(hosts[host].url);
             }
         }
@@ -259,13 +193,13 @@ export var start = function() {
         document.body.classList.remove('hide-server-list');
     }
 
-    function loadServer(el) {
-        if (!el.classList.contains('active')) {
-            clearActive();
+    sidebar.on('click', function(hostUrl) {
+        loadServer(hostUrl);
+    });
 
-            el.classList.add('active');
-            redirect(el.dataset.host);
-        }
+    function loadServer(hostUrl) {
+        sidebar.setActive(hostUrl);
+        redirect(hostUrl);
     }
 
     function createWebview(url) {
@@ -379,12 +313,4 @@ export var start = function() {
         redirect(defaultInstance);
     }
 
-    // window.addEventListener('unread-changed', function(event) {
-    //     var unread = event.detail;
-    //     // let showAlert = (unread !== null && unread !== undefined && unread !== '');
-    //     if (process.platform === 'darwin') {
-    //         remote.app.dock.setBadge(String(unread || ''));
-    //     }
-    //     // remote.Tray.showTrayAlert(showAlert, String(unread));
-    // });
 };

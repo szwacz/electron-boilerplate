@@ -68,6 +68,18 @@ class Servers extends EventEmitter {
 		this.emit('saved');
 	}
 
+	get(hostUrl) {
+		return this.hosts[hostUrl];
+	}
+
+	forEach(cb) {
+		for (var host in this.hosts) {
+			if (this.hosts.hasOwnProperty(host)) {
+				cb(this.hosts[host]);
+			}
+		}
+	}
+
 	validateHost(hostUrl, timeout) {
 		console.log('Validating hostUrl', hostUrl);
 		timeout = timeout || 5000;
@@ -141,7 +153,7 @@ class Servers extends EventEmitter {
 	setActive(hostUrl) {
 		if (this.hostExists(hostUrl)) {
 			localStorage.setItem(this.activeKey, hostUrl);
-			this.emit('active-changed', hostUrl);
+			this.emit('active-setted', hostUrl);
 			return true;
 		}
 		return false;

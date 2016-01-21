@@ -30,13 +30,14 @@ div.server-list {
 	bottom: 0;
 	height: 100%;
 	width: 80px;
+	padding-top: 5px;
 	background-color: #0F354C;
 	z-index: 100000;
 }
 
 div.server-list ul {
-	padding-left: 0px;
-	margin-top: 5px;
+	padding: 0px;
+	margin: 0px;
 }
 
 div.server-list li {
