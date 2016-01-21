@@ -11,6 +11,8 @@ var app = remote.App;
 var APP_NAME = config.name;
 var template;
 
+document.title = APP_NAME;
+
 if (process.platform === 'darwin') {
 	template = [
 		{
