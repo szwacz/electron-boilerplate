@@ -1,13 +1,15 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
-  "identifier": "com.example.electron-boilerplate",
+  "name": "billcurt-electron-auto-update",
+  "productName": "Electron Boilerplate AU",
+  "identifier": "com.example.electron-boilerplate-au",
   "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
   "version": "0.1.0",
   "author": "Mr Gumby",
   "copyright": "© 2016, your company here",
   "main": "background.js",
   "dependencies": {
-    "fs-jetpack": "^0.7.0"
+    "fs-jetpack": "^0.7.0",
+    "electron-plugins": "0.0.4",
+    "electron-updater": "^0.2.3"
   }
 }
