@@ -16,6 +16,10 @@ class WebView extends EventEmitter {
 			this.add(servers.get(hostUrl));
 		});
 
+		servers.on('host-removed', (hostUrl) => {
+			this.remove(hostUrl);
+		});
+
 		servers.on('active-setted', (hostUrl) => {
 			this.setActive(hostUrl);
 		});
@@ -61,6 +65,13 @@ class WebView extends EventEmitter {
 		this.webviewParentElement.appendChild(webview);
 
 		webview.src = host.lastPath || host.url;
+	}
+
+	remove(hostUrl) {
+		var el = this.getByUrl(hostUrl);
+		if (el) {
+			el.remove();
+		}
 	}
 
 	saveLastPath(hostUrl, lastPathUrl) {

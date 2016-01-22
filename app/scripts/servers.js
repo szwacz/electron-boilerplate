@@ -143,6 +143,9 @@ class Servers extends EventEmitter {
 		if (hosts[hostUrl]) {
 			delete hosts[hostUrl];
 			this.hosts = hosts;
+			if (this.active === hostUrl) {
+				this.clearActive();
+			}
 			this.emit('host-removed', hostUrl);
 		}
 	}
