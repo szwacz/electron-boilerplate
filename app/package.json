@@ -1,7 +1,7 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
-  "identifier": "com.example.electron-boilerplate",
+  "name": "billcurt-electron-auto-update",
+  "productName": "Electron Auto-update Boilerplate",
+  "identifier": "com.example.electron-auto-update-boilerplate",
   "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
   "version": "0.1.0",
   "author": "Mr Gumby",
