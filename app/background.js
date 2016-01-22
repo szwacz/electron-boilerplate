@@ -6,6 +6,7 @@
 import { app, BrowserWindow } from 'electron';
 import devHelper from './vendor/electron_boilerplate/dev_helper';
 import windowStateKeeper from './vendor/electron_boilerplate/window_state';
+const updater = require('electron-updater');
 
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
@@ -20,6 +21,8 @@ var mainWindowState = windowStateKeeper('main', {
 });
 
 app.on('ready', function () {
+
+  updater.on('ready', function () {
 
     mainWindow = new BrowserWindow({
         x: mainWindowState.x,
@@ -46,6 +49,17 @@ app.on('ready', function () {
     mainWindow.on('close', function () {
         mainWindowState.saveState(mainWindow);
     });
+  });
+
+  updater.on('updateRequired', function () {        
+      app.quit();
+  });
+
+  updater.on('updateAvailable', function () {
+      mainWindow.webContents.send('update-available');
+  });
+
+  updater.start();
 });
 
 app.on('window-all-closed', function () {
