@@ -21,9 +21,5 @@
     "release": "gulp release --env=production",
     "start": "node ./tasks/start",
     "test": "node ./tasks/start --env=test"
-  },
-  "dependencies": {
-    "electron-plugins": "0.0.4",
-    "electron-updater": "^0.2.3"
   }
 }
