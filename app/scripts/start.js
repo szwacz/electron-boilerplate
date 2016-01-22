@@ -3,7 +3,7 @@
 import { remote } from 'electron';
 import { servers } from './servers';
 import { sidebar } from './sidebar';
-import './webview';
+import { webview } from './webview';
 import tray from './tray';
 import './menus';
 
@@ -147,3 +147,43 @@ export var start = function() {
 
     servers.restoreActive();
 };
+
+var readAsDataURL = function (file, callback) {
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+        callback(ev.target.result, file);
+    };
+    reader.readAsDataURL(file);
+};
+
+document.addEventListener('drop', function(e) {
+    e.preventDefault();
+
+    var filesToUpload = [];
+    var readFiles = function(files) {
+        if (files.length === 0) {
+            if (filesToUpload.length > 0) {
+                var el = webview.getActive();
+                if (el) {
+                    el.send('upload-file', filesToUpload);
+                }
+            }
+            return;
+        }
+        var file = files.shift();
+        var item = {
+            file: file,
+            name: file.name,
+            type: file.type
+        };
+        filesToUpload.push(item);
+        readAsDataURL(file, function(result) {
+            item.dataUrl = result;
+            readFiles(files);
+        });
+    };
+    if (e.dataTransfer && e.dataTransfer.files) {
+        var files = Array.prototype.slice.call(e.dataTransfer.files);
+        readFiles(files);
+    }
+});
