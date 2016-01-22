@@ -20,7 +20,7 @@ var init = function () {
     manifest = projectDir.read('app/package.json', 'json');
     finalAppDir = tmpDir.cwd(manifest.productName + '.app');
 
-    return Q();
+    return new Q();
 };
 
 var copyRuntime = function () {
@@ -30,7 +30,7 @@ var copyRuntime = function () {
 var cleanupRuntime = function () {
     finalAppDir.remove('Contents/Resources/default_app');
     finalAppDir.remove('Contents/Resources/atom.icns');
-    return Q();
+    return new Q();
 };
 
 var packageBuiltApp = function () {
@@ -65,9 +65,9 @@ var finalize = function () {
     });
 
     // Copy icon
-    projectDir.copy('resources/osx/icon.icns', finalAppDir.path('Contents/Resources/icon.icns'));
+    projectDir.copy('app/images/osx/icon.icns', finalAppDir.path('Contents/Resources/icon.icns'));
 
-    return Q();
+    return new Q();
 };
 
 var renameApp = function () {
@@ -78,7 +78,7 @@ var renameApp = function () {
     });
     // Rename application
     finalAppDir.rename('Contents/MacOS/Electron', manifest.productName);
-    return Q();
+    return new Q();
 };
 
 var signApp = function () {
@@ -88,7 +88,7 @@ var signApp = function () {
         gulpUtil.log('Signing with:', cmd);
         return Q.nfcall(child_process.exec, cmd);
     } else {
-        return Q();
+        return new Q();
     }
 };
 
@@ -103,8 +103,8 @@ var packToDmgFile = function () {
     dmgManifest = utils.replace(dmgManifest, {
         productName: manifest.productName,
         appPath: finalAppDir.path(),
-        dmgIcon: projectDir.path("resources/osx/dmg-icon.icns"),
-        dmgBackground: projectDir.path("resources/osx/dmg-background.png")
+        dmgIcon: projectDir.path('app/images/osx/dmg-icon.icns'),
+        dmgBackground: projectDir.path('app/images/osx/dmg-background.png')
     });
     tmpDir.write('appdmg.json', dmgManifest);
 

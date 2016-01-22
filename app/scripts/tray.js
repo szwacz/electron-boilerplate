@@ -11,18 +11,23 @@ let _tray;
 let _mainWindow = null;
 let _callbackOnQuit;
 
-let _iconTray, _iconTrayAlert;
+var icons = {
+    'win32': {
+        dir: 'windows'
+    },
 
-if (process.platform === 'win32') {
-    _iconTray = path.join(__dirname, 'icons', 'tray', 'windows', 'icon-tray.png');
-    _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'windows', 'icon-tray-alert.png');
-} else if (process.platform === 'linux') {
-    _iconTray = path.join(__dirname, 'icons', 'tray', 'linux', 'icon-tray.png');
-    _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'linux', 'icon-tray-alert.png');
-} else if (process.platform === 'darwin') {
-    _iconTray = path.join(__dirname, 'icons', 'tray', 'osx', 'icon-trayTemplate.png');
-    _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'osx', 'icon-tray-alert.png');
-}
+    'linux': {
+        dir: 'linux'
+    },
+
+    'darwin': {
+        dir: 'osx',
+        icon: 'icon-trayTemplate.png'
+    }
+};
+
+let _iconTray = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].icon || 'icon-tray.png');
+let _iconTrayAlert = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].iconAlert || 'icon-tray-alert.png');
 
 function createAppTray(mainWindow) {
     _tray = new Tray(_iconTray);
