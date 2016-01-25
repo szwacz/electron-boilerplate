@@ -110,6 +110,17 @@ class WebView extends EventEmitter {
 		if (item) {
 			item.classList.add('active');
 		}
+
+		this.focusActive();
+	}
+
+	focusActive() {
+		var active = this.getActive();
+		if (active) {
+			active.focus();
+			return true;
+		}
+		return false;
 	}
 }
 
