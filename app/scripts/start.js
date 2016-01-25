@@ -187,3 +187,7 @@ document.addEventListener('drop', function(e) {
         readFiles(files);
     }
 });
+
+window.addEventListener('focus', function() {
+    webview.focusActive();
+});
