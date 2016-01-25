@@ -1,24 +1,32 @@
 <!doctype html>
 <html>
 <head>
-	<title>Rocket.Chat</title>
+	<title></title>
 	<meta charset="utf-8" />
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 	<link rel="stylesheet" type="text/css" href="./stylesheets/base.css">
 	<link rel="stylesheet" type="text/css" href="./stylesheets/start-page.css">
+	<link rel="stylesheet" type="text/css" href="./branding/branding.css">
 </head>
 <body class="hide-server-list">
 	<div class="server-list">
-		<ul id="serverList"></ul>
+		<ul id="serverList">
+		</ul>
+		<ul>
+			<li class="add-server">
+				<span>+</span>
+				<div class="tooltip">Add new server</div>
+			</li>
+		</ul>
 	</div>
 
 	<section class="landing-page">
 		<div class="wrapper">
 			<header>
 				<a class="logo">
-					<img src="images/logo/logo.svg" />
+					<img src="images/logo.svg" />
 				</a>
 			</header>
 			<form id="login-card" method="/">
@@ -35,13 +43,12 @@
 					Not a valid instance url
 				</div>
 
+				<div class="alert alert-danger only-offline">Check your Internet connection!</div>
+
 				<div class="submit">
 					<input type="submit" data-loading-text="Connecting..." class="button primary login" value="Connect"></input>
 				</div>
 			</form>
-			<div class="loader" data-src="images/loader.svg">
-				<span class="only-offline">Check your Internet connection!</span>
-			</div>
 			<footer>
 				<div class="social">
 					<nav>
@@ -52,14 +59,9 @@
 						<a target="_system" class="button share linkedin" href="https://www.linkedin.com/company/rocket-chat"><i class="icon-linkedin"></i><span>LinkedIn</span></a>
 					</nav>
 				</div>
-				<a href="http://meteor.com" target="_system" title="Proudly developed with Meteor" class="meteor">Proudly developed with Meteor</a>
 			</footer>
 		</div>
 	</section>
-
-	<div class="rocket-app">
-		<iframe id="rocketAppFrame"></iframe>
-	</div>
 
 	<script src="app.js"></script>
 </body>

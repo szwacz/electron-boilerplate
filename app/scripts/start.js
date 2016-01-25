@@ -1,36 +1,28 @@
+/* globals $ */
+
+import { remote } from 'electron';
+import { servers } from './servers';
+import { sidebar } from './sidebar';
+import { webview } from './webview';
+import tray from './tray';
+import './menus';
+
+sidebar.on('badge-setted', function() {
+    var badge = sidebar.getGlobalBadge();
+
+    if (process.platform === 'darwin') {
+        remote.app.dock.setBadge(badge);
+    }
+    tray.showTrayAlert(badge !== '', badge);
+});
+
 export var start = function() {
-    var key = 'rocket.chat.hosts',
-        rocketHeader = 'X-Rocket-Chat-Version'.toLowerCase(),
-        defaultInstance = 'https://demo.rocket.chat/';
-
-    //init loader
-    var loader = document.querySelector('.loader');
-    if (loader) {
-        var src = loader.getAttribute('data-src');
-        var http = new XMLHttpRequest();
-        http.open('GET', src);
-        http.onreadystatechange = function() {
-            if (this.readyState == this.DONE) {
-                if (this.response) {
-                    loader.innerHTML = this.response + loader.innerHTML;
-                }
-            }
-        };
-        http.send();
-    }
-
-    function loadPreviousHost() {
-        var current = localStorage.getItem('rocket.chat.currentHost');
-        if (current) {
-            var item = getInstanceButtonByURL(current);
-            if (item) {
-                loadServer(item);
-            }
-        }
-    }
+    var defaultInstance = 'https://demo.rocket.chat';
 
     // connection check
-    if (!navigator.onLine) offline();
+    if (!navigator.onLine) {
+        offline();
+    }
     window.addEventListener('online', online);
     window.addEventListener('offline', offline);
 
@@ -44,206 +36,158 @@ export var start = function() {
     // end connection check
 
     var form = document.querySelector('form');
+    var hostField = form.querySelector('[name="host"]');
+    var button = form.querySelector('[type="submit"]');
+    var invalidUrl = form.querySelector('#invalidUrl');
+
+    window.addEventListener('load', function() {
+        hostField.focus();
+    });
+
+    function validateHost() {
+        return new Promise(function(resolve, reject) {
+            var execValidation = function() {
+                invalidUrl.style.display = 'none';
+                hostField.classList.remove('wrong');
+
+                var host = hostField.value.trim();
+                host = host.replace(/\/$/, '');
+                hostField.value = host;
+
+                if (host.length === 0) {
+                    button.value = 'Connect';
+                    button.disabled = false;
+                    resolve();
+                    return;
+                }
+
+                button.value = 'Validating...';
+                button.disabled = true;
+
+                servers.validateHost(host, 2000).then(function() {
+                    button.value = 'Connect';
+                    button.disabled = false;
+                    resolve();
+                }, function() {
+                    // If the url begins with HTTP, mark as invalid
+                    if (/^http:\/\/.+/.test(host)) {
+                        button.value = 'Invalid url';
+                        invalidUrl.style.display = 'block';
+                        hostField.classList.add('wrong');
+                        reject();
+                        return;
+                    }
+
+                    // If the url begins with HTTPS, fallback to HTTP
+                    if (/^https:\/\/.+/.test(host)) {
+                        hostField.value = host.replace('https://', 'http://');
+                        return execValidation();
+                    }
+
+                    // If the url isn't localhost, don't have dots and don't have protocol
+                    // try as a .rocket.chat subdomain
+                    if (!/(^https?:\/\/)|(\.)|(^localhost(:\d+)?$)/.test(host)) {
+                        hostField.value = `https://${host}.rocket.chat`;
+                        return execValidation();
+                    }
+
+                    // If the url don't start with protocol try HTTPS
+                    if (!/^https?:\/\//.test(host)) {
+                        hostField.value = `https://${host}`;
+                        return execValidation();
+                    }
+                });
+            };
+            execValidation();
+        });
+    }
+
+    hostField.addEventListener('blur', function() {
+        validateHost().then(function() {}, function() {});
+    });
+
+    var submit = function() {
+        validateHost().then(function() {
+            var input = form.querySelector('[name="host"]');
+            var url = input.value;
+
+            if (url.length === 0) {
+                url = defaultInstance;
+            }
+
+            if (servers.addHost(url) === true) {
+                sidebar.show();
+            }
+
+            servers.setActive(url);
+
+            input.value = '';
+        }, function() {});
+    };
+
+    hostField.addEventListener('keydown', function(ev) {
+        if (ev.which === 13) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            submit();
+            return false;
+        }
+    });
+
     form.addEventListener('submit', function(ev) {
-        console.log('trying to connect')
         ev.preventDefault();
         ev.stopPropagation();
-        var input = form.querySelector('[name="host"]');
-        var button = form.querySelector('[type="submit"]');
-        var val = button.value;
-        button.value = button.getAttribute('data-loading-text');
-        var url = input.value;
-
-        if (url.length === 0) {
-            connectDefaultInstance();
-            input.value = '';
-            button.value = val;
-        } else {
-
-            console.debug('checking', url);
-            input.classList.remove('wrong');
-            urlExists(url, 5000).then(function() {
-                console.debug('url found!');
-                addServer(url);
-                redirect(url);
-                input.value = '';
-                button.value = val;
-            }, function(status) {
-                button.value = val;
-                form.querySelector('#invalidUrl').style.display = 'block';
-                console.debug('url wrong');
-                input.classList.add('wrong');
-            });
-        }
-
+        submit();
         return false;
     });
 
-    function changeServer() {
-        document.querySelector('.rocket-app').style.display = 'none';
-        document.querySelector('.landing-page').style.display = 'block';
-    }
+    $('.add-server').on('click', function() {
+        servers.clearActive();
+    });
 
-    function urlExists(url, timeout) {
-        return new Promise(function(resolve, reject) {
-            var http = new XMLHttpRequest();
-            var resolved = false;
-            http.open('HEAD', url);
-            http.onreadystatechange = function() {
-                if (this.readyState == this.DONE) {
-                    if (!resolved) {
-                        resolved = true;
-                        var headers = this.getAllResponseHeaders().toLowerCase();
-                        if (headers.indexOf(rocketHeader) !== -1) {
-                            resolve();
-                        } else {
-                            reject(this.status);
-                        }
-                    }
+    servers.restoreActive();
+};
+
+var readAsDataURL = function (file, callback) {
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+        callback(ev.target.result, file);
+    };
+    reader.readAsDataURL(file);
+};
+
+document.addEventListener('drop', function(e) {
+    e.preventDefault();
+
+    var filesToUpload = [];
+    var readFiles = function(files) {
+        if (files.length === 0) {
+            if (filesToUpload.length > 0) {
+                var el = webview.getActive();
+                if (el) {
+                    el.send('upload-file', filesToUpload);
                 }
-            };
-            if (timeout) {
-                setTimeout(function() {
-                    if (!resolved) {
-                        resolved = true;
-                        reject();
-                    }
-                }, timeout);
             }
-            http.send();
-        });
-    }
-
-    function addServer(url) {
-        var hosts = localStorage.getItem(key);
-        if (hosts === null) {
-            hosts = [];
-        } else {
-            try {
-                hosts = JSON.parse(hosts);
-            } catch (e) {}
-        }
-
-        var list = document.getElementById('serverList');
-
-        var newHost = true;
-        hosts.some(function(instanceURL) {
-            if (instanceURL === url) {
-                var item = getInstanceButtonByURL(url);
-                if (item) {
-                    loadServer(item);
-                }
-
-                newHost = false;
-                return true;
-            }
-        });
-
-        if (!newHost) {
             return;
         }
-
-        document.body.classList.remove('hide-server-list');
-        localStorage.setItem('server-list-closed', 'false');
-
-        hosts.push(url);
-        localStorage.setItem(key, JSON.stringify(hosts));
-
-        clearActive();
-
-        list.appendChild(createItem(url, (list.childNodes.length + 1), true));
-    }
-
-    function getInstanceButtonByURL(url) {
-        var list = document.getElementById('serverList');
-        for (var i = 0; i < list.childNodes.length; i++) {
-            if (list.childNodes[i].dataset.host === url) {
-                return list.childNodes[i];
-            }
-        }
-    }
-
-    function createItem(url, pos, active) {
-        var item = document.createElement('li');
-        item.innerHTML = '<span>' + (pos) + '</span>';
-        item.dataset.host = url;
-        item.title = url;
-        item.classList.add('instance');
-        if (active) {
-            item.classList.add('active');
-        }
-        item.onclick = function() {
-            loadServer(this);
+        var file = files.shift();
+        var item = {
+            file: file,
+            name: file.name,
+            type: file.type
         };
-        return item;
-    }
-
-    function clearActive() {
-        var activeItem = document.querySelector('.server-list li.active');
-        if (activeItem) {
-            activeItem.classList.remove('active');
-        }
-    }
-
-    function renderServers() {
-        var list = document.getElementById('serverList');
-        var hosts = localStorage.getItem(key);
-
-        try {
-            hosts = JSON.parse(hosts);
-        } catch (e) {
-            if (hosts.match(/^https?:\/\//)) {
-                hosts = [hosts];
-            }
-
-            localStorage.setItem(key, JSON.stringify(hosts));
-        }
-
-        if(hosts) {
-            for (var i = 0; i < hosts.length; i++) {
-                list.appendChild(createItem(hosts[i], (i + 1)));
-            }
-        }
-    }
-
-    renderServers();
-    loadPreviousHost();
-
-    if (localStorage.getItem('server-list-closed') === 'false') {
-        document.body.classList.remove('hide-server-list');
-    }
-
-    function loadServer(el) {
-        if (!el.classList.contains('active')) {
-            clearActive();
-
-            el.classList.add('active');
-            redirect(el.dataset.host);
-        }
-    }
-
-    function redirect(url) {
-        localStorage.setItem('rocket.chat.currentHost', url);
-        document.getElementById('rocketAppFrame').src = url;
-        document.querySelector('.landing-page').style.display = 'none';
-        document.querySelector('.rocket-app').style.display = 'block';
-    }
-
-    function connectDefaultInstance() {
-        addServer(defaultInstance);
-        redirect(defaultInstance);
-    }
-
-    var rocketAppFrame = document.getElementById('rocketAppFrame');
-    rocketAppFrame.onload = function () {
-        rocketAppFrame.contentWindow.addEventListener('unread-changed', function (e) {
-            window.dispatchEvent(new CustomEvent('unread-changed', {
-                detail: e.detail
-            }));
+        filesToUpload.push(item);
+        readAsDataURL(file, function(result) {
+            item.dataUrl = result;
+            readFiles(files);
         });
-        rocketAppFrame.contentWindow.document.addEventListener('click', supportExternalLinks, false);
-        rocketAppFrame.contentWindow.open = function() {
-            return window.open.apply(this, arguments);
-        }
     };
-}
+    if (e.dataTransfer && e.dataTransfer.files) {
+        var files = Array.prototype.slice.call(e.dataTransfer.files);
+        readFiles(files);
+    }
+});
+
+window.addEventListener('focus', function() {
+    webview.focusActive();
+});

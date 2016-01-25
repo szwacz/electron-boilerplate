@@ -24,7 +24,7 @@ var init = function () {
     packDir = tmpDir.dir(packName);
     readyAppDir = packDir.cwd('opt', manifest.name);
 
-    return Q();
+    return new Q();
 };
 
 var copyRuntime = function () {
@@ -34,7 +34,7 @@ var copyRuntime = function () {
 var packageBuiltApp = function () {
     var deferred = Q.defer();
 
-    asar.createPackage(projectDir.path('build'), readyAppDir.path('resources/app.asar'), function() {
+    asar.createPackage(projectDir.path('build'), readyAppDir.path('resources/app.asar'), function () {
         deferred.resolve();
     });
 
@@ -54,13 +54,13 @@ var finalize = function () {
     packDir.write('usr/share/applications/' + manifest.name + '.desktop', desktop);
 
     // Copy icon
-    projectDir.copy('resources/icon.png', readyAppDir.path('icon.png'));
+    projectDir.copy('app/images/linux/icon.png', readyAppDir.path('icon.png'));
 
-    return Q();
+    return new Q();
 };
 
-var renameApp = function() {
-    return readyAppDir.renameAsync("electron", manifest.name);
+var renameApp = function () {
+    return readyAppDir.renameAsync('electron', manifest.name);
 };
 
 var packToDebFile = function () {
@@ -89,7 +89,7 @@ var packToDebFile = function () {
     childProcess.exec('fakeroot dpkg-deb -Zxz --build ' + packDir.path().replace(/\s/g, '\\ ') + ' ' + debPath.replace(/\s/g, '\\ '),
         function (error, stdout, stderr) {
             if (error || stderr) {
-                console.log("ERROR while building DEB package:");
+                console.log('ERROR while building DEB package:');
                 console.log(error);
                 console.log(stderr);
             } else {

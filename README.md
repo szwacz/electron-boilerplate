@@ -6,7 +6,7 @@ Scope of this project:
 
 - Provide basic structure of the application so you can much easier grasp what should go where.
 - Give you cross-platform development environment, which works the same way on OSX, Windows and Linux.
-- Generate ready for distribution installers of your app for all supported operating systems.
+- Generate ready for distribution installers of your app for all three operating systems.
 
 NOT in the scope:
 
@@ -35,7 +35,7 @@ Sits on path: `electron-boilerplate/package.json`. Here you declare dependencies
 Also here you declare the version of Electron runtime you want to use:
 ```json
 "devDependencies": {
-  "electron-prebuilt": "^0.24.0"
+  "electron-prebuilt": "^0.34.0"
 }
 ```
 
@@ -71,7 +71,7 @@ It will also download Electron runtime, and install dependencies for second `pac
 npm start
 ```
 
-#### Adding pure-js npm modules to your app
+#### Adding npm modules to your app
 
 Remember to add your dependency to `app/package.json` file, so do:
 ```
@@ -79,28 +79,35 @@ cd app
 npm install name_of_npm_module --save
 ```
 
-#### Adding native npm modules to your app
-
-If you want to install native module you need to compile it agains Electron, not Node.js you are firing in command line by typing `npm install` [(Read more)](https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules.md).
-```
-npm run app-install -- name_of_npm_module
-```
-Of course this method works also for pure-js modules, so you can use it all the time if you're able to remember such an ugly command.
-
 #### Working with modules
 
-Electron ecosystem (because it's a merge of node.js and browser) gives you a little trouble while working with modules. ES6 modules have nice syntax and are the future, so they're utilized in this project (thanks to [rollup](https://github.com/rollup/rollup)). But at the same time node.js and npm still rely on the CommonJS syntax. So in this project you need to use both:
+How about being future proof and using ES6 modules all the time in your app? Thanks to [rollup](https://github.com/rollup/rollup) you can do that. It will transpile the imports to proper `require()` statements, so even though ES6 modules aren't natively supported yet you can start using them today.
+
+You can use it on those kinds of modules:
 ```js
-// Modules which you authored in this project are intended to be
-// imported through new ES6 syntax.
+// Modules authored by you
 import { myStuff } from './my_lib/my_stuff';
+// Node.js native
+import fs from 'fs';
+// Electron native
+import { app } from 'electron';
+// Loaded from npm
+import moment from 'moment';
+```
 
-// Node.js modules are loaded the old way with require().
-var fs = require('fs');
+#### Including files to your project
 
-// And all modules which you installed from npm
-// also need to be required.
-var moment = require('moment');
+The build script copies files from `app` to `build` directory and the application is started from `build`. Therefore if you want to use any special file/folder in your app make sure it will be copied via some of glob patterns in `tasks/build.js`:
+
+```js
+var paths = {
+    copyFromAppDir: [
+        './node_modules/**',
+        './vendor/**',
+        './**/*.html',
+        './**/*.+(jpg|png|svg)'
+    ],
+}
 ```
 
 #### Unit tests
@@ -141,13 +148,7 @@ The installer is built using [NSIS](http://nsis.sourceforge.net). You have to in
 
 #### 32-bit build on 64-bit Windows
 
-There are still a lot of 32-bit Windows installations in use. If you want to support those systems and have 64-bit OS on your machine you need to manually force npm to install all packages for 32-bit. Npm allowes to do that via environment variable:
-```
-SET npm_config_arch=ia32
-rmdir /S node_modules
-npm install
-```
-Note: This snippet deletes whole `node_modules` folder assuming you already had run `npm install` in the past (then fresh install is required for the trick to work).
+There are still a lot of 32-bit Windows installations in use. If you want to support those systems and have 64-bit OS make sure you've installed 32-bit (instead of 64-bit) Node version. There are [versions managers](https://github.com/coreybutler/nvm-windows) if you feel the need for both architectures on the same machine.
 
 # License
 

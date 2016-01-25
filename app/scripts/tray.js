@@ -1,25 +1,33 @@
 'use strict';
 
-var Tray = require('tray');
-var Menu = require('menu');
-var path = require('path');
+import { remote } from 'electron';
+import path from 'path';
+
+var Tray = remote.Tray;
+var Menu = remote.Menu;
+
 
 let _tray;
 let _mainWindow = null;
 let _callbackOnQuit;
 
-let _iconTray, _iconTrayAlert;
+var icons = {
+    'win32': {
+        dir: 'windows'
+    },
 
-if (process.platform === 'win32') {
-    _iconTray = path.join(__dirname, 'icons', 'tray', 'windows', 'icon-tray.png');
-    _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'windows', 'icon-tray-alert.png');
-} else if (process.platform === 'linux') {
-    _iconTray = path.join(__dirname, 'icons', 'tray', 'linux', 'icon-tray.png');
-    _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'linux', 'icon-tray-alert.png');
-} else if (process.platform === 'darwin') {
-    _iconTray = path.join(__dirname, 'icons', 'tray', 'osx', 'icon-trayTemplate.png');
-    _iconTrayAlert = path.join(__dirname, 'icons', 'tray', 'osx', 'icon-tray-alert.png');
-}
+    'linux': {
+        dir: 'linux'
+    },
+
+    'darwin': {
+        dir: 'osx',
+        icon: 'icon-trayTemplate.png'
+    }
+};
+
+let _iconTray = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].icon || 'icon-tray.png');
+let _iconTrayAlert = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].iconAlert || 'icon-tray-alert.png');
 
 function createAppTray(mainWindow) {
     _tray = new Tray(_iconTray);
@@ -87,15 +95,15 @@ function showTrayAlert(showAlert, title) {
         _mainWindow.flashFrame(showAlert);
         if (showAlert) {
             _tray.setImage(_iconTrayAlert);
-            // if (process.platform === 'darwin') {
+            if (process.platform === 'darwin') {
+                _tray.setTitle(title);
             //     _tray.setTitle(title);
-            //     _tray.setTitle(title);
-            // }
+            }
         } else {
             _tray.setImage(_iconTray);
-            // if (process.platform === 'darwin') {
-            //     _tray.setTitle('');
-            // }
+            if (process.platform === 'darwin') {
+                _tray.setTitle('');
+            }
         }
     }
 }
@@ -131,7 +139,17 @@ function bindOnQuit(callback) {
     _callbackOnQuit = callback;
 }
 
-module.exports = {
+createAppTray(remote.getCurrentWindow());
+
+bindOnQuit(function() {
+    remote.app.quit();
+});
+
+window.addEventListener('beforeunload', function() {
+    destroy();
+});
+
+export default {
     createAppTray: createAppTray,
     showTrayAlert: showTrayAlert,
     minimizeMainWindow: minimizeMainWindow,

@@ -3,11 +3,13 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-var app = require('app');
-var BrowserWindow = require('browser-window');
-var env = require('./vendor/electron_boilerplate/env_config');
-var devHelper = require('./vendor/electron_boilerplate/dev_helper');
-var windowStateKeeper = require('./vendor/electron_boilerplate/window_state');
+import { app, BrowserWindow } from 'electron';
+import devHelper from './vendor/electron_boilerplate/dev_helper';
+import windowStateKeeper from './vendor/electron_boilerplate/window_state';
+
+// Special module holding environment variables which you declared
+// in config/env_xxx.json file.
+import env from './env';
 
 var mainWindow;
 
@@ -31,9 +33,9 @@ app.on('ready', function () {
     }
 
     if (env.name === 'test') {
-        mainWindow.loadUrl('file://' + __dirname + '/spec.html');
+        mainWindow.loadURL('file://' + __dirname + '/spec.html');
     } else {
-        mainWindow.loadUrl('file://' + __dirname + '/app.html');
+        mainWindow.loadURL('file://' + __dirname + '/app.html');
     }
 
     if (env.name !== 'production') {

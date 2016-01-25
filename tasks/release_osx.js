@@ -20,23 +20,23 @@ var init = function () {
     manifest = projectDir.read('app/package.json', 'json');
     finalAppDir = tmpDir.cwd(manifest.productName + '.app');
 
-    return Q();
+    return new Q();
 };
 
 var copyRuntime = function () {
     return projectDir.copyAsync('node_modules/electron-prebuilt/dist/Electron.app', finalAppDir.path());
 };
 
-var cleanupRuntime = function() {
+var cleanupRuntime = function () {
     finalAppDir.remove('Contents/Resources/default_app');
     finalAppDir.remove('Contents/Resources/atom.icns');
-    return Q();
-}
+    return new Q();
+};
 
 var packageBuiltApp = function () {
     var deferred = Q.defer();
 
-    asar.createPackage(projectDir.path('build'), finalAppDir.path('Contents/Resources/app.asar'), function() {
+    asar.createPackage(projectDir.path('build'), finalAppDir.path('Contents/Resources/app.asar'), function () {
         deferred.resolve();
     });
 
@@ -49,7 +49,8 @@ var finalize = function () {
     info = utils.replace(info, {
         productName: manifest.productName,
         identifier: manifest.identifier,
-        version: manifest.version
+        version: manifest.version,
+        copyright: manifest.copyright
     });
     finalAppDir.write('Contents/Info.plist', info);
 
@@ -64,12 +65,12 @@ var finalize = function () {
     });
 
     // Copy icon
-    projectDir.copy('resources/osx/icon.icns', finalAppDir.path('Contents/Resources/icon.icns'));
+    projectDir.copy('app/images/osx/icon.icns', finalAppDir.path('Contents/Resources/icon.icns'));
 
-    return Q();
+    return new Q();
 };
 
-var renameApp = function() {
+var renameApp = function () {
     // Rename helpers
     [' Helper EH', ' Helper NP', ' Helper'].forEach(function (helper_suffix) {
         finalAppDir.rename('Contents/Frameworks/Electron' + helper_suffix + '.app/Contents/MacOS/Electron' + helper_suffix, manifest.productName + helper_suffix );
@@ -77,8 +78,8 @@ var renameApp = function() {
     });
     // Rename application
     finalAppDir.rename('Contents/MacOS/Electron', manifest.productName);
-    return Q();
-}
+    return new Q();
+};
 
 var signApp = function () {
     var identity = utils.getSigningId();
@@ -87,9 +88,9 @@ var signApp = function () {
         gulpUtil.log('Signing with:', cmd);
         return Q.nfcall(child_process.exec, cmd);
     } else {
-        return Q();
+        return new Q();
     }
-}
+};
 
 var packToDmgFile = function () {
     var deferred = Q.defer();
@@ -102,8 +103,8 @@ var packToDmgFile = function () {
     dmgManifest = utils.replace(dmgManifest, {
         productName: manifest.productName,
         appPath: finalAppDir.path(),
-        dmgIcon: projectDir.path("resources/osx/dmg-icon.icns"),
-        dmgBackground: projectDir.path("resources/osx/dmg-background.png")
+        dmgIcon: projectDir.path('app/images/osx/dmg-icon.icns'),
+        dmgBackground: projectDir.path('app/images/osx/dmg-background.png')
     });
     tmpDir.write('appdmg.json', dmgManifest);
 

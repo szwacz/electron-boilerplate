@@ -2,12 +2,10 @@
 // Can be used for more than one window, just construct many
 // instances of it and give each different name.
 
-'use strict';
+import { app } from 'electron';
+import jetpack from 'fs-jetpack';
 
-var app = require('app');
-var jetpack = require('fs-jetpack');
-
-module.exports = function (name, defaults) {
+export default function (name, defaults) {
 
     var userDataDir = jetpack.cwd(app.getPath('userData'));
     var stateStoreFile = 'window-state-' + name +'.json';
@@ -38,4 +36,4 @@ module.exports = function (name, defaults) {
         get isMaximized() { return state.isMaximized; },
         saveState: saveState
     };
-};
+}

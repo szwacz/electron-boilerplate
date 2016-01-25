@@ -1,17 +1,13 @@
-'use strict';
+import { app, Menu, BrowserWindow } from 'electron';
 
-var app = require('app');
-var Menu = require('menu');
-var BrowserWindow = require('browser-window');
-
-module.exports.setDevMenu = function () {
+var setDevMenu = function () {
     var devMenu = Menu.buildFromTemplate([{
         label: 'Development',
         submenu: [{
             label: 'Reload',
             accelerator: 'CmdOrCtrl+R',
             click: function () {
-                BrowserWindow.getFocusedWindow().reloadIgnoringCache();
+                BrowserWindow.getFocusedWindow().webContents.reloadIgnoringCache();
             }
         },{
             label: 'Toggle DevTools',
@@ -29,3 +25,7 @@ module.exports.setDevMenu = function () {
     }]);
     Menu.setApplicationMenu(devMenu);
 };
+
+export default {
+    setDevMenu: setDevMenu,
+}

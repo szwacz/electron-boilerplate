@@ -20,7 +20,7 @@ var init = function () {
     manifest = projectDir.read('app/package.json', 'json');
     readyAppDir = tmpDir.cwd(manifest.name);
 
-    return Q();
+    return new Q();
 };
 
 var copyRuntime = function () {
@@ -34,7 +34,7 @@ var cleanupRuntime = function () {
 var packageBuiltApp = function () {
     var deferred = Q.defer();
 
-    asar.createPackage(projectDir.path('build'), readyAppDir.path('resources/app.asar'), function() {
+    asar.createPackage(projectDir.path('build'), readyAppDir.path('resources/app.asar'), function () {
         deferred.resolve();
     });
 
@@ -44,15 +44,19 @@ var packageBuiltApp = function () {
 var finalize = function () {
     var deferred = Q.defer();
 
-    projectDir.copy('resources/windows/icon.ico', readyAppDir.path('icon.ico'));
+    projectDir.copy('app/images/windows/icon.ico', readyAppDir.path('icon.ico'));
 
     // Replace Electron icon for your own.
     var rcedit = require('rcedit');
     rcedit(readyAppDir.path('electron.exe'), {
-        'icon': projectDir.path('resources/windows/icon.ico'),
+        'icon': projectDir.path('app/images/windows/icon.ico'),
         'version-string': {
             'ProductName': manifest.productName,
             'FileDescription': manifest.description,
+            'ProductVersion': manifest.version,
+            'CompanyName': manifest.author, // it might be better to add another field to package.json for this
+            'LegalCopyright': manifest.copyright,
+            'OriginalFilename': manifest.productName + '.exe'
         }
     }, function (err) {
         if (!err) {
@@ -72,15 +76,17 @@ var createInstaller = function () {
 
     var finalPackageName = manifest.name + '_' + manifest.version + '.exe';
     var installScript = projectDir.read('resources/windows/installer.nsi');
+
     installScript = utils.replace(installScript, {
         name: manifest.name,
         productName: manifest.productName,
+        author: manifest.author,
         version: manifest.version,
         src: readyAppDir.path(),
         dest: releasesDir.path(finalPackageName),
         icon: readyAppDir.path('icon.ico'),
-        setupIcon: projectDir.path('resources/windows/setup-icon.ico'),
-        banner: projectDir.path('resources/windows/setup-banner.bmp'),
+        setupIcon: projectDir.path('app/images/windows/setup-icon.ico'),
+        banner: projectDir.path('app/images/windows/setup-banner.bmp'),
     });
     tmpDir.write('installer.nsi', installScript);
 
@@ -97,8 +103,7 @@ var createInstaller = function () {
     });
     nsis.on('error', function (err) {
         if (err.message === 'spawn makensis ENOENT') {
-            throw "Can't find NSIS. Are you sure you've installed it and"
-                + " added to PATH environment variable?";
+            throw 'Can\'t find NSIS. Are you sure you\'ve installed it and added to PATH environment variable?';
         } else {
             throw err;
         }
