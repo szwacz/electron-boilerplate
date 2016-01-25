@@ -59,7 +59,10 @@ class WebView extends EventEmitter {
 				case 'unread-changed':
 					sidebar.setBadge(host.url, event.args[0]);
 					break;
-				}
+				case 'focus':
+					servers.setActive(host.url);
+					break;
+			}
 		});
 
 		this.webviewParentElement.appendChild(webview);

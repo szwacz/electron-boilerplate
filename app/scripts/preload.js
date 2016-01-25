@@ -1,6 +1,23 @@
 /* globals Meteor, fileUpload, Tracker, RocketChat */
+'use strict';
 
 var IPC = require('electron').ipcRenderer;
+
+class Notification extends window.Notification {
+    get onclick() {
+        return super.onclick;
+    }
+
+    set onclick(fn) {
+        var result = super.onclick = () => {
+            IPC.sendToHost('focus');
+            fn.apply(this, arguments);
+        };
+        return result;
+    }
+}
+
+window.Notification = Notification;
 
 function dataURItoArrayBuffer(dataURI) {
     var byteString = atob(dataURI.split(',')[1]);
