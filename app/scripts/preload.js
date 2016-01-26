@@ -141,7 +141,7 @@ try {
 
     webFrame.setSpellCheckProvider((localStorage.getItem('userLanguage') || 'en'), false, {
         spellCheck: function(text) {
-            if (localStorage.getItem('userLanguage')) {
+            if (localStorage.getItem('userLanguage') && checker.getAvailableDictionaries().length > 0) {
                 checker.setDictionary(localStorage.getItem('userLanguage'));
             }
 
