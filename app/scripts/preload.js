@@ -1,4 +1,4 @@
-/* globals Meteor, fileUpload, Tracker, RocketChat */
+/* globals Meteor, Tracker, RocketChat */
 'use strict';
 
 var IPC = require('electron').ipcRenderer;
@@ -18,27 +18,6 @@ class Notification extends window.Notification {
 }
 
 window.Notification = Notification;
-
-function dataURItoArrayBuffer(dataURI) {
-    var byteString = atob(dataURI.split(',')[1]);
-
-    var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-
-    return ab;
-}
-
-IPC.on('upload-file', function(sender, value) {
-    value.forEach(function(item) {
-        item.file = new File([dataURItoArrayBuffer(item.dataUrl)], item.name, {type: item.type});
-    });
-    console.log(value);
-    fileUpload(value);
-    document.querySelector('.dropzone').classList.remove('over');
-});
 
 var events = ['unread-changed'];
 
