@@ -8,11 +8,9 @@ Scope of this project:
 - Give you cross-platform development environment, which works the same way on OSX, Windows and Linux.
 - Generate ready for distribution installers of your app for all three operating systems.
 
-NOT in the scope:
+Not in the scope:
 
 - Imposing on you any framework (e.g. Angular, React). You can integrate the one which makes most sense for you.
-
-By the way, there is a twin project to this one: [nw-boilerplate](https://github.com/szwacz/nw-boilerplate), which is the same thing but for NW.js.
 
 # Quick start
 The only development dependency of this project is [Node.js](https://nodejs.org). So just make sure you have it installed.
@@ -49,10 +47,10 @@ Sits on path: `electron-boilerplate/app/package.json`. This is **real** manifest
 ### Project's folders
 
 - `app` - code of your application goes here.
-- `config` - place for you to declare environment specific stuff.
+- `config` - place where you can declare environment specific stuff for your app.
 - `build` - in this folder lands built, runnable application.
 - `releases` - ready for distribution installers will land here.
-- `resources` - resources for particular operating system.
+- `resources` - resources needed for particular operating system.
 - `tasks` - build and development environment scripts.
 
 
@@ -116,7 +114,7 @@ var paths = {
 
 #### Unit tests
 
-electron-boilerplate has preconfigured [jasmine](http://jasmine.github.io/2.0/introduction.html) unit test runner. To run it go with standard:
+electron-boilerplate has preconfigured [jasmine](http://jasmine.github.io/2.0/introduction.html) test runner. To run the tests go with standard:
 ```
 npm test
 ```
@@ -158,7 +156,7 @@ There are still a lot of 32-bit Windows installations in use. If you want to sup
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Jakub Szwacz
+Copyright (c) 2015-2016 Jakub Szwacz
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
