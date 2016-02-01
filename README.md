@@ -79,7 +79,11 @@ npm install name_of_npm_module --save
 
 #### Native npm modules
 
-Want to use them? See [this file](./tasks/rebuild_native.js) for instructions.
+Want to use [native modules](https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules.md)? This objective needs some extra work (rebuilding module for Electron). In this boilerplate it's fully automated, just use special command instead of standard `npm install something` when want to install native module.
+```
+npm run install-native -- name_of_native_module
+```
+This script when run first time will add [electron-rebuild](https://github.com/electronjs/electron-rebuild) to your project. After that everything is wired and no further maintenance is necessary.
 
 #### Working with modules
 

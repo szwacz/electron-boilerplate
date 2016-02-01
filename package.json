@@ -20,6 +20,7 @@
     "build": "gulp build",
     "release": "gulp release --env=production",
     "start": "node ./tasks/start",
-    "test": "node ./tasks/start --env=test"
+    "test": "node ./tasks/start --env=test",
+    "install-native": "node ./tasks/install_native_module"
   }
 }
