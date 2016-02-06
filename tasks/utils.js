@@ -36,3 +36,10 @@ module.exports.getElectronVersion = function () {
     var manifest = jetpack.read(__dirname + '/../package.json', 'json');
     return manifest.devDependencies['electron-prebuilt'].substring(1);
 };
+
+module.exports.spawnScriptPath = function (path) {
+    if (process.platform === 'win32') {
+        return path + '.cmd';
+    }
+    return path;
+};

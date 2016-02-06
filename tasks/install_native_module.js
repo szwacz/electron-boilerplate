@@ -7,6 +7,7 @@ var childProcess = require('child_process');
 var Q = require('q');
 var appDir = require('fs-jetpack').cwd(__dirname, '../app');
 var argv = require('yargs').argv;
+var utils = require('./utils');
 
 var ensureElectronRebuildInstalled = function () {
     var deferred = Q.defer();
@@ -16,7 +17,7 @@ var ensureElectronRebuildInstalled = function () {
         require('electron-rebuild');
         deferred.resolve();
     } catch (err) {
-        childProcess.spawn('npm', [
+        childProcess.spawn(utils.spawnScriptPath('npm'), [
             'install', '--save-dev', 'electron-rebuild'
         ], {
             stdio: 'inherit'
@@ -57,7 +58,7 @@ var installNativeModule = function () {
     if (!moduleName) {
         deferred.reject('Module name not specified! Correct usage is "npm run install-native -- name_of_native_module" (remember about space after "--").');
     } else {
-        childProcess.spawn('npm', [
+        childProcess.spawn(utils.spawnScriptPath('npm'), [
             'install', '--save', moduleName
         ], {
             cwd: appDir.cwd(),
@@ -73,7 +74,7 @@ var installNativeModule = function () {
 var runRebuild = function () {
     var deferred = Q.defer();
 
-    childProcess.spawn('npm', [
+    childProcess.spawn(utils.spawnScriptPath('npm'), [
         'run', 'postinstall'
     ], {
         cwd: appDir.cwd(),
