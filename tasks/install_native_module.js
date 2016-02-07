@@ -17,7 +17,7 @@ var ensureElectronRebuildInstalled = function () {
         require('electron-rebuild');
         deferred.resolve();
     } catch (err) {
-        childProcess.spawn(utils.spawnScriptPath('npm'), [
+        childProcess.spawn(utils.spawnablePath('npm'), [
             'install', '--save-dev', 'electron-rebuild'
         ], {
             stdio: 'inherit'
@@ -58,7 +58,7 @@ var installNativeModule = function () {
     if (!moduleName) {
         deferred.reject('Module name not specified! Correct usage is "npm run install-native -- name_of_native_module" (remember about space after "--").');
     } else {
-        childProcess.spawn(utils.spawnScriptPath('npm'), [
+        childProcess.spawn(utils.spawnablePath('npm'), [
             'install', '--save', moduleName
         ], {
             cwd: appDir.cwd(),
@@ -74,7 +74,7 @@ var installNativeModule = function () {
 var runRebuild = function () {
     var deferred = Q.defer();
 
-    childProcess.spawn(utils.spawnScriptPath('npm'), [
+    childProcess.spawn(utils.spawnablePath('npm'), [
         'run', 'postinstall'
     ], {
         cwd: appDir.cwd(),

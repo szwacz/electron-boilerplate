@@ -2,7 +2,6 @@
 
 var argv = require('yargs').argv;
 var os = require('os');
-var jetpack = require('fs-jetpack');
 
 module.exports.os = function () {
     switch (os.platform()) {
@@ -32,7 +31,8 @@ module.exports.getSigningId = function () {
     return argv.sign;
 };
 
-module.exports.spawnScriptPath = function (path) {
+// Fixes https://github.com/nodejs/node-v0.x-archive/issues/2318
+module.exports.spawnablePath = function (path) {
     if (process.platform === 'win32') {
         return path + '.cmd';
     }
