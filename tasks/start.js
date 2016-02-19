@@ -9,14 +9,11 @@ var utils = require('./utils');
 var watch;
 
 var gulpPath = pathUtil.resolve('./node_modules/.bin/gulp');
-if (process.platform === 'win32') {
-    gulpPath += '.cmd';
-}
 
 var runBuild = function () {
     var deferred = Q.defer();
 
-    var build = childProcess.spawn(gulpPath, [
+    var build = childProcess.spawn(utils.spawnablePath(gulpPath), [
         'build',
         '--env=' + utils.getEnvName(),
         '--color'
@@ -32,7 +29,7 @@ var runBuild = function () {
 };
 
 var runGulpWatch = function () {
-    watch = childProcess.spawn(gulpPath, [
+    watch = childProcess.spawn(utils.spawnablePath(gulpPath), [
         'watch',
         '--env=' + utils.getEnvName(),
         '--color'
