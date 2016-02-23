@@ -13,7 +13,7 @@ sidebar.on('badge-setted', function() {
     if (process.platform === 'darwin') {
         remote.app.dock.setBadge(badge);
     }
-    tray.showTrayAlert(badge !== '', badge);
+    tray.showTrayAlert(!isNaN(parseInt(badge)) && badge > 0, badge);
 });
 
 export var start = function() {
