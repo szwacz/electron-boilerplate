@@ -50,7 +50,8 @@ var finalize = function () {
         productName: manifest.productName,
         identifier: manifest.identifier,
         version: manifest.version,
-        copyright: manifest.copyright
+        build: manifest.build,
+        copyright: manifest.copyright,
     });
     finalAppDir.write('Contents/Info.plist', info);
 

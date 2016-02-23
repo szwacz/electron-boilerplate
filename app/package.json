@@ -4,6 +4,7 @@
   "identifier": "com.example.electron-boilerplate",
   "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
   "version": "0.1.0",
+  "build": "1",
   "author": "Mr Gumby",
   "copyright": "© 2016, your company here",
   "main": "background.js",
