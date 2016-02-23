@@ -26,7 +26,7 @@ if (process.platform === 'darwin') {
 					type: 'separator'
 				},
 				{
-					label: 'Change server',
+					label: 'Add new server',
 					click: function() {
 						servers.clearActive();
 					}
@@ -150,7 +150,7 @@ if (process.platform === 'darwin') {
 			label: APP_NAME,
 			submenu: [
 				{
-					label: 'Change server',
+					label: 'Add new server',
 					click: function() {
 						servers.clearActive();
 					}
