@@ -20,7 +20,7 @@ if (process.platform === 'darwin') {
 			submenu: [
 				{
 					label: 'About ' + APP_NAME,
-					selector: 'orderFrontStandardAboutPanel:'
+					role: 'about'
 				},
 				{
 					type: 'separator'
@@ -37,16 +37,16 @@ if (process.platform === 'darwin') {
 				{
 					label: 'Hide ' + APP_NAME,
 					accelerator: 'CmdOrCtrl+H',
-					selector: 'hide:'
+					role: 'hide'
 				},
 				{
 					label: 'Hide Others',
 					accelerator: 'CmdOrCtrl+Shift+H',
-					selector: 'hideOtherApplications:'
+					role: 'hideothers'
 				},
 				{
 					label: 'Show All',
-					selector: 'unhideAllApplications:'
+					role: 'unhide'
 				},
 				{
 					type: 'separator'
@@ -54,7 +54,7 @@ if (process.platform === 'darwin') {
 				{
 					label: 'Quit',
 					accelerator: 'CmdOrCtrl+Q',
-					selector: 'terminate:'
+					role: 'terminate'
 				}
 			]
 		},
@@ -64,12 +64,12 @@ if (process.platform === 'darwin') {
 				{
 					label: 'Undo',
 					accelerator: 'CmdOrCtrl+Z',
-					selector: 'undo:'
+					role: 'undo'
 				},
 				{
 					label: 'Redo',
 					accelerator: 'CmdOrCtrl+Shift+Z',
-					selector: 'redo:'
+					role: 'redo'
 				},
 				{
 					type: 'separator'
@@ -77,22 +77,22 @@ if (process.platform === 'darwin') {
 				{
 					label: 'Cut',
 					accelerator: 'CmdOrCtrl+X',
-					selector: 'cut:'
+					role: 'cut'
 				},
 				{
 					label: 'Copy',
 					accelerator: 'CmdOrCtrl+C',
-					selector: 'copy:'
+					role: 'copy'
 				},
 				{
 					label: 'Paste',
 					accelerator: 'CmdOrCtrl+V',
-					selector: 'paste:'
+					role: 'paste'
 				},
 				{
 					label: 'Select All',
 					accelerator: 'CmdOrCtrl+A',
-					selector: 'selectAll:'
+					role: 'selectall'
 				}
 			]
 		},
@@ -127,19 +127,19 @@ if (process.platform === 'darwin') {
 				{
 					label: 'Minimize',
 					accelerator: 'CmdOrCtrl+M',
-					selector: 'performMiniaturize:'
+					role: 'minimize'
 				},
 				{
 					label: 'Close',
 					accelerator: 'CmdOrCtrl+W',
-					selector: 'performClose:'
+					role: 'close'
 				},
 				{
 					type: 'separator'
 				},
 				{
 					label: 'Bring All to Front',
-					selector: 'arrangeInFront:'
+					role: 'front'
 				}
 			]
 		}
@@ -161,6 +161,44 @@ if (process.platform === 'darwin') {
 					click: function() {
 						app.quit();
 					}
+				}
+			]
+		},
+		{
+			label: 'Edit',
+			submenu: [
+				{
+					label: 'Undo',
+					accelerator: 'CmdOrCtrl+Z',
+					role: 'undo'
+				},
+				{
+					label: 'Redo',
+					accelerator: 'CmdOrCtrl+Shift+Z',
+					role: 'redo'
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Cut',
+					accelerator: 'CmdOrCtrl+X',
+					role: 'cut'
+				},
+				{
+					label: 'Copy',
+					accelerator: 'CmdOrCtrl+C',
+					role: 'copy'
+				},
+				{
+					label: 'Paste',
+					accelerator: 'CmdOrCtrl+V',
+					role: 'paste'
+				},
+				{
+					label: 'Select All',
+					accelerator: 'CmdOrCtrl+A',
+					role: 'selectall'
 				}
 			]
 		},

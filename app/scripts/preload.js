@@ -79,30 +79,30 @@ var getTemplate = function() {
     return [
         {
             label: 'Undo',
-            selector: 'undo:'
+            role: 'undo'
         },
         {
             label: 'Redo',
-            selector: 'redo:'
+            role: 'redo'
         },
         {
             type: 'separator'
         },
         {
             label: 'Cut',
-            selector: 'cut:'
+            role: 'cut'
         },
         {
             label: 'Copy',
-            selector: 'copy:'
+            role: 'copy'
         },
         {
             label: 'Paste',
-            selector: 'paste:'
+            role: 'paste'
         },
         {
             label: 'Select All',
-            selector: 'selectAll:'
+            role: 'selectall'
         }
     ];
 };
