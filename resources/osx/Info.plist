@@ -34,5 +34,7 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>{{copyright}}</string>
+	<key>LSApplicationCategoryType</key>
+	<string>{{LSApplicationCategoryType}}</string>
 </dict>
 </plist>

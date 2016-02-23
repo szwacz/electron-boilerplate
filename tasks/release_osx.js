@@ -52,7 +52,9 @@ var finalize = function () {
         version: manifest.version,
         build: manifest.build,
         copyright: manifest.copyright,
+        LSApplicationCategoryType: manifest.LSApplicationCategoryType
     });
+
     finalAppDir.write('Contents/Info.plist', info);
 
     // Prepare Info.plist of Helper apps

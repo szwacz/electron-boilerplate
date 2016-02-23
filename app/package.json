@@ -11,4 +11,6 @@
   "dependencies": {
     "fs-jetpack": "^0.7.0"
   }
+  },
+  "LSApplicationCategoryType": "public.app-category.productivity"
 }
