@@ -50,8 +50,10 @@ var finalize = function () {
         productName: manifest.productName,
         identifier: manifest.identifier,
         version: manifest.version,
+        build: manifest.build,
         copyright: manifest.copyright
     });
+
     finalAppDir.write('Contents/Info.plist', info);
 
     // Prepare Info.plist of Helper apps
@@ -86,10 +88,12 @@ var signApp = function () {
     var installerIdentity = utils.getInstallerSigningId();
     if (identity && installerIdentity) {
         var cmds = [
-            'codesign --deep -fs "' + identity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A"',
-            'codesign --deep -fs "' + identity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper.app/"',
-            'codesign --deep -fs "' + identity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper EH.app/"',
-            'codesign --deep -fs "' + identity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper NP.app/"'
+            'codesign --deep -f -s "' + identity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A"',
+            'codesign --deep -f -s "' + identity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libffmpeg.dylib"',
+            'codesign --deep -f -s "' + identity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libnode.dylib"',
+            'codesign --deep -f -s "' + identity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper.app/"',
+            'codesign --deep -f -s "' + identity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper EH.app/"',
+            'codesign --deep -f -s "' + identity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper NP.app/"'
         ];
 
         if (finalAppDir.exists('Contents/Frameworks/Squirrel.framework/Versions/A')) {
@@ -99,16 +103,21 @@ var signApp = function () {
             cmds.push('codesign --deep -fs "' + identity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/Squirrel.framework/Versions/A"');
         }
 
-        cmds.push('codesign -fs "' + identity + '" --entitlements parent.plist "' + finalAppDir.path() + '"');
+        cmds.push('codesign --deep -f -s "' + identity + '" --entitlements parent.plist -v "' + finalAppDir.path() + '"');
 
         cmds.push('productbuild --component "' + finalAppDir.path() + '" /Applications --sign "' + installerIdentity + '" "' + releasesDir.path(manifest.productName + '.pkg') + '"');
 
         var result = new Q();
         cmds.forEach(function (cmd) {
-            gulpUtil.log('Signing with:', cmd);
-            result = result.then(function() {
+            result = result.then(function(result) {
+                console.log(result);
+                gulpUtil.log('Signing with:', cmd);
                 return Q.nfcall(child_process.exec, cmd);
             });
+        });
+        result = result.then(function(result) {
+            console.log(result);
+            return new Q();
         });
         return result;
     } else {
