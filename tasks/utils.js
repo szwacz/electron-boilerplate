@@ -27,16 +27,20 @@ module.exports.getEnvName = function () {
     return argv.env || 'development';
 };
 
-module.exports.getSigningId = function () {
-    return argv.sign;
+module.exports.getSigningId = function (manifest) {
+    return argv.sign || (manifest.codeSignIdentitiy ? manifest.codeSignIdentitiy.dmg : undefined);
 };
 
-module.exports.getInstallerSigningId = function () {
-    return argv['installer-sign'];
+module.exports.getMASSigningId = function (manifest) {
+    return argv['mas-sign'] || (manifest.codeSignIdentitiy ? manifest.codeSignIdentitiy.MAS : undefined);
 };
 
-module.exports.MAS = function () {
-    return argv.mas ? '_mas' : '';
+module.exports.getMASInstallerSigningId = function (manifest) {
+    return argv['mas-installer-sign'] || (manifest.codeSignIdentitiy ? manifest.codeSignIdentitiy.MASInstaller : undefined);
+};
+
+module.exports.releaseForMAS = function () {
+    return !!argv.mas;
 };
 
 // Fixes https://github.com/nodejs/node-v0.x-archive/issues/2318

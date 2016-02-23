@@ -10,7 +10,11 @@
   "main": "background.js",
   "dependencies": {
     "fs-jetpack": "^0.7.0"
-  }
+  },
+  "//codeSignIdentitiy": {
+    "dmg": "Developer ID Application: Company Name (APPIDENTITY)",
+    "MAS": "3rd Party Mac Developer Application: Company Name (APPIDENTITY)",
+    "MASInstaller": "3rd Party Mac Developer Installer: Company Name (APPIDENTITY)"
   },
   "LSApplicationCategoryType": "public.app-category.productivity"
 }
