@@ -10,5 +10,5 @@ var releaseForOs = {
 };
 
 gulp.task('release', ['build'], function () {
-     return releaseForOs[utils.os()]();
+    return releaseForOs[utils.os()]();
 });
