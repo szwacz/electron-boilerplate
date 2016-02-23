@@ -31,6 +31,14 @@ module.exports.getSigningId = function () {
     return argv.sign;
 };
 
+module.exports.getInstallerSigningId = function () {
+    return argv['installer-sign'];
+};
+
+module.exports.MAS = function () {
+    return argv.mas ? '_mas' : '';
+};
+
 // Fixes https://github.com/nodejs/node-v0.x-archive/issues/2318
 module.exports.spawnablePath = function (path) {
     if (process.platform === 'win32') {
