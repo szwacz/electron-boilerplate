@@ -123,6 +123,7 @@ if (process.platform === 'darwin') {
 		},
 		{
 			label: 'Window',
+			id: 'window',
 			submenu: [
 				{
 					label: 'Minimize',
@@ -136,6 +137,11 @@ if (process.platform === 'darwin') {
 				},
 				{
 					type: 'separator'
+				},
+				{
+					type: 'separator',
+					id: 'server-list-separator',
+					visible: false
 				},
 				{
 					label: 'Bring All to Front',
@@ -229,7 +235,13 @@ if (process.platform === 'darwin') {
 		},
 		{
 			label: 'Window',
+			id: 'window',
 			submenu: [
+				{
+					type: 'separator',
+					id: 'server-list-separator',
+					visible: false
+				},
 				{
 					label: 'Close',
 					accelerator: 'CmdOrCtrl+W',
@@ -242,4 +254,6 @@ if (process.platform === 'darwin') {
 	];
 }
 
-Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+export var menu = Menu.buildFromTemplate(template);
+
+Menu.setApplicationMenu(menu);

@@ -75,6 +75,7 @@ div.server-list li {
 	align-items: center;
 	height: 60px;
 	position: relative;
+	margin-bottom: 20px;
 }
 
 div.server-list li:before {
@@ -137,6 +138,18 @@ div.server-list li:before {
 	font-weight: bold;
 	padding: 0 5px;
 	box-shadow: 0px 1px 2px rgba(0,0,0,.6);
+}
+
+.server-list li .name {
+	text-align: center;
+	width: 70px;
+	bottom: -10px;
+	position: absolute;
+	font-size: 12px;
+	line-height: 11px;
+	right: 5px;
+	font-weight: 600;
+	opacity: 0.6;
 }
 
 .server-list li:hover span {
