@@ -50,7 +50,9 @@ var finalize = function () {
         productName: manifest.productName,
         identifier: manifest.identifier,
         version: manifest.version,
-        copyright: manifest.copyright
+        build: manifest.build,
+        copyright: manifest.copyright,
+        LSApplicationCategoryType: manifest.LSApplicationCategoryType
     });
     finalAppDir.write('Contents/Info.plist', info);
 
@@ -82,8 +84,48 @@ var renameApp = function () {
 };
 
 var signApp = function () {
-    var identity = utils.getSigningId();
-    if (identity) {
+    var identity = utils.getSigningId(manifest);
+    var MASIdentity = utils.getMASSigningId(manifest);
+    var MASInstallerIdentity = utils.getMASInstallerSigningId(manifest);
+
+    if (utils.releaseForMAS()) {
+        if (!MASIdentity || !MASInstallerIdentity) {
+            gulpUtil.log('--mas-sign and --mas-installer-sign are required to release for Mac App Store!');
+            process.exit(0);
+        }
+        var cmds = [
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libffmpeg.dylib"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libnode.dylib"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper.app/"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper EH.app/"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper NP.app/"'
+        ];
+
+        if (finalAppDir.exists('Contents/Frameworks/Squirrel.framework/Versions/A')) {
+            // # Signing a non-MAS build.
+            cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/Mantle.framework/Versions/A"');
+            cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/ReactiveCocoa.framework/Versions/A"');
+            cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/Squirrel.framework/Versions/A"');
+        }
+
+        cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements parent.plist -v "' + finalAppDir.path() + '"');
+
+        cmds.push('productbuild --component "' + finalAppDir.path() + '" /Applications --sign "' + MASInstallerIdentity + '" "' + releasesDir.path(manifest.productName + '.pkg') + '"');
+
+        var result = new Q();
+        cmds.forEach(function (cmd) {
+            result = result.then(function(result) {
+                gulpUtil.log('Signing with:', cmd);
+                return Q.nfcall(child_process.exec, cmd);
+            });
+        });
+        result = result.then(function(result) {
+            return new Q();
+        });
+        return result;
+
+    } else if (identity) {
         var cmd = 'codesign --deep --force --sign "' + identity + '" "' + finalAppDir.path() + '"';
         gulpUtil.log('Signing with:', cmd);
         return Q.nfcall(child_process.exec, cmd);
@@ -93,6 +135,10 @@ var signApp = function () {
 };
 
 var packToDmgFile = function () {
+    if (utils.releaseForMAS()) {
+        return new Q();
+    }
+
     var deferred = Q.defer();
 
     var appdmg = require('appdmg');

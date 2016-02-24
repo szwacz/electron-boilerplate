@@ -35,6 +35,6 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>{{copyright}}</string>
 	<key>LSApplicationCategoryType</key>
-	<string>public.app-category.productivity</string>
+	<string>{{LSApplicationCategoryType}}</string>
 </dict>
 </plist>
