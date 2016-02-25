@@ -258,6 +258,7 @@ if (process.platform === 'darwin') {
 	];
 }
 
+export var menuTemplate = template;
 export var menu = Menu.buildFromTemplate(template);
 
 Menu.setApplicationMenu(menu);

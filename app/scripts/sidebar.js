@@ -1,16 +1,15 @@
 import { EventEmitter } from 'events';
 import { remote } from 'electron';
 import { servers } from './servers';
-import { menu } from './menus';
+import { menu, menuTemplate } from './menus';
 
 var MenuItem = remote.MenuItem;
 var Menu = remote.Menu;
 
-var windowMenuPosition = menu.items.findIndex(function(i) {return i.id === 'window'});
-var windowMenu = menu.items[windowMenuPosition];
-var serverListSeparatorPosition = windowMenu.submenu.items.findIndex(function(i) {return i.id === 'server-list-separator'});
-var serverListSeparator = windowMenu.submenu.items[serverListSeparatorPosition];
-
+var windowMenuPosition = menuTemplate.findIndex(function(i) {return i.id === 'window'});
+var windowMenu = menuTemplate[windowMenuPosition];
+var serverListSeparatorPosition = windowMenu.submenu.findIndex(function(i) {return i.id === 'server-list-separator'});
+var serverListSeparator = windowMenu.submenu[serverListSeparatorPosition];
 
 class SideBar extends EventEmitter {
 	constructor() {
@@ -103,18 +102,19 @@ class SideBar extends EventEmitter {
 
 		serverListSeparator.visible = true;
 
-		var menuItem = new MenuItem({
+		var menuItem = {
 			label: host.title,
 			accelerator: 'CmdOrCtrl+' + this.hostCount,
+			position: "before=server-list-separator",
+			id: url,
 			click: () => {
 				this.emit('click', host.url);
 				servers.setActive(host.url);
 			}
-		});
+		};
 
-		windowMenu.submenu.insert(serverListSeparatorPosition++, menuItem);
-		item.menuItemCommandId = menuItem.commandId;
-		Menu.setApplicationMenu(menu);
+		windowMenu.submenu.push(menuItem);
+		Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 	}
 
 	remove(hostUrl) {
@@ -122,8 +122,9 @@ class SideBar extends EventEmitter {
 		if (el) {
 			el.remove();
 
-			var index = windowMenu.submenu.getIndexOfCommandId(el.menuItemCommandId);
-			windowMenu.submenu.items[index].visible = false;
+			var index = windowMenu.submenu.findIndex(function(i) {return i.id === hostUrl});
+			windowMenu.submenu.splice(index, 1);
+			Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 		}
 	}
 
