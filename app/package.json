@@ -11,6 +11,7 @@
   "dependencies": {
     "fs-jetpack": "^0.7.0"
   },
+  "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
   "codeSignIdentitiy": {
     "dmg": "Developer ID Application: Konecty Informatica Ltda (DX85ENM22A)",
     "MAS": "3rd Party Mac Developer Application: Konecty Informatica Ltda (DX85ENM22A)",

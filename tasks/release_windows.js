@@ -74,7 +74,7 @@ var renameApp = function () {
 var createInstaller = function () {
     var deferred = Q.defer();
 
-    var finalPackageName = manifest.name + '_' + manifest.version + '.exe';
+    var finalPackageName = utils.getReleasePackageName(manifest) + '.exe';
     var installScript = projectDir.read('resources/windows/installer.nsi');
 
     installScript = utils.replace(installScript, {
@@ -90,7 +90,7 @@ var createInstaller = function () {
     });
     tmpDir.write('installer.nsi', installScript);
 
-    gulpUtil.log('Building installer with NSIS...');
+    gulpUtil.log('Building installer with NSIS... (' + finalPackageName + ')');
 
     // Remove destination file if already exists.
     releasesDir.remove(finalPackageName);
