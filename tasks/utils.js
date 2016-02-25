@@ -24,7 +24,7 @@ module.exports.replace = function (str, patterns) {
 };
 
 module.exports.getReleasePackageName = function(manifest) {
-    return utils.replace(manifest.packageNameTemplate, {
+    return module.exports.replace(manifest.packageNameTemplate, {
         name: manifest.name,
         version: manifest.version,
         build: manifest.build,
