@@ -7,7 +7,7 @@ import config from './config';
 import '../branding/branding.js';
 
 var Menu = remote.Menu;
-var app = remote.App;
+var app = remote.app;
 var APP_NAME = config.name;
 var template;
 
@@ -27,6 +27,7 @@ if (process.platform === 'darwin') {
 				},
 				{
 					label: 'Add new server',
+					accelerator: 'Command+N',
 					click: function() {
 						servers.clearActive();
 					}
@@ -36,12 +37,12 @@ if (process.platform === 'darwin') {
 				},
 				{
 					label: 'Hide ' + APP_NAME,
-					accelerator: 'CmdOrCtrl+H',
+					accelerator: 'Command+H',
 					role: 'hide'
 				},
 				{
 					label: 'Hide Others',
-					accelerator: 'CmdOrCtrl+Shift+H',
+					accelerator: 'Command+Alt+H',
 					role: 'hideothers'
 				},
 				{
@@ -53,8 +54,10 @@ if (process.platform === 'darwin') {
 				},
 				{
 					label: 'Quit',
-					accelerator: 'CmdOrCtrl+Q',
-					role: 'terminate'
+					accelerator: 'Command+Q',
+					click: function() {
+						app.quit();
+					}
 				}
 			]
 		},
@@ -63,12 +66,12 @@ if (process.platform === 'darwin') {
 			submenu: [
 				{
 					label: 'Undo',
-					accelerator: 'CmdOrCtrl+Z',
+					accelerator: 'Command+Z',
 					role: 'undo'
 				},
 				{
 					label: 'Redo',
-					accelerator: 'CmdOrCtrl+Shift+Z',
+					accelerator: 'Command+Shift+Z',
 					role: 'redo'
 				},
 				{
@@ -76,22 +79,22 @@ if (process.platform === 'darwin') {
 				},
 				{
 					label: 'Cut',
-					accelerator: 'CmdOrCtrl+X',
+					accelerator: 'Command+X',
 					role: 'cut'
 				},
 				{
 					label: 'Copy',
-					accelerator: 'CmdOrCtrl+C',
+					accelerator: 'Command+C',
 					role: 'copy'
 				},
 				{
 					label: 'Paste',
-					accelerator: 'CmdOrCtrl+V',
+					accelerator: 'Command+V',
 					role: 'paste'
 				},
 				{
 					label: 'Select All',
-					accelerator: 'CmdOrCtrl+A',
+					accelerator: 'Command+A',
 					role: 'selectall'
 				}
 			]
@@ -101,7 +104,7 @@ if (process.platform === 'darwin') {
 			submenu: [
 				{
 					label: 'Reload',
-					accelerator: 'CmdOrCtrl+R',
+					accelerator: 'Command+R',
 					click: function() {
 						remote.getCurrentWindow().reload();
 					}
@@ -114,7 +117,7 @@ if (process.platform === 'darwin') {
 				},
 				{
 					label: 'Toggle DevTools',
-					accelerator: 'CmdOrCtrl+Alt+I',
+					accelerator: 'Command+Alt+I',
 					click: function() {
 						remote.getCurrentWindow().toggleDevTools();
 					}
@@ -127,12 +130,12 @@ if (process.platform === 'darwin') {
 			submenu: [
 				{
 					label: 'Minimize',
-					accelerator: 'CmdOrCtrl+M',
+					accelerator: 'Command+M',
 					role: 'minimize'
 				},
 				{
 					label: 'Close',
-					accelerator: 'CmdOrCtrl+W',
+					accelerator: 'Command+W',
 					role: 'close'
 				},
 				{
@@ -157,13 +160,14 @@ if (process.platform === 'darwin') {
 			submenu: [
 				{
 					label: 'Add new server',
+					accelerator: 'Ctrl+N',
 					click: function() {
 						servers.clearActive();
 					}
 				},
 				{
 					label: 'Quit',
-					accelerator: 'CmdOrCtrl+Q',
+					accelerator: 'Ctrl+Q',
 					click: function() {
 						app.quit();
 					}
@@ -175,12 +179,12 @@ if (process.platform === 'darwin') {
 			submenu: [
 				{
 					label: 'Undo',
-					accelerator: 'CmdOrCtrl+Z',
+					accelerator: 'Ctrl+Z',
 					role: 'undo'
 				},
 				{
 					label: 'Redo',
-					accelerator: 'CmdOrCtrl+Shift+Z',
+					accelerator: 'Ctrl+Shift+Z',
 					role: 'redo'
 				},
 				{
@@ -188,22 +192,22 @@ if (process.platform === 'darwin') {
 				},
 				{
 					label: 'Cut',
-					accelerator: 'CmdOrCtrl+X',
+					accelerator: 'Ctrl+X',
 					role: 'cut'
 				},
 				{
 					label: 'Copy',
-					accelerator: 'CmdOrCtrl+C',
+					accelerator: 'Ctrl+C',
 					role: 'copy'
 				},
 				{
 					label: 'Paste',
-					accelerator: 'CmdOrCtrl+V',
+					accelerator: 'Ctrl+V',
 					role: 'paste'
 				},
 				{
 					label: 'Select All',
-					accelerator: 'CmdOrCtrl+A',
+					accelerator: 'Ctrl+A',
 					role: 'selectall'
 				}
 			]
@@ -213,7 +217,7 @@ if (process.platform === 'darwin') {
 			submenu: [
 				{
 					label: 'Reload',
-					accelerator: 'CmdOrCtrl+R',
+					accelerator: 'Ctrl+R',
 					click: function() {
 						remote.getCurrentWindow().reload();
 					}
@@ -226,7 +230,7 @@ if (process.platform === 'darwin') {
 				},
 				{
 					label: 'Toggle DevTools',
-					accelerator: 'CmdOrCtrl+Alt+I',
+					accelerator: 'Ctrl+Shift+I',
 					click: function() {
 						remote.getCurrentWindow().toggleDevTools();
 					}
@@ -244,7 +248,7 @@ if (process.platform === 'darwin') {
 				},
 				{
 					label: 'Close',
-					accelerator: 'CmdOrCtrl+W',
+					accelerator: 'Ctrl+W',
 					click: function() {
 						remote.getCurrentWindow().close();
 					}
