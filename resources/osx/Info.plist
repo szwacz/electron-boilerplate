@@ -17,6 +17,10 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleVersion</key>
+	<string>{{build}}</string>
+	<key>CFBundleVersionString</key>
+	<string>{{build}}</string>
+	<key>CFBundleShortVersionString</key>
 	<string>{{version}}</string>
 	<key>CFBundleGetInfoString</key>
 	<string>{{version}}</string>
@@ -30,5 +34,7 @@
 	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>{{copyright}}</string>
+	<key>LSApplicationCategoryType</key>
+	<string>{{LSApplicationCategoryType}}</string>
 </dict>
 </plist>
