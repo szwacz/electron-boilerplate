@@ -4,10 +4,17 @@
   "identifier": "chat.rocket",
   "description": "Rocket.Chat Native Cross-Platform Desktop Application via Electron.",
   "version": "1.0.0",
+  "build": "6",
   "author": "Rocket.Chat Support <support@rocket.chat>",
   "copyright": "© 2016, Rocket.Chat",
   "main": "background.js",
   "dependencies": {
     "fs-jetpack": "^0.7.0"
-  }
+  },
+  "//codeSignIdentitiy": {
+    "dmg": "Developer ID Application: Konecty Informatica Ltda (DX85ENM22A)",
+    "MAS": "3rd Party Mac Developer Application: Konecty Informatica Ltda (DX85ENM22A)",
+    "MASInstaller": "3rd Party Mac Developer Installer: Konecty Informatica Ltda (DX85ENM22A)"
+  },
+  "LSApplicationCategoryType": "public.app-category.productivity"
 }
