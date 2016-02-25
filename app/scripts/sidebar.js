@@ -1,10 +1,22 @@
 import { EventEmitter } from 'events';
 import { remote } from 'electron';
 import { servers } from './servers';
+import { menu } from './menus';
+
+var MenuItem = remote.MenuItem;
+var Menu = remote.Menu;
+
+var windowMenuPosition = menu.items.findIndex(function(i) {return i.id === 'window'});
+var windowMenu = menu.items[windowMenuPosition];
+var serverListSeparatorPosition = windowMenu.submenu.items.findIndex(function(i) {return i.id === 'server-list-separator'});
+var serverListSeparator = windowMenu.submenu.items[serverListSeparatorPosition];
+
 
 class SideBar extends EventEmitter {
 	constructor() {
 		super();
+
+		this.hostCount = 0;
 
 		this.listElement = document.getElementById('serverList');
 
@@ -63,11 +75,20 @@ class SideBar extends EventEmitter {
 		};
 		img.src = `${url}/assets/favicon.svg?v=3`;
 
+		var hotkey = document.createElement('div');
+		hotkey.classList.add('name');
+		if (process.platform === 'darwin') {
+			hotkey.innerHTML = '⌘' + (++this.hostCount);
+		} else {
+			hotkey.innerHTML = '^' + (++this.hostCount);
+		}
+
 		var item = document.createElement('li');
 		item.appendChild(initials);
 		item.appendChild(tooltip);
 		item.appendChild(badge);
 		item.appendChild(img);
+		item.appendChild(hotkey);
 
 		item.dataset.host = url;
 		item.setAttribute('server', url);
@@ -79,12 +100,30 @@ class SideBar extends EventEmitter {
 		};
 
 		this.listElement.appendChild(item);
+
+		serverListSeparator.visible = true;
+
+		var menuItem = new MenuItem({
+			label: host.title,
+			accelerator: 'CmdOrCtrl+' + this.hostCount,
+			click: () => {
+				this.emit('click', host.url);
+				servers.setActive(host.url);
+			}
+		});
+
+		windowMenu.submenu.insert(serverListSeparatorPosition++, menuItem);
+		item.menuItemCommandId = menuItem.commandId;
+		Menu.setApplicationMenu(menu);
 	}
 
 	remove(hostUrl) {
 		var el = this.getByUrl(hostUrl);
 		if (el) {
 			el.remove();
+
+			var index = windowMenu.submenu.getIndexOfCommandId(el.menuItemCommandId);
+			windowMenu.submenu.items[index].visible = false;
 		}
 	}
 
