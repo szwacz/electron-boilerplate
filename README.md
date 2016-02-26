@@ -1,6 +1,6 @@
 electron-boilerplate
 ==============
-Comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).  
+Comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).
 
 Scope of this project:
 
@@ -25,7 +25,7 @@ npm start
 
 # Structure of the project
 
-There are **two** `package.json` files:  
+There are **two** `package.json` files:
 
 #### 1. For development
 Sits on path: `electron-boilerplate/package.json`. Here you declare dependencies for your development environment and build scripts. **This file is not distributed with real application!**
@@ -142,8 +142,40 @@ You can create Windows installer only when running on Windows, the same is true 
 #### App signing
 
 The Mac release supports [code signing](https://developer.apple.com/library/mac/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html). To sign the `.app` in the release image, include the certificate ID in the command as so,
+```shell
+npm run release -- --sign DX85ENM22A
 ```
-npm run release -- --sign A123456789
+
+#### Mac App Store
+You should install the Electron build for MAS
+```
+export npm_config_platform=mas
+rm -rf node_modules
+npm install
+```
+
+To sign your app for Mac App Store
+```shell
+npm run release -- --mas --mas-sign "3rd Party Mac Developer Application: Company Name (APPIDENTITY)" --mas-installer-sign "3rd Party Mac Developer Installer: Company Name (APPIDENTITY)"
+```
+
+Or edit the `app/package.json`, remove the `//` from `//codeSignIdentitiy` and update the values with your sign indentities
+```json
+  "//codeSignIdentitiy": {
+    "dmg": "Developer ID Application: Company Name (APPIDENTITY)",
+    "MAS": "3rd Party Mac Developer Application: Company Name (APPIDENTITY)",
+    "MASInstaller": "3rd Party Mac Developer Installer: Company Name (APPIDENTITY)"
+  }
+```
+
+You can change the application category too
+```json
+  "LSApplicationCategoryType": "public.app-category.productivity"
+```
+
+If you insert your indentities in the package.json you can compile for MAS like
+```
+npm run release -- --mas
 ```
 
 ## Windows only

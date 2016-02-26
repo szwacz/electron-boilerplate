@@ -16,18 +16,26 @@ var destDir = projectDir.cwd('./build');
 
 var paths = {
     copyFromAppDir: [
+        './branding/**',
+        './scripts/**',
+        './lib/**',
+        './spec.js',
         './node_modules/**',
         './vendor/**',
+        './images/**',
+        './icons/**',
+        './stylesheets/**/*.css',
+        './fonts/**',
         './**/*.html',
         './**/*.+(jpg|png|svg)'
     ],
-}
+};
 
 // -------------------------------------
 // Tasks
 // -------------------------------------
 
-gulp.task('clean', function (callback) {
+gulp.task('clean', function () {
     return destDir.dirAsync('.', { empty: true });
 });
 
@@ -97,7 +105,7 @@ gulp.task('bundle-watch', bundleTask);
 
 
 var lessTask = function () {
-    return gulp.src('app/stylesheets/main.less')
+    return gulp.src('app/stylesheets/base.less')
     .pipe(less())
     .pipe(gulp.dest(destDir.path('stylesheets')));
 };

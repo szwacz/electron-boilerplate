@@ -1,13 +1,21 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
-  "identifier": "com.example.electron-boilerplate",
-  "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
-  "version": "0.1.0",
-  "author": "Mr Gumby",
-  "copyright": "© 2016, your company here",
+  "name": "rocketchat",
+  "productName": "Rocket.Chat",
+  "identifier": "chat.rocket",
+  "description": "Rocket.Chat Native Cross-Platform Desktop Application via Electron.",
+  "version": "1.1.0-partial.1",
+  "build": "10",
+  "author": "Rocket.Chat Support <support@rocket.chat>",
+  "copyright": "© 2016, Rocket.Chat",
   "main": "background.js",
   "dependencies": {
     "fs-jetpack": "^0.7.0"
-  }
+  },
+  "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
+  "codeSignIdentitiy": {
+    "dmg": "Developer ID Application: Konecty Informatica Ltda (DX85ENM22A)",
+    "MAS": "3rd Party Mac Developer Application: Konecty Informatica Ltda (DX85ENM22A)",
+    "MASInstaller": "3rd Party Mac Developer Installer: Konecty Informatica Ltda (DX85ENM22A)"
+  },
+  "LSApplicationCategoryType": "public.app-category.productivity"
 }

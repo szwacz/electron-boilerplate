@@ -46,6 +46,10 @@ app.on('ready', function () {
     mainWindow.on('close', function () {
         mainWindowState.saveState(mainWindow);
     });
+
+    mainWindow.webContents.on('will-navigate', function(event) {
+        event.preventDefault();
+    });
 });
 
 app.on('window-all-closed', function () {
