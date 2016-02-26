@@ -20,7 +20,7 @@ var init = function () {
     tmpDir = projectDir.dir('./tmp', { empty: true });
     releasesDir = projectDir.dir('./releases');
     manifest = projectDir.read('app/package.json', 'json');
-    packName = manifest.name + '_' + manifest.version;
+    packName = utils.getReleasePackageName(manifest);
     packDir = tmpDir.dir(packName);
     readyAppDir = packDir.cwd('opt', manifest.name);
 
@@ -66,10 +66,10 @@ var renameApp = function () {
 var packToDebFile = function () {
     var deferred = Q.defer();
 
-    var debFileName = packName + '_amd64.deb';
+    var debFileName = packName + '.deb';
     var debPath = releasesDir.path(debFileName);
 
-    gulpUtil.log('Creating DEB package...');
+    gulpUtil.log('Creating DEB package... (' + debFileName + ')');
 
     // Counting size of the app in KiB
     var appSize = Math.round(readyAppDir.inspectTree('.').size / 1024);

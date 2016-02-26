@@ -7,3 +7,4 @@ Thumbs.db
 /build/
 /releases/
 /tmp/
+app/scripts/bugsnag_apikey.js

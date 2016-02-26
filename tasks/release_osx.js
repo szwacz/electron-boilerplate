@@ -94,9 +94,9 @@ var signApp = function () {
             process.exit(0);
         }
         var cmds = [
-            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A"',
             'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libffmpeg.dylib"',
             'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libnode.dylib"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A"',
             'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper.app/"',
             'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper EH.app/"',
             'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper NP.app/"'
@@ -109,7 +109,7 @@ var signApp = function () {
             cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/Squirrel.framework/Versions/A"');
         }
 
-        cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements parent.plist -v "' + finalAppDir.path() + '"');
+        cmds.push('codesign -f -s "' + MASIdentity + '" --entitlements parent.plist -v "' + finalAppDir.path() + '"');
 
         cmds.push('productbuild --component "' + finalAppDir.path() + '" /Applications --sign "' + MASInstallerIdentity + '" "' + releasesDir.path(manifest.productName + '.pkg') + '"');
 
@@ -142,7 +142,7 @@ var packToDmgFile = function () {
     var deferred = Q.defer();
 
     var appdmg = require('appdmg');
-    var dmgName = manifest.name + '_' + manifest.version + '.dmg';
+    var dmgName = utils.getReleasePackageName(manifest) + '.dmg';
 
     // Prepare appdmg config
     var dmgManifest = projectDir.read('resources/osx/appdmg.json');
@@ -157,7 +157,7 @@ var packToDmgFile = function () {
     // Delete DMG file with this name if already exists
     releasesDir.remove(dmgName);
 
-    gulpUtil.log('Packaging to DMG file...');
+    gulpUtil.log('Packaging to DMG file... (' + dmgName + ')');
 
     var readyDmgPath = releasesDir.path(dmgName);
     appdmg({

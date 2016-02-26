@@ -18,6 +18,7 @@ var paths = {
     copyFromAppDir: [
         './branding/**',
         './scripts/**',
+        './lib/**',
         './spec.js',
         './node_modules/**',
         './vendor/**',
