@@ -94,9 +94,9 @@ var signApp = function () {
             process.exit(0);
         }
         var cmds = [
-            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A"',
             'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libffmpeg.dylib"',
             'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libnode.dylib"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A"',
             'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper.app/"',
             'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper EH.app/"',
             'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper NP.app/"'
