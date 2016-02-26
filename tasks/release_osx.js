@@ -109,7 +109,7 @@ var signApp = function () {
             cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/Squirrel.framework/Versions/A"');
         }
 
-        cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements parent.plist -v "' + finalAppDir.path() + '"');
+        cmds.push('codesign -f -s "' + MASIdentity + '" --entitlements parent.plist -v "' + finalAppDir.path() + '"');
 
         cmds.push('productbuild --component "' + finalAppDir.path() + '" /Applications --sign "' + MASInstallerIdentity + '" "' + releasesDir.path(manifest.productName + '.pkg') + '"');
 
