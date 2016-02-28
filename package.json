@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "asar": "^0.7.2",
-    "electron-prebuilt": "git@github.com:RocketChat/electron-prebuilt.git",
+    "electron-prebuilt": "https://github.com/RocketChat/electron-prebuilt.git",
     "fs-jetpack": "^0.7.0",
     "gulp": "^3.9.0",
     "gulp-less": "^3.0.3",
