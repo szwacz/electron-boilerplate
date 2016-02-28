@@ -3,12 +3,12 @@
 var pathUtil = require('path');
 var Q = require('q');
 var gulp = require('gulp');
-var rollup = require('rollup');
 var less = require('gulp-less');
 var jetpack = require('fs-jetpack');
 
-var utils = require('./utils');
-var generateSpecsImportFile = require('./generate_specs_import');
+var bundle = require('./bundle');
+var generateSpecImportsFile = require('./generate_spec_imports');
+var utils = require('../utils');
 
 var projectDir = jetpack;
 var srcDir = projectDir.cwd('./app');
@@ -41,35 +41,6 @@ var copyTask = function () {
 gulp.task('copy', ['clean'], copyTask);
 gulp.task('copy-watch', copyTask);
 
-
-var bundle = function (src, dest) {
-    var deferred = Q.defer();
-
-    rollup.rollup({
-        entry: src,
-    }).then(function (bundle) {
-        var jsFile = pathUtil.basename(dest);
-        var result = bundle.generate({
-            format: 'cjs',
-            sourceMap: true,
-            sourceMapFile: jsFile,
-        });
-        // Wrap code in self invoking function so the variables don't
-        // pollute the global namespace.
-        var isolatedCode = '(function () {' + result.code + '\n}());';
-        return Q.all([
-            destDir.writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
-            destDir.writeAsync(dest + '.map', result.map.toString()),
-        ]);
-    }).then(function () {
-        deferred.resolve();
-    }).catch(function (err) {
-        console.error('Build: Error during rollup', err.stack);
-    });
-
-    return deferred.promise;
-};
-
 var bundleApplication = function () {
     return Q.all([
         bundle(srcDir.path('background.js'), destDir.path('background.js')),
@@ -78,7 +49,7 @@ var bundleApplication = function () {
 };
 
 var bundleSpecs = function () {
-    generateSpecsImportFile().then(function (specEntryPointPath) {
+    generateSpecImportsFile().then(function (specEntryPointPath) {
         return Q.all([
             bundle(srcDir.path('background.js'), destDir.path('background.js')),
             bundle(specEntryPointPath, destDir.path('spec.js')),
