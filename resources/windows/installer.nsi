@@ -1,11 +1,15 @@
 ; NSIS packaging/install script
 ; Docs: http://nsis.sourceforge.net/Docs/Contents.html
 
+; --------------------------------
+;  Includes
+; --------------------------------
+
 !include LogicLib.nsh
 !include nsDialogs.nsh
 
 ; --------------------------------
-; Variables
+;  Variables
 ; --------------------------------
 
 !define dest "{{dest}}"
@@ -26,7 +30,7 @@
 !define uninstaller "uninstall.exe"
 
 ; --------------------------------
-; Installation
+;  Installation
 ; --------------------------------
 
 Unicode true
@@ -52,11 +56,29 @@ Caption "${productName} Setup"
 SubCaption 3 " "
 SubCaption 4 " "
 
+;   --------------------------------
+;    Page layout
+;   --------------------------------
+
 Page custom welcome
+Page components
+Page directory
 Page instfiles
+Page custom finish finishEnd
+
+;   --------------------------------
+;    Control variables
+;   --------------------------------
 
 Var Image
 Var ImageHandle
+
+Var LaunchAppCheckbox
+Var LaunchAppCheckbox_State
+
+;   --------------------------------
+;    Installer init
+;   --------------------------------
 
 Function .onInit
 
@@ -64,15 +86,26 @@ Function .onInit
     InitPluginsDir
     ReserveFile "${banner}"
     File /oname=$PLUGINSDIR\banner.bmp "${banner}"
+    
+    ; Check if the application is currently running, show message if it is
+    retryInstallation:
+    FindWindow $0 "Chrome_WidgetWin_1" "Rocket.Chat"
+        StrCmp $0 0 notRunning
+            MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "${productName} is currently running. Please close the application to continue." /SD IDCANCEL IDRETRY retryInstallation
+            Abort
+    notRunning:
 
 FunctionEnd
 
-; Custom welcome page
+;   --------------------------------
+;    Welcome page [custom]
+;   --------------------------------
+
 Function welcome
 
     nsDialogs::Create 1018
 
-    ${NSD_CreateLabel} 185 1u 210 100% "Welcome to ${productName} version ${version} installer.$\r$\n$\r$\nClick install to begin."
+    ${NSD_CreateLabel} 185 1u 210 100% "Welcome to ${productName} version ${version} installer.$\r$\n$\r$\nClick next to continue."
 
     ${NSD_CreateBitmap} 0 0 170 210 ""
     Pop $Image
@@ -84,9 +117,15 @@ Function welcome
 
 FunctionEnd
 
-; Installation declarations
-Section "Install"
+;   --------------------------------
+;    Installation sections
+;   --------------------------------
 
+Section "Rocket.Chat Client"
+
+    ; Make this section a requirement
+    SectionIn RO
+    
     WriteRegStr HKLM "${regkey}" "Install_Dir" "$INSTDIR"
     WriteRegStr HKLM "${uninstkey}" "DisplayName" "${productName}"
     WriteRegStr HKLM "${uninstkey}" "DisplayIcon" '"$INSTDIR\icon.ico"'
@@ -102,18 +141,68 @@ Section "Install"
     ; Include all files from /build directory
     File /r "${src}\*"
 
-    ; Create start menu shortcut
-    SetShellVarContext all
-    CreateShortCut "$SMPROGRAMS\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
-    ; Create desktop shortcut
-    CreateShortCut "$DESKTOP\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
-
     WriteUninstaller "${uninstaller}"
 
 SectionEnd
 
+Section "Desktop shortcut"
+
+    ; Create desktop shortcut
+    CreateShortCut "$DESKTOP\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
+    
+SectionEnd
+
+Section "Autostart Entry"
+
+    ; Create autostart entry
+    CreateShortCut "$SMSTARTUP\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
+    
+SectionEnd
+
+Section "Start Menu Entry"
+
+    ; Create start menu entry
+    SetShellVarContext all
+    CreateShortCut "$SMPROGRAMS\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
+    
+SectionEnd
+
+;   --------------------------------
+;    Finish page [custom]
+;   --------------------------------
+
+Function finish
+
+    nsDialogs::Create 1018
+
+    ${NSD_CreateLabel} 185 1u 210 30u "${productName} installation successfully finished."
+
+    ${NSD_CreateCheckbox} 185 35u 100% 10u "Launch ${productName}"
+    Pop $LaunchAppCheckbox
+    ${NSD_SetState} $LaunchAppCheckbox ${BST_CHECKED}
+
+    ${NSD_CreateBitmap} 0 0 170 210 ""
+    Pop $Image
+    ${NSD_SetImage} $Image $PLUGINSDIR\banner.bmp $ImageHandle
+
+    nsDialogs::Show
+
+    ${NSD_FreeImage} $ImageHandle
+
+FunctionEnd
+
+Function finishEnd
+    ; Save checkbox state on installer leave
+    ${NSD_GetState} $LaunchAppCheckbox $LaunchAppCheckbox_State
+
+    ; Launch the app, if the box is checked
+    ${If} $LaunchAppCheckbox_State == ${BST_CHECKED}
+        Exec "$INSTDIR\${exec}"
+    ${EndIf}
+FunctionEnd
+
 ; --------------------------------
-; Uninstaller
+;  Uninstaller
 ; --------------------------------
 
 ShowUninstDetails nevershow
@@ -122,13 +211,40 @@ UninstallCaption "Uninstall ${productName}"
 UninstallText "Don't like ${productName} anymore? Hit uninstall button."
 UninstallIcon "${icon}"
 
+;   --------------------------------
+;    Page layout
+;   --------------------------------
+
 UninstPage custom un.confirm un.confirmOnLeave
 UninstPage instfiles
+
+;   --------------------------------
+;    Control variables
+;   --------------------------------
 
 Var RemoveAppDataCheckbox
 Var RemoveAppDataCheckbox_State
 
-; Custom uninstall confirm page
+;   --------------------------------
+;    Uninstaller init
+;   --------------------------------
+
+Function un.onInit
+
+    ; Check if the application is currently running, show message if it is
+    retryUninstall:
+    FindWindow $0 "Chrome_WidgetWin_1" "Rocket.Chat"
+        StrCmp $0 0 notRunning
+            MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "${productName} is currently running. Please close the application to continue." /SD IDCANCEL IDRETRY retryUninstall
+            Abort
+    notRunning:
+
+FunctionEnd
+
+;   --------------------------------
+;    Confirm page [custom]
+;   --------------------------------
+
 Function un.confirm
 
     nsDialogs::Create 1018
@@ -149,17 +265,27 @@ Function un.confirmOnLeave
 
 FunctionEnd
 
-; Uninstall declarations
+;   --------------------------------
+;    Uninstallation sections
+;   --------------------------------
+
 Section "Uninstall"
 
+    ; Remove registry entries
     DeleteRegKey HKLM "${uninstkey}"
     DeleteRegKey HKLM "${regkey}"
 
-    SetShellVarContext all
-    Delete "$SMPROGRAMS\${productName}.lnk"
     ; Remove desktop shortcut
     Delete "$DESKTOP\${productName}.lnk"
-    ; Remove whole directory from Program Files
+    
+    ; Remove autostart entry
+    Delete "$SMSTARTUP\${productName}.lnk"
+    
+    ; Remove start menu entry
+    SetShellVarContext all
+    Delete "$SMPROGRAMS\${productName}.lnk"
+    
+    ; Remove whole directory from installation directory
     RMDir /r "$INSTDIR"
 
     ; Remove also appData directory generated by your app if user checked this option
