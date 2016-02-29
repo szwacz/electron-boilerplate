@@ -89,7 +89,7 @@ Function .onInit
     
     ; Check if the application is currently running, show message if it is
     retryInstallation:
-    FindWindow $0 "Chrome_WidgetWin_1" "Rocket.Chat"
+    FindWindow $0 "Chrome_WidgetWin_1" "${productName}"
         StrCmp $0 0 notRunning
             MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "${productName} is currently running. Please close the application to continue." /SD IDCANCEL IDRETRY retryInstallation
             Abort
@@ -121,7 +121,7 @@ FunctionEnd
 ;    Installation sections
 ;   --------------------------------
 
-Section "Rocket.Chat Client"
+Section "${productName} Client"
 
     ; Make this section a requirement
     SectionIn RO
@@ -233,7 +233,7 @@ Function un.onInit
 
     ; Check if the application is currently running, show message if it is
     retryUninstall:
-    FindWindow $0 "Chrome_WidgetWin_1" "Rocket.Chat"
+    FindWindow $0 "Chrome_WidgetWin_1" "${productName}"
         StrCmp $0 0 notRunning
             MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "${productName} is currently running. Please close the application to continue." /SD IDCANCEL IDRETRY retryUninstall
             Abort
