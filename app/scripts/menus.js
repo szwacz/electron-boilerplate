@@ -56,6 +56,7 @@ if (process.platform === 'darwin') {
 					label: 'Quit',
 					accelerator: 'Command+Q',
 					click: function() {
+                        remote.app.forceQuit = true;
 						app.quit();
 					}
 				}
@@ -169,6 +170,7 @@ if (process.platform === 'darwin') {
 					label: 'Quit',
 					accelerator: 'Ctrl+Q',
 					click: function() {
+                        remote.app.forceQuit = true;
 						app.quit();
 					}
 				}
