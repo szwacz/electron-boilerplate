@@ -107,13 +107,7 @@ var getTemplate = function() {
 	];
 };
 
-var template = getTemplate();
-menu = Menu.buildFromTemplate(getTemplate());
-
-window.addEventListener('contextmenu', function(){
-	menu.popup(remote.getCurrentWindow());
-	menu = Menu.buildFromTemplate(template);
-}, false);
+let lastMisspelledWord;
 
 try {
 	var checker = require('spellchecker');
@@ -127,23 +121,10 @@ try {
 			var isMisspelled = checker.isMisspelled(text);
 
 			if (isMisspelled) {
-				var options = checker.getCorrectionsForMisspelling(text);
-				var maxItems = Math.min(options.length, 5);
-				template.unshift({type: 'separator'});
-				if (maxItems > 0) {
-					var onClick = function(menuItem) {
-						webContents.replaceMisspelling(menuItem.label);
-					};
-					for (var i = maxItems-1; i >= 0; i--) {
-						var item = options[i];
-						template.unshift({ label: item, click: onClick});
-					}
-				} else {
-					template.unshift({ label: 'no suggestions', click: function() { } });
-				}
+				lastMisspelledWord = text;
+			} else {
+				lastMisspelledWord = undefined;
 			}
-			menu = Menu.buildFromTemplate(template);
-			template = getTemplate();
 
 			return !isMisspelled;
 		}
@@ -151,3 +132,48 @@ try {
 } catch(e) {
 	console.log('Spellchecker unavailble');
 }
+
+window.addEventListener('contextmenu', function(event){
+	event.preventDefault();
+
+	const template = getTemplate();
+
+	setTimeout(function() {
+		if (['TEXTAREA', 'INPUT'].indexOf(event.target.nodeName) > -1) {
+			const text = window.getSelection().toString().trim();
+			if (text !== '' && checker.isMisspelled(text)) {
+				const options = checker.getCorrectionsForMisspelling(lastMisspelledWord);
+				const maxItems = Math.min(options.length, 5);
+
+				if (maxItems > 0) {
+					const suggestions = [];
+					const onClick = function(menuItem) {
+						webContents.replaceMisspelling(menuItem.label);
+					};
+
+					for (let i = 0; i < options.length; i++) {
+						const item = options[i];
+						suggestions.push({ label: item, click: onClick });
+					}
+
+					template.unshift({ type: 'separator' });
+
+					if (suggestions.length > maxItems) {
+						const morSuggestions = {
+							label: 'More spelling suggestions',
+							submenu: suggestions.slice(maxItems)
+						};
+						template.unshift(morSuggestions);
+					}
+
+					template.unshift.apply(template, suggestions.slice(0, maxItems));
+				} else {
+					template.unshift({ label: 'no suggestions', click: function() { } });
+				}
+			}
+		}
+
+		menu = Menu.buildFromTemplate(template);
+		menu.popup(remote.getCurrentWindow());
+	}, 0);
+}, false);
