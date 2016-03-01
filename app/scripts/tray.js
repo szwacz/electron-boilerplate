@@ -6,6 +6,7 @@ import path from 'path';
 var Tray = remote.Tray;
 var Menu = remote.Menu;
 
+var quit = remote.require('./quit');
 
 let _tray;
 let _mainWindow = null;
@@ -44,16 +45,16 @@ function createAppTray(mainWindow) {
     }, {
         label: 'Quit',
         click: function() {
-            remote.app.forceQuit = true;
+            quit.forceQuit();
             doQuit();
         }
     }]);
     _tray.setToolTip('Rocket.Chat');
     _tray.setContextMenu(contextMenu);
 
-    if (process.platform === 'darwin' || process.platform == 'win32') {
+    if (process.platform === 'darwin' || process.platform === 'win32') {
         _tray.on('double-click', function() {
-            toggleShowMainWindow();
+            showMainWindow(true);
         });
     } else {
         let dblClickDelay = 500,
@@ -67,7 +68,7 @@ function createAppTray(mainWindow) {
             } else {
                 clearTimeout(dblClickTimeoutFct);
                 dblClickTimeoutFct = null;
-                toggleShowMainWindow();
+                showMainWindow(true);
             }
         });
     }
@@ -116,21 +117,13 @@ function restoreMainWindow() {
     showMainWindow(true);
 }
 
-function toggleShowMainWindow() {
-    if (_mainWindow !== null && _mainWindow !== undefined) {
-        showMainWindow(_mainWindow.isMinimized());
-    }
-}
-
 function showMainWindow(show) {
     if (_mainWindow !== null && _mainWindow !== undefined) {
         if (show) {
             _mainWindow.restore();
             _mainWindow.show();
-            _mainWindow.setSkipTaskbar(false);
         } else {
             _mainWindow.minimize();
-            _mainWindow.setSkipTaskbar(true);
         }
     }
 }
@@ -145,16 +138,6 @@ bindOnQuit(function() {
     remote.app.quit();
 });
 
-// Closes or hides the client
-window.onbeforeunload = function(e) {
-    if(!remote.app.forceQuit) {
-        showMainWindow(false);
-        return false;
-    }
-    else {
-        destroy();
-    }
-}
 
 export default {
     createAppTray: createAppTray,

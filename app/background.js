@@ -13,6 +13,19 @@ import env from './env';
 
 var mainWindow;
 
+var shouldQuit = app.makeSingleInstance(function() {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+        mainWindow.restore();
+        mainWindow.show();
+        mainWindow.focus();
+    }
+});
+
+if (shouldQuit) {
+    app.quit();
+}
+
 // Preserver of the window size and position between app launches.
 var mainWindowState = windowStateKeeper('main', {
     width: 1000,
@@ -26,7 +39,7 @@ app.on('ready', function () {
         y: mainWindowState.y,
         width: mainWindowState.width,
         height: mainWindowState.height,
-        
+
         // Opens hidden, if the state was hidden on closing
         skipTaskbar: mainWindowState.isMinimized,
         show: !mainWindowState.isMinimized
@@ -35,9 +48,13 @@ app.on('ready', function () {
     if (mainWindowState.isMaximized) {
         mainWindow.maximize();
     }
-    
+
     if (mainWindowState.isMinimized) {
         mainWindow.minimize();
+    }
+
+    if (mainWindowState.isHidden) {
+        mainWindow.hide();
     }
 
     if (env.name === 'test') {
@@ -51,8 +68,18 @@ app.on('ready', function () {
         mainWindow.openDevTools();
     }
 
-    mainWindow.on('close', function () {
+    mainWindow.on('close', function (event) {
         mainWindowState.saveState(mainWindow);
+        if (app.forceQuit) {
+            return;
+        }
+        event.preventDefault();
+
+        mainWindow.hide();
+    });
+
+    app.on('activate', function(){
+        mainWindow.show();
     });
 
     mainWindow.webContents.on('will-navigate', function(event) {

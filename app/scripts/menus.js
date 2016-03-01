@@ -6,8 +6,9 @@ import { sidebar } from './sidebar';
 import config from './config';
 import '../branding/branding.js';
 
+var quit = remote.require('./quit');
+
 var Menu = remote.Menu;
-var app = remote.app;
 var APP_NAME = config.name;
 var template;
 
@@ -56,8 +57,7 @@ if (process.platform === 'darwin') {
 					label: 'Quit',
 					accelerator: 'Command+Q',
 					click: function() {
-                        remote.app.forceQuit = true;
-						app.quit();
+						quit.forceQuit();
 					}
 				}
 			]
@@ -170,8 +170,7 @@ if (process.platform === 'darwin') {
 					label: 'Quit',
 					accelerator: 'Ctrl+Q',
 					click: function() {
-                        remote.app.forceQuit = true;
-						app.quit();
+						quit.forceQuit();
 					}
 				}
 			]
