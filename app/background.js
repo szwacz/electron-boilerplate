@@ -25,11 +25,19 @@ app.on('ready', function () {
         x: mainWindowState.x,
         y: mainWindowState.y,
         width: mainWindowState.width,
-        height: mainWindowState.height
+        height: mainWindowState.height,
+        
+        // Opens hidden, if the state was hidden on closing
+        skipTaskbar: mainWindowState.isMinimized,
+        show: !mainWindowState.isMinimized
     });
 
     if (mainWindowState.isMaximized) {
         mainWindow.maximize();
+    }
+    
+    if (mainWindowState.isMinimized) {
+        mainWindow.minimize();
     }
 
     if (env.name === 'test') {
