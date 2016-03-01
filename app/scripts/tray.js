@@ -44,20 +44,21 @@ function createAppTray(mainWindow) {
     }, {
         label: 'Quit',
         click: function() {
+            remote.app.forceQuit = true;
             doQuit();
         }
     }]);
     _tray.setToolTip('Rocket.Chat');
     _tray.setContextMenu(contextMenu);
 
-    if (process.platform === 'darwin') {
-        _tray.on('double-clicked', function() {
+    if (process.platform === 'darwin' || process.platform == 'win32') {
+        _tray.on('double-click', function() {
             toggleShowMainWindow();
         });
     } else {
         let dblClickDelay = 500,
             dblClickTimeoutFct = null;
-        _tray.on('clicked', function() {
+        _tray.on('click', function() {
             if (!dblClickTimeoutFct) {
                 dblClickTimeoutFct = setTimeout(function() {
                     // Single click, do nothing for now
@@ -97,7 +98,6 @@ function showTrayAlert(showAlert, title) {
             _tray.setImage(_iconTrayAlert);
             if (process.platform === 'darwin') {
                 _tray.setTitle(title);
-            //     _tray.setTitle(title);
             }
         } else {
             _tray.setImage(_iconTray);
@@ -145,9 +145,16 @@ bindOnQuit(function() {
     remote.app.quit();
 });
 
-window.addEventListener('beforeunload', function() {
-    destroy();
-});
+// Closes or hides the client
+window.onbeforeunload = function(e) {
+    if(!remote.app.forceQuit) {
+        showMainWindow(false);
+        return false;
+    }
+    else {
+        destroy();
+    }
+}
 
 export default {
     createAppTray: createAppTray,
