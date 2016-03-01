@@ -6,6 +6,7 @@ import path from 'path';
 var Tray = remote.Tray;
 var Menu = remote.Menu;
 
+var quit = remote.require('./quit');
 
 let _tray;
 let _mainWindow = null;
@@ -44,7 +45,7 @@ function createAppTray(mainWindow) {
     }, {
         label: 'Quit',
         click: function() {
-            remote.app.forceQuit = true;
+            quit.forceQuit();
             doQuit();
         }
     }]);
@@ -53,7 +54,7 @@ function createAppTray(mainWindow) {
 
     if (process.platform === 'darwin' || process.platform === 'win32') {
         _tray.on('double-click', function() {
-            toggleShowMainWindow();
+            showMainWindow(true);
         });
     } else {
         let dblClickDelay = 500,
@@ -67,7 +68,7 @@ function createAppTray(mainWindow) {
             } else {
                 clearTimeout(dblClickTimeoutFct);
                 dblClickTimeoutFct = null;
-                toggleShowMainWindow();
+                showMainWindow(true);
             }
         });
     }
@@ -116,21 +117,13 @@ function restoreMainWindow() {
     showMainWindow(true);
 }
 
-function toggleShowMainWindow() {
-    if (_mainWindow !== null && _mainWindow !== undefined) {
-        showMainWindow(_mainWindow.isMinimized());
-    }
-}
-
 function showMainWindow(show) {
     if (_mainWindow !== null && _mainWindow !== undefined) {
         if (show) {
             _mainWindow.restore();
             _mainWindow.show();
-            _mainWindow.setSkipTaskbar(false);
         } else {
             _mainWindow.minimize();
-            _mainWindow.setSkipTaskbar(true);
         }
     }
 }

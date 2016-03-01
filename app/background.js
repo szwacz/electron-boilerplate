@@ -52,18 +52,13 @@ app.on('ready', function () {
     }
 
     mainWindow.on('close', function (event) {
+        mainWindowState.saveState(mainWindow);
         if (app.forceQuit) {
             return;
         }
         event.preventDefault();
 
-        if (process.platform === 'darwin') {
-            mainWindow.hide();
-        } else {
-            mainWindow.minimize();
-            mainWindow.setSkipTaskbar(true);
-        }
-        mainWindowState.saveState(mainWindow);
+        mainWindow.hide();
     });
 
     app.on('activate', function(){
