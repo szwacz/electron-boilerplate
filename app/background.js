@@ -26,7 +26,7 @@ app.on('ready', function () {
         y: mainWindowState.y,
         width: mainWindowState.width,
         height: mainWindowState.height,
-        
+
         // Opens hidden, if the state was hidden on closing
         skipTaskbar: mainWindowState.isMinimized,
         show: !mainWindowState.isMinimized
@@ -35,7 +35,7 @@ app.on('ready', function () {
     if (mainWindowState.isMaximized) {
         mainWindow.maximize();
     }
-    
+
     if (mainWindowState.isMinimized) {
         mainWindow.minimize();
     }
@@ -51,8 +51,23 @@ app.on('ready', function () {
         mainWindow.openDevTools();
     }
 
-    mainWindow.on('close', function () {
+    mainWindow.on('close', function (event) {
+        if (app.forceQuit) {
+            return;
+        }
+        event.preventDefault();
+
+        if (process.platform === 'darwin') {
+            mainWindow.hide();
+        } else {
+            mainWindow.minimize();
+            mainWindow.setSkipTaskbar(true);
+        }
         mainWindowState.saveState(mainWindow);
+    });
+
+    app.on('activate', function(){
+        mainWindow.show();
     });
 
     mainWindow.webContents.on('will-navigate', function(event) {

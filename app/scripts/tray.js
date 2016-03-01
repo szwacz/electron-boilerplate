@@ -51,7 +51,7 @@ function createAppTray(mainWindow) {
     _tray.setToolTip('Rocket.Chat');
     _tray.setContextMenu(contextMenu);
 
-    if (process.platform === 'darwin' || process.platform == 'win32') {
+    if (process.platform === 'darwin' || process.platform === 'win32') {
         _tray.on('double-click', function() {
             toggleShowMainWindow();
         });
@@ -145,16 +145,6 @@ bindOnQuit(function() {
     remote.app.quit();
 });
 
-// Closes or hides the client
-window.onbeforeunload = function(e) {
-    if(!remote.app.forceQuit) {
-        showMainWindow(false);
-        return false;
-    }
-    else {
-        destroy();
-    }
-}
 
 export default {
     createAppTray: createAppTray,
