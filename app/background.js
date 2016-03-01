@@ -13,6 +13,19 @@ import env from './env';
 
 var mainWindow;
 
+var shouldQuit = app.makeSingleInstance(function() {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+        mainWindow.restore();
+        mainWindow.show();
+        mainWindow.focus();
+    }
+});
+
+if (shouldQuit) {
+    app.quit();
+}
+
 // Preserver of the window size and position between app launches.
 var mainWindowState = windowStateKeeper('main', {
     width: 1000,
