@@ -40,6 +40,10 @@ app.on('ready', function () {
         mainWindow.minimize();
     }
 
+    if (mainWindowState.isHidden) {
+        mainWindow.hide();
+    }
+
     if (env.name === 'test') {
         mainWindow.loadURL('file://' + __dirname + '/spec.html');
     } else {

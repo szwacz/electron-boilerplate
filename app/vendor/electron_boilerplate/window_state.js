@@ -26,6 +26,7 @@ export default function (name, defaults) {
         }
         state.isMaximized = win.isMaximized();
         state.isMinimized = win.isMinimized();
+        state.isHidden = !win.isMinimized() && !win.isVisible();
         userDataDir.write(stateStoreFile, state, { atomic: true });
     };
 
@@ -36,6 +37,7 @@ export default function (name, defaults) {
         get height() { return state.height; },
         get isMaximized() { return state.isMaximized; },
         get isMinimized() { return state.isMinimized; },
+        get isHidden() { return state.isHidden; },
         saveState: saveState
     };
 }
