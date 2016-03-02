@@ -168,7 +168,9 @@ class SideBar extends EventEmitter {
 
 		if (badge !== null && badge !== undefined && badge !== '') {
 			item.classList.add('unread');
-			if (!isNaN(parseInt(badge))) {
+			if (isNaN(parseInt(badge))) {
+				badgeEl.innerHTML = '';
+			} else {
 				badgeEl.innerHTML = badge;
 			}
 		} else {
