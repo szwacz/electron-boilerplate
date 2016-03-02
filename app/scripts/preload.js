@@ -164,7 +164,7 @@ const getCorrections = function(text) {
 	});
 
 	// Get the size of biggest array
-	const length = allCorrections.reduce(function(a, b) {
+	const length = allCorrections.length === 0 ? 0 : allCorrections.reduce(function(a, b) {
 		return Math.max(a.length || a, b.length || b);
 	});
 
