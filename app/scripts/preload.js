@@ -167,8 +167,9 @@ const getCorrections = function(text) {
 	});
 
 	// Get the size of biggest array
-	const length = allCorrections.length === 0 ? 0 : allCorrections.reduce(function(a, b) {
-		return Math.max(a.length || a, b.length || b);
+	let length = 0;
+	allCorrections.forEach(function(items) {
+		length = Math.max(length, items.length);
 	});
 
 	// Merge all arrays until the size of the biggest array
