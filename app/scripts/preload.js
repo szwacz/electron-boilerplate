@@ -107,26 +107,123 @@ var getTemplate = function() {
 	];
 };
 
-let lastMisspelledWord;
+let languagesMenu;
+let checker;
+const enabledDictionaries = [];
+let availableDictionaries = [];
+
+if (localStorage.getItem('spellcheckerDictionaries')) {
+	let spellcheckerDictionaries = JSON.parse(localStorage.getItem('spellcheckerDictionaries'));
+	if (Array.isArray(spellcheckerDictionaries)) {
+		enabledDictionaries.push.apply(enabledDictionaries, spellcheckerDictionaries);
+	}
+}
+
+if (localStorage.getItem('userLanguage') && enabledDictionaries.indexOf(localStorage.getItem('userLanguage')) === -1) {
+	enabledDictionaries.push(localStorage.getItem('userLanguage'));
+}
+
+const saveEnabledDictionaries = function() {
+	localStorage.setItem('spellcheckerDictionaries', JSON.stringify(enabledDictionaries));
+};
+
+const isCorrect = function(text) {
+	if (!checker) {
+		return true;
+	}
+
+	let isCorrect = false;
+	enabledDictionaries.forEach(function(enabledDictionary) {
+		if (availableDictionaries.indexOf(enabledDictionary) === -1) {
+			return;
+		}
+
+		checker.setDictionary(enabledDictionary);
+		if (!checker.isMisspelled(text)) {
+			isCorrect = true;
+		}
+	});
+
+	return isCorrect;
+};
+
+const getCorrections = function(text) {
+	// Create an array of arrays of corrections
+	// One array of corrections per language
+	let allCorrections = [];
+	enabledDictionaries.forEach(function(enabledDictionary) {
+		if (availableDictionaries.indexOf(enabledDictionary) === -1) {
+			return;
+		}
+
+		checker.setDictionary(enabledDictionary);
+		const languageCorrections = checker.getCorrectionsForMisspelling(text);
+		if (languageCorrections.length > 0) {
+			allCorrections.push(languageCorrections);
+		}
+	});
+
+	// Get the size of biggest array
+	const length = allCorrections.reduce(function(a, b) {
+		return Math.max(a.length || a, b.length || b);
+	});
+
+	// Merge all arrays until the size of the biggest array
+	// To get the best suggestions of each language first
+	// Ex: [[1,2,3], [a,b]] => [1,a,2,b,3]
+	const corrections = [];
+	for (let i = 0; i < length; i++) {
+		for (var j = 0; j < allCorrections.length; j++) {
+			if (allCorrections[j][i]) {
+				corrections.push(allCorrections[j][i]);
+			}
+		}
+	}
+
+	// Remove duplicateds
+	corrections.forEach(function(item, index) {
+		const dupIndex = corrections.indexOf(item, index+1);
+		if (dupIndex > -1) {
+			corrections.splice(dupIndex, 1);
+		}
+	});
+
+	return corrections;
+};
 
 try {
-	var checker = require('spellchecker');
+	checker = require('spellchecker');
 
-	webFrame.setSpellCheckProvider((localStorage.getItem('userLanguage') || 'en'), false, {
+	availableDictionaries = checker.getAvailableDictionaries();
+
+	if (availableDictionaries.length > 0) {
+		languagesMenu = {
+			label: 'Spelling languages',
+			submenu: []
+		};
+
+		availableDictionaries.forEach((dictionary) => {
+			const menu = {
+				label: dictionary,
+				type: 'checkbox',
+				checked: enabledDictionaries.indexOf(dictionary) > -1,
+				click: function(menuItem) {
+					menu.checked = menuItem.checked;
+					if (menuItem.checked) {
+						enabledDictionaries.push(dictionary);
+					} else {
+						enabledDictionaries.splice(enabledDictionaries.indexOf(dictionary), 1);
+					}
+					saveEnabledDictionaries();
+				}
+			};
+			languagesMenu.submenu.push(menu);
+		});
+	}
+
+	webFrame.setSpellCheckProvider('', false, {
 		spellCheck: function(text) {
-			if (localStorage.getItem('userLanguage') && checker.getAvailableDictionaries().length > 0) {
-				checker.setDictionary(localStorage.getItem('userLanguage'));
-			}
-
-			var isMisspelled = checker.isMisspelled(text);
-
-			if (isMisspelled) {
-				lastMisspelledWord = text;
-			} else {
-				lastMisspelledWord = undefined;
-			}
-
-			return !isMisspelled;
+			return isCorrect(text);
 		}
 	});
 } catch(e) {
@@ -138,12 +235,17 @@ window.addEventListener('contextmenu', function(event){
 
 	const template = getTemplate();
 
+	if (languagesMenu) {
+		template.unshift({ type: 'separator' });
+		template.unshift(languagesMenu);
+	}
+
 	setTimeout(function() {
 		if (['TEXTAREA', 'INPUT'].indexOf(event.target.nodeName) > -1) {
 			const text = window.getSelection().toString().trim();
-			if (text !== '' && checker.isMisspelled(text)) {
-				const options = checker.getCorrectionsForMisspelling(lastMisspelledWord);
-				const maxItems = Math.min(options.length, 5);
+			if (text !== '' && !isCorrect(text)) {
+				const options = getCorrections(text);
+				const maxItems = Math.min(options.length, 6);
 
 				if (maxItems > 0) {
 					const suggestions = [];
