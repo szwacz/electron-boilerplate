@@ -122,8 +122,12 @@ if (localStorage.getItem('spellcheckerDictionaries')) {
 	}
 }
 
-if (localStorage.getItem('userLanguage') && enabledDictionaries.indexOf(localStorage.getItem('userLanguage')) === -1) {
+if (enabledDictionaries.length === 0 && localStorage.getItem('userLanguage')) {
 	enabledDictionaries.push(localStorage.getItem('userLanguage'));
+}
+
+if (enabledDictionaries.length === 0) {
+	enabledDictionaries.push(navigator.language.replace('-', '_'));
 }
 
 const saveEnabledDictionaries = function() {
