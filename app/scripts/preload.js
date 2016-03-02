@@ -74,6 +74,8 @@ var webContents = remote.getCurrentWebContents();
 var Menu = remote.require('menu');
 var menu = new Menu();
 
+var path = remote.require('path');
+
 // set the initial context menu so that a context menu exists even before spellcheck is called
 var getTemplate = function() {
 	return [
@@ -111,6 +113,7 @@ let languagesMenu;
 let checker;
 const enabledDictionaries = [];
 let availableDictionaries = [];
+let dictionariesPath;
 
 if (localStorage.getItem('spellcheckerDictionaries')) {
 	let spellcheckerDictionaries = JSON.parse(localStorage.getItem('spellcheckerDictionaries'));
@@ -119,8 +122,12 @@ if (localStorage.getItem('spellcheckerDictionaries')) {
 	}
 }
 
-if (localStorage.getItem('userLanguage') && enabledDictionaries.indexOf(localStorage.getItem('userLanguage')) === -1) {
-	enabledDictionaries.push(localStorage.getItem('userLanguage'));
+if (enabledDictionaries.length === 0) {
+	if (localStorage.getItem('userLanguage')) {
+		enabledDictionaries.push(localStorage.getItem('userLanguage'));
+	}
+
+	enabledDictionaries.push(navigator.language.replace('-', '_'));
 }
 
 const saveEnabledDictionaries = function() {
@@ -138,7 +145,7 @@ const isCorrect = function(text) {
 			return;
 		}
 
-		checker.setDictionary(enabledDictionary);
+		checker.setDictionary(enabledDictionary, dictionariesPath);
 		if (!checker.isMisspelled(text)) {
 			isCorrect = true;
 		}
@@ -156,7 +163,7 @@ const getCorrections = function(text) {
 			return;
 		}
 
-		checker.setDictionary(enabledDictionary);
+		checker.setDictionary(enabledDictionary, dictionariesPath);
 		const languageCorrections = checker.getCorrectionsForMisspelling(text);
 		if (languageCorrections.length > 0) {
 			allCorrections.push(languageCorrections);
@@ -164,8 +171,9 @@ const getCorrections = function(text) {
 	});
 
 	// Get the size of biggest array
-	const length = allCorrections.length === 0 ? 0 : allCorrections.reduce(function(a, b) {
-		return Math.max(a.length || a, b.length || b);
+	let length = 0;
+	allCorrections.forEach(function(items) {
+		length = Math.max(length, items.length);
 	});
 
 	// Merge all arrays until the size of the biggest array
@@ -196,30 +204,38 @@ try {
 
 	availableDictionaries = checker.getAvailableDictionaries();
 
-	if (availableDictionaries.length > 0) {
-		languagesMenu = {
-			label: 'Spelling languages',
-			submenu: []
-		};
-
-		availableDictionaries.forEach((dictionary) => {
-			const menu = {
-				label: dictionary,
-				type: 'checkbox',
-				checked: enabledDictionaries.indexOf(dictionary) > -1,
-				click: function(menuItem) {
-					menu.checked = menuItem.checked;
-					if (menuItem.checked) {
-						enabledDictionaries.push(dictionary);
-					} else {
-						enabledDictionaries.splice(enabledDictionaries.indexOf(dictionary), 1);
-					}
-					saveEnabledDictionaries();
-				}
-			};
-			languagesMenu.submenu.push(menu);
-		});
+	if (availableDictionaries.length === 0) {
+		dictionariesPath = path.join(remote.app.getAppPath(), '../dictionaries');
+		console.log('dictionariesPath', dictionariesPath);
+		availableDictionaries = [
+			'en_US',
+			'es_ES',
+			'pt_BR'
+		];
 	}
+
+	languagesMenu = {
+		label: 'Spelling languages',
+		submenu: []
+	};
+
+	availableDictionaries.forEach((dictionary) => {
+		const menu = {
+			label: dictionary,
+			type: 'checkbox',
+			checked: enabledDictionaries.indexOf(dictionary) > -1,
+			click: function(menuItem) {
+				menu.checked = menuItem.checked;
+				if (menuItem.checked) {
+					enabledDictionaries.push(dictionary);
+				} else {
+					enabledDictionaries.splice(enabledDictionaries.indexOf(dictionary), 1);
+				}
+				saveEnabledDictionaries();
+			}
+		};
+		languagesMenu.submenu.push(menu);
+	});
 
 	webFrame.setSpellCheckProvider('', false, {
 		spellCheck: function(text) {
