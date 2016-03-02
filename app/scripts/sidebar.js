@@ -71,7 +71,7 @@ class SideBar extends EventEmitter {
 			img.style.display = 'initial';
 			initials.style.display = 'none';
 		};
-		img.src = `${url}/assets/favicon.svg?v=3`;
+		img.src = `${url}/assets/favicon.svg?v=${Math.round(Math.random()*10000)}`;
 
 		var hotkey = document.createElement('div');
 		hotkey.classList.add('name');
