@@ -69,6 +69,9 @@ var finalize = function () {
     // Copy icon
     projectDir.copy('app/images/osx/icon.icns', finalAppDir.path('Contents/Resources/icon.icns'));
 
+    // Copy dictionaries
+    projectDir.copy('dictionaries', finalAppDir.path('Contents/Resources/dictionaries'));
+
     return new Q();
 };
 
