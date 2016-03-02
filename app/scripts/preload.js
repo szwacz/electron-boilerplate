@@ -206,7 +206,6 @@ try {
 
 	if (availableDictionaries.length === 0) {
 		dictionariesPath = path.join(remote.app.getAppPath(), '../dictionaries');
-		console.log('dictionariesPath', dictionariesPath);
 		availableDictionaries = [
 			'en_US',
 			'es_ES',
