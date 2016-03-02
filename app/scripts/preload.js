@@ -122,11 +122,11 @@ if (localStorage.getItem('spellcheckerDictionaries')) {
 	}
 }
 
-if (enabledDictionaries.length === 0 && localStorage.getItem('userLanguage')) {
-	enabledDictionaries.push(localStorage.getItem('userLanguage'));
-}
-
 if (enabledDictionaries.length === 0) {
+	if (localStorage.getItem('userLanguage')) {
+		enabledDictionaries.push(localStorage.getItem('userLanguage'));
+	}
+
 	enabledDictionaries.push(navigator.language.replace('-', '_'));
 }
 
