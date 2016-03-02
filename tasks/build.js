@@ -21,6 +21,7 @@ var paths = {
         './lib/**',
         './spec.js',
         './quit.js',
+        './dictionaries/**',
         './node_modules/**',
         './vendor/**',
         './images/**',
