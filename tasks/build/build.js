@@ -34,26 +34,27 @@ gulp.task('clean', function (callback) {
 
 var copyTask = function () {
     return projectDir.copyAsync('app', destDir.path(), {
-        overwrite: true,
-        matching: paths.copyFromAppDir
-    });
+            overwrite: true,
+            matching: paths.copyFromAppDir
+        });
 };
 gulp.task('copy', ['clean'], copyTask);
 gulp.task('copy-watch', copyTask);
 
+
 var bundleApplication = function () {
     return Q.all([
-        bundle(srcDir.path('background.js'), destDir.path('background.js')),
-        bundle(srcDir.path('app.js'), destDir.path('app.js')),
-    ]);
+            bundle(srcDir.path('background.js'), destDir.path('background.js')),
+            bundle(srcDir.path('app.js'), destDir.path('app.js')),
+        ]);
 };
 
 var bundleSpecs = function () {
-    generateSpecImportsFile().then(function (specEntryPointPath) {
+    return generateSpecImportsFile().then(function (specEntryPointPath) {
         return Q.all([
-            bundle(srcDir.path('background.js'), destDir.path('background.js')),
-            bundle(specEntryPointPath, destDir.path('spec.js')),
-        ]);
+                bundle(srcDir.path('background.js'), destDir.path('background.js')),
+                bundle(specEntryPointPath, destDir.path('spec.js')),
+            ]);
     });
 };
 
@@ -69,8 +70,8 @@ gulp.task('bundle-watch', bundleTask);
 
 var lessTask = function () {
     return gulp.src('app/stylesheets/main.less')
-    .pipe(less())
-    .pipe(gulp.dest(destDir.path('stylesheets')));
+        .pipe(less())
+        .pipe(gulp.dest(destDir.path('stylesheets')));
 };
 gulp.task('less', ['clean'], lessTask);
 gulp.task('less-watch', lessTask);

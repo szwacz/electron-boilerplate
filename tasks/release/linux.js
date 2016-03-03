@@ -107,11 +107,11 @@ var cleanClutter = function () {
 
 module.exports = function () {
     return init()
-    .then(copyRuntime)
-    .then(packageBuiltApp)
-    .then(finalize)
-    .then(renameApp)
-    .then(packToDebFile)
-    .then(cleanClutter)
-    .catch(console.error);
+        .then(copyRuntime)
+        .then(packageBuiltApp)
+        .then(finalize)
+        .then(renameApp)
+        .then(packToDebFile)
+        .then(cleanClutter)
+        .catch(console.error);
 };
