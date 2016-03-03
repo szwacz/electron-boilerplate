@@ -1,4 +1,4 @@
 'use strict';
 
 require('./tasks/build/build');
-require('./tasks/release');
+require('./tasks/release/release');
