@@ -4,7 +4,7 @@ var Q = require('q');
 var gulpUtil = require('gulp-util');
 var jetpack = require('fs-jetpack');
 var asar = require('asar');
-var utils = require('./utils');
+var utils = require('../utils');
 var child_process = require('child_process');
 
 var projectDir;
@@ -135,13 +135,13 @@ var cleanClutter = function () {
 
 module.exports = function () {
     return init()
-    .then(copyRuntime)
-    .then(cleanupRuntime)
-    .then(packageBuiltApp)
-    .then(finalize)
-    .then(renameApp)
-    .then(signApp)
-    .then(packToDmgFile)
-    .then(cleanClutter)
-    .catch(console.error);
+        .then(copyRuntime)
+        .then(cleanupRuntime)
+        .then(packageBuiltApp)
+        .then(finalize)
+        .then(renameApp)
+        .then(signApp)
+        .then(packToDmgFile)
+        .then(cleanClutter)
+        .catch(console.error);
 };
