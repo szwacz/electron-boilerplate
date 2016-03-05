@@ -4,6 +4,7 @@ import { remote } from 'electron';
 import { servers } from './servers';
 import { sidebar } from './sidebar';
 import { webview } from './webview';
+import webFrame from 'web-frame';
 import config from './config';
 import '../branding/branding.js';
 
@@ -105,26 +106,37 @@ if (process.platform === 'darwin') {
 			label: 'View',
 			submenu: [
 				{
-					label: 'Reload current server',
+					label: 'Original Zoom',
+					accelerator: 'Command+0',
+					click: function() {
+						webFrame.setZoomLevel(0);
+					}
+				},
+				{
+					label: 'Zoom In',
+					accelerator: 'Command+=',
+					click: function() {
+						webFrame.setZoomLevel(webFrame.getZoomLevel()+1);
+					}
+				},
+				{
+					label: 'Zoom Out',
+					accelerator: 'Command+-',
+					click: function() {
+						webFrame.setZoomLevel(webFrame.getZoomLevel()-1);
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Reload - current server',
 					accelerator: 'Command+R',
 					click: function() {
 						const activeWebview = webview.getActive();
 						if (activeWebview) {
 							activeWebview.reload();
 						}
-					}
-				},
-				{
-					label: 'Reload application',
-					accelerator: 'Command+Shift+R',
-					click: function() {
-						remote.getCurrentWindow().reload();
-					}
-				},
-				{
-					label: 'Toggle server list',
-					click: function() {
-						sidebar.toggle();
 					}
 				},
 				{
@@ -138,9 +150,28 @@ if (process.platform === 'darwin') {
 					}
 				},
 				{
+					type: 'separator'
+				},
+				{
+					label: 'Reload - application',
+					accelerator: 'Command+Shift+R',
+					click: function() {
+						remote.getCurrentWindow().reload();
+					}
+				},
+				{
 					label: 'Toggle DevTools - application',
 					click: function() {
 						remote.getCurrentWindow().toggleDevTools();
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Toggle server list',
+					click: function() {
+						sidebar.toggle();
 					}
 				}
 			]
@@ -237,26 +268,37 @@ if (process.platform === 'darwin') {
 			label: 'View',
 			submenu: [
 				{
-					label: 'Reload current server',
+					label: 'Original Zoom',
+					accelerator: 'Command+0',
+					click: function() {
+						webFrame.setZoomLevel(0);
+					}
+				},
+				{
+					label: 'Zoom In',
+					accelerator: 'Command+=',
+					click: function() {
+						webFrame.setZoomLevel(webFrame.getZoomLevel()+1);
+					}
+				},
+				{
+					label: 'Zoom Out',
+					accelerator: 'Command+-',
+					click: function() {
+						webFrame.setZoomLevel(webFrame.getZoomLevel()-1);
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Reload - current server',
 					accelerator: 'Ctrl+R',
 					click: function() {
 						const activeWebview = webview.getActive();
 						if (activeWebview) {
 							activeWebview.reload();
 						}
-					}
-				},
-				{
-					label: 'Reload application',
-					accelerator: 'Ctrl+Shift+R',
-					click: function() {
-						remote.getCurrentWindow().reload();
-					}
-				},
-				{
-					label: 'Toggle server list',
-					click: function() {
-						sidebar.toggle();
 					}
 				},
 				{
@@ -270,9 +312,28 @@ if (process.platform === 'darwin') {
 					}
 				},
 				{
+					type: 'separator'
+				},
+				{
+					label: 'Reload - application',
+					accelerator: 'Ctrl+Shift+R',
+					click: function() {
+						remote.getCurrentWindow().reload();
+					}
+				},
+				{
 					label: 'Toggle DevTools - application',
 					click: function() {
 						remote.getCurrentWindow().toggleDevTools();
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Toggle server list',
+					click: function() {
+						sidebar.toggle();
 					}
 				}
 			]
