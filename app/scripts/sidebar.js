@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { remote } from 'electron';
 import { servers } from './servers';
+import { webview } from './webview';
 import { menuTemplate } from './menus';
 
 var Menu = remote.Menu;
@@ -233,6 +234,12 @@ export var sidebar = new SideBar();
 
 var selectedInstance = null;
 var instanceMenu = remote.Menu.buildFromTemplate([{
+	label: 'Reload server',
+	click: function() {
+		const activeWebview = webview.getByUrl(selectedInstance.dataset.host);
+		activeWebview.reload();
+	}
+}, {
 	label: 'Remove server',
 	click: function() {
 		servers.removeHost(selectedInstance.dataset.host);

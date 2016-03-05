@@ -3,6 +3,7 @@
 import { remote } from 'electron';
 import { servers } from './servers';
 import { sidebar } from './sidebar';
+import { webview } from './webview';
 import config from './config';
 import '../branding/branding.js';
 
@@ -104,8 +105,18 @@ if (process.platform === 'darwin') {
 			label: 'View',
 			submenu: [
 				{
-					label: 'Reload',
+					label: 'Reload current server',
 					accelerator: 'Command+R',
+					click: function() {
+						const activeWebview = webview.getActive();
+						if (activeWebview) {
+							activeWebview.reload();
+						}
+					}
+				},
+				{
+					label: 'Reload application',
+					accelerator: 'Command+Shift+R',
 					click: function() {
 						remote.getCurrentWindow().reload();
 					}
@@ -217,8 +228,18 @@ if (process.platform === 'darwin') {
 			label: 'View',
 			submenu: [
 				{
-					label: 'Reload',
+					label: 'Reload current server',
 					accelerator: 'Ctrl+R',
+					click: function() {
+						const activeWebview = webview.getActive();
+						if (activeWebview) {
+							activeWebview.reload();
+						}
+					}
+				},
+				{
+					label: 'Reload application',
+					accelerator: 'Ctrl+Shift+R',
 					click: function() {
 						remote.getCurrentWindow().reload();
 					}
