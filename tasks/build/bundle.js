@@ -6,10 +6,10 @@ var rollup = require('rollup');
 var Q = require('q');
 
 var nodeBuiltInModules = ['assert', 'buffer', 'child_process', 'cluster',
-	'console', 'constants', 'crypto', 'dgram', 'dns', 'domain', 'events',
-	'fs', 'http', 'https', 'module', 'net', 'os', 'path', 'process', 'punycode',
-	'querystring', 'readline', 'repl', 'stream', 'string_decoder', 'timers',
-	'tls', 'tty', 'url', 'util', 'v8', 'vm', 'zlib'];
+    'console', 'constants', 'crypto', 'dgram', 'dns', 'domain', 'events',
+    'fs', 'http', 'https', 'module', 'net', 'os', 'path', 'process', 'punycode',
+    'querystring', 'readline', 'repl', 'stream', 'string_decoder', 'timers',
+    'tls', 'tty', 'url', 'util', 'v8', 'vm', 'zlib'];
 
 var electronBuiltInModules = ['electron'];
 
@@ -39,9 +39,9 @@ module.exports = function (src, dest) {
         // pollute the global namespace.
         var isolatedCode = '(function () {' + result.code + '\n}());';
         return Q.all([
-	            jetpack.writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
-	            jetpack.writeAsync(dest + '.map', result.map.toString()),
-	        ]);
+                jetpack.writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
+                jetpack.writeAsync(dest + '.map', result.map.toString()),
+            ]);
     }).then(function () {
         deferred.resolve();
     }).catch(function (err) {
