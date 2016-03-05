@@ -236,8 +236,7 @@ var selectedInstance = null;
 var instanceMenu = remote.Menu.buildFromTemplate([{
 	label: 'Reload server',
 	click: function() {
-		const activeWebview = webview.getByUrl(selectedInstance.dataset.host);
-		activeWebview.reload();
+		webview.getByUrl(selectedInstance.dataset.host).reload();
 	}
 }, {
 	label: 'Remove server',
@@ -247,7 +246,7 @@ var instanceMenu = remote.Menu.buildFromTemplate([{
 }, {
 	label: 'Open DevTools',
 	click: function() {
-		document.querySelector(`webview[server="${selectedInstance.dataset.host}"]`).openDevTools();
+		webview.getByUrl(selectedInstance.dataset.host).openDevTools();
 	}
 }]);
 

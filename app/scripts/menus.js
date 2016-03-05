@@ -128,8 +128,17 @@ if (process.platform === 'darwin') {
 					}
 				},
 				{
-					label: 'Toggle DevTools',
+					label: 'Toggle DevTools - current server',
 					accelerator: 'Command+Alt+I',
+					click: function() {
+						const activeWebview = webview.getActive();
+						if (activeWebview) {
+							activeWebview.openDevTools();
+						}
+					}
+				},
+				{
+					label: 'Toggle DevTools - application',
 					click: function() {
 						remote.getCurrentWindow().toggleDevTools();
 					}
@@ -251,8 +260,17 @@ if (process.platform === 'darwin') {
 					}
 				},
 				{
-					label: 'Toggle DevTools',
+					label: 'Toggle DevTools - current server',
 					accelerator: 'Ctrl+Shift+I',
+					click: function() {
+						const activeWebview = webview.getActive();
+						if (activeWebview) {
+							activeWebview.openDevTools();
+						}
+					}
+				},
+				{
+					label: 'Toggle DevTools - application',
 					click: function() {
 						remote.getCurrentWindow().toggleDevTools();
 					}
