@@ -211,11 +211,25 @@ if (process.platform === 'darwin') {
 			label: APP_NAME,
 			submenu: [
 				{
+					label: 'About ' + APP_NAME,
+					click: function() {
+						const win = new remote.BrowserWindow({ width: 310, height: 200, minWidth: 310, minHeight: 200, maxWidth: 310, maxHeight: 200, show: false, maximizable: false, minimizable: false, title: ' ' });
+						win.loadURL('file://' + __dirname + '/about.html');
+						win.show();
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
 					label: 'Add new server',
 					accelerator: 'Ctrl+N',
 					click: function() {
 						servers.clearActive();
 					}
+				},
+				{
+					type: 'separator'
 				},
 				{
 					label: 'Quit',
