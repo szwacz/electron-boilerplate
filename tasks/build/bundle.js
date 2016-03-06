@@ -45,7 +45,7 @@ module.exports = function (src, dest) {
     }).then(function () {
         deferred.resolve();
     }).catch(function (err) {
-        console.error('Build: Error during rollup', err.stack);
+        deferred.reject(err);
     });
 
     return deferred.promise;
