@@ -6,11 +6,7 @@ import path from 'path';
 var Tray = remote.Tray;
 var Menu = remote.Menu;
 
-var quit = remote.require('./quit');
-
-let _tray;
-let _mainWindow = null;
-let _callbackOnQuit;
+let mainWindow = remote.getCurrentWindow();
 
 var icons = {
     'win32': {
@@ -30,31 +26,32 @@ var icons = {
 let _iconTray = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].icon || 'icon-tray.png');
 let _iconTrayAlert = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].iconAlert || 'icon-tray-alert.png');
 
-function createAppTray(mainWindow) {
-    _tray = new Tray(_iconTray);
+function createAppTray() {
+    let _tray = new Tray(_iconTray);
     var contextMenu = Menu.buildFromTemplate([{
         label: 'Hide',
         click: function() {
-            showMainWindow(false);
+            mainWindow.hide();
         }
     }, {
         label: 'Show',
         click: function() {
-            showMainWindow(true);
+            mainWindow.restore();
+            mainWindow.show();
         }
     }, {
         label: 'Quit',
         click: function() {
-            quit.forceQuit();
-            doQuit();
+            remote.app.quit();
         }
     }]);
-    _tray.setToolTip('Rocket.Chat');
+    _tray.setToolTip(remote.app.getName());
     _tray.setContextMenu(contextMenu);
 
     if (process.platform === 'darwin' || process.platform === 'win32') {
         _tray.on('double-click', function() {
-            showMainWindow(true);
+            mainWindow.restore();
+            mainWindow.show();
         });
     } else {
         let dblClickDelay = 500,
@@ -68,82 +65,37 @@ function createAppTray(mainWindow) {
             } else {
                 clearTimeout(dblClickTimeoutFct);
                 dblClickTimeoutFct = null;
-                showMainWindow(true);
+                mainWindow.restore();
+                mainWindow.show();
             }
         });
     }
 
-    _mainWindow = mainWindow;
-    _mainWindow.tray = _tray;
-}
-
-function destroy() {
-    if (_tray !== null && _tray !== undefined) {
-        _tray.destroy();
-        _tray = null;
-    }
-    _mainWindow = null;
-    _callbackOnQuit = null;
-}
-
-function doQuit() {
-    if (typeof _callbackOnQuit === 'function') {
-        _callbackOnQuit();
-    }
+    mainWindow = mainWindow;
+    mainWindow.tray = _tray;
 }
 
 function showTrayAlert(showAlert, title) {
-    if ((_tray !== null && _tray !== undefined) && (_mainWindow !== null && _mainWindow !== undefined)) {
-        _mainWindow.flashFrame(showAlert);
-        if (showAlert) {
-            _tray.setImage(_iconTrayAlert);
-            if (process.platform === 'darwin') {
-                _tray.setTitle(title);
-            }
-        } else {
-            _tray.setImage(_iconTray);
-            if (process.platform === 'darwin') {
-                _tray.setTitle('');
-            }
+    if (mainWindow.tray === null || mainWindow.tray === undefined) {
+        return;
+    }
+
+    mainWindow.flashFrame(showAlert);
+    if (showAlert) {
+        mainWindow.tray.setImage(_iconTrayAlert);
+        if (process.platform === 'darwin') {
+            mainWindow.tray.setTitle(title);
+        }
+    } else {
+        mainWindow.tray.setImage(_iconTray);
+        if (process.platform === 'darwin') {
+            mainWindow.tray.setTitle('');
         }
     }
 }
 
-function minimizeMainWindow() {
-    showMainWindow(false);
-}
-
-function restoreMainWindow() {
-    showMainWindow(true);
-}
-
-function showMainWindow(show) {
-    if (_mainWindow !== null && _mainWindow !== undefined) {
-        if (show) {
-            _mainWindow.restore();
-            _mainWindow.show();
-        } else {
-            _mainWindow.minimize();
-        }
-    }
-}
-
-function bindOnQuit(callback) {
-    _callbackOnQuit = callback;
-}
-
-createAppTray(remote.getCurrentWindow());
-
-bindOnQuit(function() {
-    remote.app.quit();
-});
-
+createAppTray();
 
 export default {
-    createAppTray: createAppTray,
-    showTrayAlert: showTrayAlert,
-    minimizeMainWindow: minimizeMainWindow,
-    restoreMainWindow: restoreMainWindow,
-    bindOnQuit: bindOnQuit,
-    destroy: destroy
+    showTrayAlert: showTrayAlert
 };

@@ -68,12 +68,15 @@ app.on('ready', function () {
 
     mainWindow.on('close', function (event) {
         mainWindowState.saveState(mainWindow);
-        if (app.forceQuit) {
+        if (mainWindow.forceClose) {
             return;
         }
         event.preventDefault();
-
         mainWindow.hide();
+    });
+
+    app.on('before-quit', function() {
+        mainWindow.forceClose = true;
     });
 
     app.on('activate', function(){

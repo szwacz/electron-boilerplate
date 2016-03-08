@@ -5,13 +5,10 @@ import { servers } from './servers';
 import { sidebar } from './sidebar';
 import { webview } from './webview';
 import webFrame from 'web-frame';
-import config from './config';
 import '../branding/branding.js';
 
-var quit = remote.require('./quit');
-
 var Menu = remote.Menu;
-var APP_NAME = config.name;
+var APP_NAME = remote.app.getName();
 var template;
 
 document.title = APP_NAME;
@@ -24,16 +21,6 @@ if (process.platform === 'darwin') {
 				{
 					label: 'About ' + APP_NAME,
 					role: 'about'
-				},
-				{
-					type: 'separator'
-				},
-				{
-					label: 'Add new server',
-					accelerator: 'Command+N',
-					click: function() {
-						servers.clearActive();
-					}
 				},
 				{
 					type: 'separator'
@@ -56,10 +43,10 @@ if (process.platform === 'darwin') {
 					type: 'separator'
 				},
 				{
-					label: 'Quit',
+					label: 'Quit ' + APP_NAME,
 					accelerator: 'Command+Q',
 					click: function() {
-						quit.forceQuit();
+						remote.app.quit();
 					}
 				}
 			]
@@ -130,7 +117,7 @@ if (process.platform === 'darwin') {
 					type: 'separator'
 				},
 				{
-					label: 'Reload - current server',
+					label: 'Current Server - Reload',
 					accelerator: 'Command+R',
 					click: function() {
 						const activeWebview = webview.getActive();
@@ -140,7 +127,7 @@ if (process.platform === 'darwin') {
 					}
 				},
 				{
-					label: 'Toggle DevTools - current server',
+					label: 'Current Server - Toggle DevTools',
 					accelerator: 'Command+Alt+I',
 					click: function() {
 						const activeWebview = webview.getActive();
@@ -153,14 +140,18 @@ if (process.platform === 'darwin') {
 					type: 'separator'
 				},
 				{
-					label: 'Reload - application',
+					label: 'Application - Reload',
 					accelerator: 'Command+Shift+R',
 					click: function() {
-						remote.getCurrentWindow().reload();
+						var mainWindow = remote.getCurrentWindow();
+						if (mainWindow.tray) {
+							mainWindow.tray.destroy();
+						}
+						mainWindow.reload();
 					}
 				},
 				{
-					label: 'Toggle DevTools - application',
+					label: 'Application - Toggle DevTools',
 					click: function() {
 						remote.getCurrentWindow().toggleDevTools();
 					}
@@ -179,6 +170,7 @@ if (process.platform === 'darwin') {
 		{
 			label: 'Window',
 			id: 'window',
+			role: 'window',
 			submenu: [
 				{
 					label: 'Minimize',
@@ -199,8 +191,46 @@ if (process.platform === 'darwin') {
 					visible: false
 				},
 				{
+					label: 'Add new server',
+					accelerator: 'Command+N',
+					click: function() {
+						var mainWindow = remote.getCurrentWindow();
+						mainWindow.restore();
+						mainWindow.show();
+						servers.clearActive();
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
 					label: 'Bring All to Front',
-					role: 'front'
+					click: function() {
+						var mainWindow = remote.getCurrentWindow();
+						mainWindow.restore();
+						mainWindow.show();
+					}
+				}
+			]
+		},
+		{
+			label: 'Help',
+			role: 'help',
+			submenu: [
+				{
+					label: APP_NAME + ' Help',
+					click: function() {
+						remote.shell.openExternal('https://rocket.chat/docs');
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Learn More',
+					click: function() {
+						remote.shell.openExternal('https://rocket.chat');
+					}
 				}
 			]
 		}
@@ -222,20 +252,10 @@ if (process.platform === 'darwin') {
 					type: 'separator'
 				},
 				{
-					label: 'Add new server',
-					accelerator: 'Ctrl+N',
-					click: function() {
-						servers.clearActive();
-					}
-				},
-				{
-					type: 'separator'
-				},
-				{
 					label: 'Quit',
 					accelerator: 'Ctrl+Q',
 					click: function() {
-						quit.forceQuit();
+						remote.app.quit();
 					}
 				}
 			]
@@ -306,7 +326,7 @@ if (process.platform === 'darwin') {
 					type: 'separator'
 				},
 				{
-					label: 'Reload - current server',
+					label: 'Current Server - Reload',
 					accelerator: 'Ctrl+R',
 					click: function() {
 						const activeWebview = webview.getActive();
@@ -316,7 +336,7 @@ if (process.platform === 'darwin') {
 					}
 				},
 				{
-					label: 'Toggle DevTools - current server',
+					label: 'Current Server - Toggle DevTools',
 					accelerator: 'Ctrl+Shift+I',
 					click: function() {
 						const activeWebview = webview.getActive();
@@ -329,14 +349,18 @@ if (process.platform === 'darwin') {
 					type: 'separator'
 				},
 				{
-					label: 'Reload - application',
+					label: 'Application - Reload',
 					accelerator: 'Ctrl+Shift+R',
 					click: function() {
-						remote.getCurrentWindow().reload();
+						var mainWindow = remote.getCurrentWindow();
+						if (mainWindow.tray) {
+							mainWindow.tray.destroy();
+						}
+						mainWindow.reload();
 					}
 				},
 				{
-					label: 'Toggle DevTools - application',
+					label: 'Application - Toggle DevTools',
 					click: function() {
 						remote.getCurrentWindow().toggleDevTools();
 					}
@@ -360,6 +384,16 @@ if (process.platform === 'darwin') {
 					type: 'separator',
 					id: 'server-list-separator',
 					visible: false
+				},
+				{
+					label: 'Add new server',
+					accelerator: 'Ctrl+N',
+					click: function() {
+						servers.clearActive();
+					}
+				},
+				{
+					type: 'separator'
 				},
 				{
 					label: 'Close',

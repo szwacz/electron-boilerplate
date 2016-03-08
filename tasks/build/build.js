@@ -20,7 +20,6 @@ var paths = {
         './scripts/**',
         './lib/**',
         './spec.js',
-        './quit.js',
         './app.html',
         './node_modules/**',
         './vendor/**',
