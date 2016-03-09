@@ -16,13 +16,13 @@ var whatToInclude = [
 
 module.exports = function () {
     return srcDir.findAsync('.', { matching: whatToInclude }, 'relativePath')
-    .then(function (specPaths) {
-        var fileContent = specPaths.map(function (path) {
-            return 'import "' + path + '";';
-        }).join('\n');
-        return srcDir.writeAsync(fileName, fileBanner + fileContent);
-    })
-    .then(function () {
-        return srcDir.path(fileName);
-    });
+        .then(function (specPaths) {
+            var fileContent = specPaths.map(function (path) {
+                return 'import "' + path + '";';
+            }).join('\n');
+            return srcDir.writeAsync(fileName, fileBanner + fileContent);
+        })
+        .then(function () {
+            return srcDir.path(fileName);
+        });
 };

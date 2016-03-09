@@ -9,11 +9,20 @@ export default function (name, defaults) {
 
     var userDataDir = jetpack.cwd(app.getPath('userData'));
     var stateStoreFile = 'window-state-' + name +'.json';
-
-    var state = userDataDir.read(stateStoreFile, 'json') || {
+    var state = {
         width: defaults.width,
         height: defaults.height
     };
+
+    try {
+        var loadedState = userDataDir.read(stateStoreFile, 'json');
+        if (loadedState != null) {
+            state = loadedState;
+        }
+    } catch (err) {
+        // For some reason json can't be read.
+        // No worries, we have defaults.
+    }
 
     var saveState = function (win) {
         if (!win.isMaximized() && !win.isMinimized()) {
