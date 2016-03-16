@@ -4,6 +4,7 @@ var pathUtil = require('path');
 var Q = require('q');
 var gulp = require('gulp');
 var less = require('gulp-less');
+var plumber = require('gulp-plumber');
 var jetpack = require('fs-jetpack');
 
 var bundle = require('./bundle');
@@ -70,6 +71,7 @@ gulp.task('bundle-watch', bundleTask);
 
 var lessTask = function () {
     return gulp.src('app/stylesheets/main.less')
+        .pipe(plumber())
         .pipe(less())
         .pipe(gulp.dest(destDir.path('stylesheets')));
 };
