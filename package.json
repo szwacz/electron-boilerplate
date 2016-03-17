@@ -4,9 +4,11 @@
     "electron-prebuilt": "^0.36.0",
     "fs-jetpack": "^0.7.0",
     "gulp": "^3.9.0",
+    "gulp-batch": "^1.0.5",
     "gulp-less": "^3.0.3",
     "gulp-plumber": "^1.1.0",
     "gulp-util": "^3.0.6",
+    "gulp-watch": "^4.3.5",
     "q": "^1.4.1",
     "rollup": "^0.25.4",
     "yargs": "^4.2.0"
