@@ -4,6 +4,9 @@ var pathUtil = require('path');
 var Q = require('q');
 var gulp = require('gulp');
 var less = require('gulp-less');
+var watch = require('gulp-watch');
+var batch = require('gulp-batch');
+var plumber = require('gulp-plumber');
 var jetpack = require('fs-jetpack');
 
 var bundle = require('./bundle');
@@ -70,6 +73,7 @@ gulp.task('bundle-watch', bundleTask);
 
 var lessTask = function () {
     return gulp.src('app/stylesheets/main.less')
+        .pipe(plumber())
         .pipe(less())
         .pipe(gulp.dest(destDir.path('stylesheets')));
 };
@@ -103,9 +107,15 @@ gulp.task('finalize', ['clean'], function () {
 
 
 gulp.task('watch', function () {
-    gulp.watch('app/**/*.js', ['bundle-watch']);
-    gulp.watch(paths.copyFromAppDir, { cwd: 'app' }, ['copy-watch']);
-    gulp.watch('app/**/*.less', ['less-watch']);
+    watch('app/**/*.js', batch(function (events, done) {
+        gulp.start('bundle-watch', done);
+    }));
+    watch(paths.copyFromAppDir, { cwd: 'app' }, batch(function (events, done) {
+        gulp.start('copy-watch', done);
+    }));
+    watch('app/**/*.less', batch(function (events, done) {
+        gulp.start('less-watch', done);
+    }));
 });
 
 
