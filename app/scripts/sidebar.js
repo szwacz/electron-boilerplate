@@ -188,15 +188,16 @@ class SideBar extends EventEmitter {
 	getGlobalBadge() {
 		var count = 0;
 		var alert = '';
-		var badgeEls = this.listElement.querySelectorAll(`li.instance .badge`);
-		for (var i = badgeEls.length - 1; i >= 0; i--) {
-			var badgeEl = badgeEls[i];
-			var text = badgeEl.innerHTML;
+		var instanceEls = this.listElement.querySelectorAll('li.instance');
+		for (var i = instanceEls.length - 1; i >= 0; i--) {
+			var instanceEl = instanceEls[i];
+			var text = instanceEl.querySelector('.badge').innerHTML;
 			if (!isNaN(parseInt(text))) {
 				count += parseInt(text);
 			}
-			if (alert === '' && text === '•') {
-				alert = text;
+
+			if (alert === '' && instanceEl.classList.contains('unread') === true) {
+				alert = '•';
 			}
 		}
 

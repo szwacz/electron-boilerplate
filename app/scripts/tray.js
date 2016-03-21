@@ -89,7 +89,7 @@ function showTrayAlert(showAlert, title) {
     } else {
         mainWindow.tray.setImage(_iconTray);
         if (process.platform === 'darwin') {
-            mainWindow.tray.setTitle('');
+            mainWindow.tray.setTitle(title);
         }
     }
 }
