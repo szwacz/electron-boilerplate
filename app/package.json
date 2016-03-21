@@ -3,7 +3,7 @@
   "productName": "Rocket.Chat+",
   "identifier": "chat.rocket",
   "description": "Rocket.Chat Native Cross-Platform Desktop Application via Electron.",
-  "version": "1.2.0-rc.2",
+  "version": "1.2.0",
   "build": "13",
   "author": "Rocket.Chat Support <support@rocket.chat>",
   "copyright": "© 2016, Rocket.Chat",
