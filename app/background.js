@@ -13,6 +13,21 @@ import env from './env';
 
 var mainWindow;
 
+if (process.platform !== 'darwin') {
+    var shouldQuit = app.makeSingleInstance(function() {
+        // Someone tried to run a second instance, we should focus our window.
+        if (mainWindow) {
+            mainWindow.restore();
+            mainWindow.show();
+            mainWindow.focus();
+        }
+    });
+
+    if (shouldQuit) {
+        app.quit();
+    }
+}
+
 // Preserver of the window size and position between app launches.
 var mainWindowState = windowStateKeeper('main', {
     width: 1000,
@@ -32,6 +47,14 @@ app.on('ready', function () {
         mainWindow.maximize();
     }
 
+    if (mainWindowState.isMinimized) {
+        mainWindow.minimize();
+    }
+
+    if (mainWindowState.isHidden) {
+        mainWindow.hide();
+    }
+
     if (env.name === 'test') {
         mainWindow.loadURL('file://' + __dirname + '/spec.html');
     } else {
@@ -43,8 +66,21 @@ app.on('ready', function () {
         mainWindow.openDevTools();
     }
 
-    mainWindow.on('close', function () {
+    mainWindow.on('close', function (event) {
         mainWindowState.saveState(mainWindow);
+        if (mainWindow.forceClose) {
+            return;
+        }
+        event.preventDefault();
+        mainWindow.hide();
+    });
+
+    app.on('before-quit', function() {
+        mainWindow.forceClose = true;
+    });
+
+    app.on('activate', function(){
+        mainWindow.show();
     });
 
     mainWindow.webContents.on('will-navigate', function(event) {

@@ -3,12 +3,12 @@
 import { remote } from 'electron';
 import { servers } from './servers';
 import { sidebar } from './sidebar';
-import config from './config';
+import { webview } from './webview';
+import webFrame from 'web-frame';
 import '../branding/branding.js';
 
 var Menu = remote.Menu;
-var app = remote.app;
-var APP_NAME = config.name;
+var APP_NAME = remote.app.getName();
 var template;
 
 document.title = APP_NAME;
@@ -21,16 +21,6 @@ if (process.platform === 'darwin') {
 				{
 					label: 'About ' + APP_NAME,
 					role: 'about'
-				},
-				{
-					type: 'separator'
-				},
-				{
-					label: 'Add new server',
-					accelerator: 'Command+N',
-					click: function() {
-						servers.clearActive();
-					}
 				},
 				{
 					type: 'separator'
@@ -53,11 +43,10 @@ if (process.platform === 'darwin') {
 					type: 'separator'
 				},
 				{
-					label: 'Quit',
+					label: 'Quit ' + APP_NAME,
 					accelerator: 'Command+Q',
 					click: function() {
-                        remote.app.forceQuit = true;
-						app.quit();
+						remote.app.quit();
 					}
 				}
 			]
@@ -104,23 +93,76 @@ if (process.platform === 'darwin') {
 			label: 'View',
 			submenu: [
 				{
-					label: 'Reload',
+					label: 'Original Zoom',
+					accelerator: 'Command+0',
+					click: function() {
+						webFrame.setZoomLevel(0);
+					}
+				},
+				{
+					label: 'Zoom In',
+					accelerator: 'Command+=',
+					click: function() {
+						webFrame.setZoomLevel(webFrame.getZoomLevel()+1);
+					}
+				},
+				{
+					label: 'Zoom Out',
+					accelerator: 'Command+-',
+					click: function() {
+						webFrame.setZoomLevel(webFrame.getZoomLevel()-1);
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Current Server - Reload',
 					accelerator: 'Command+R',
 					click: function() {
-						remote.getCurrentWindow().reload();
+						const activeWebview = webview.getActive();
+						if (activeWebview) {
+							activeWebview.reload();
+						}
 					}
+				},
+				{
+					label: 'Current Server - Toggle DevTools',
+					accelerator: 'Command+Alt+I',
+					click: function() {
+						const activeWebview = webview.getActive();
+						if (activeWebview) {
+							activeWebview.openDevTools();
+						}
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Application - Reload',
+					accelerator: 'Command+Shift+R',
+					click: function() {
+						var mainWindow = remote.getCurrentWindow();
+						if (mainWindow.tray) {
+							mainWindow.tray.destroy();
+						}
+						mainWindow.reload();
+					}
+				},
+				{
+					label: 'Application - Toggle DevTools',
+					click: function() {
+						remote.getCurrentWindow().toggleDevTools();
+					}
+				},
+				{
+					type: 'separator'
 				},
 				{
 					label: 'Toggle server list',
 					click: function() {
 						sidebar.toggle();
-					}
-				},
-				{
-					label: 'Toggle DevTools',
-					accelerator: 'Command+Alt+I',
-					click: function() {
-						remote.getCurrentWindow().toggleDevTools();
 					}
 				}
 			]
@@ -128,6 +170,7 @@ if (process.platform === 'darwin') {
 		{
 			label: 'Window',
 			id: 'window',
+			role: 'window',
 			submenu: [
 				{
 					label: 'Minimize',
@@ -148,8 +191,46 @@ if (process.platform === 'darwin') {
 					visible: false
 				},
 				{
+					label: 'Add new server',
+					accelerator: 'Command+N',
+					click: function() {
+						var mainWindow = remote.getCurrentWindow();
+						mainWindow.restore();
+						mainWindow.show();
+						servers.clearActive();
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
 					label: 'Bring All to Front',
-					role: 'front'
+					click: function() {
+						var mainWindow = remote.getCurrentWindow();
+						mainWindow.restore();
+						mainWindow.show();
+					}
+				}
+			]
+		},
+		{
+			label: 'Help',
+			role: 'help',
+			submenu: [
+				{
+					label: APP_NAME + ' Help',
+					click: function() {
+						remote.shell.openExternal('https://rocket.chat/docs');
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Learn More',
+					click: function() {
+						remote.shell.openExternal('https://rocket.chat');
+					}
 				}
 			]
 		}
@@ -160,18 +241,21 @@ if (process.platform === 'darwin') {
 			label: APP_NAME,
 			submenu: [
 				{
-					label: 'Add new server',
-					accelerator: 'Ctrl+N',
+					label: 'About ' + APP_NAME,
 					click: function() {
-						servers.clearActive();
+						const win = new remote.BrowserWindow({ width: 310, height: 200, minWidth: 310, minHeight: 200, maxWidth: 310, maxHeight: 200, show: false, maximizable: false, minimizable: false, title: ' ' });
+						win.loadURL('file://' + __dirname + '/about.html');
+						win.show();
 					}
+				},
+				{
+					type: 'separator'
 				},
 				{
 					label: 'Quit',
 					accelerator: 'Ctrl+Q',
 					click: function() {
-                        remote.app.forceQuit = true;
-						app.quit();
+						remote.app.quit();
 					}
 				}
 			]
@@ -218,23 +302,76 @@ if (process.platform === 'darwin') {
 			label: 'View',
 			submenu: [
 				{
-					label: 'Reload',
+					label: 'Original Zoom',
+					accelerator: 'Command+0',
+					click: function() {
+						webFrame.setZoomLevel(0);
+					}
+				},
+				{
+					label: 'Zoom In',
+					accelerator: 'Command+=',
+					click: function() {
+						webFrame.setZoomLevel(webFrame.getZoomLevel()+1);
+					}
+				},
+				{
+					label: 'Zoom Out',
+					accelerator: 'Command+-',
+					click: function() {
+						webFrame.setZoomLevel(webFrame.getZoomLevel()-1);
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Current Server - Reload',
 					accelerator: 'Ctrl+R',
 					click: function() {
-						remote.getCurrentWindow().reload();
+						const activeWebview = webview.getActive();
+						if (activeWebview) {
+							activeWebview.reload();
+						}
 					}
+				},
+				{
+					label: 'Current Server - Toggle DevTools',
+					accelerator: 'Ctrl+Shift+I',
+					click: function() {
+						const activeWebview = webview.getActive();
+						if (activeWebview) {
+							activeWebview.openDevTools();
+						}
+					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Application - Reload',
+					accelerator: 'Ctrl+Shift+R',
+					click: function() {
+						var mainWindow = remote.getCurrentWindow();
+						if (mainWindow.tray) {
+							mainWindow.tray.destroy();
+						}
+						mainWindow.reload();
+					}
+				},
+				{
+					label: 'Application - Toggle DevTools',
+					click: function() {
+						remote.getCurrentWindow().toggleDevTools();
+					}
+				},
+				{
+					type: 'separator'
 				},
 				{
 					label: 'Toggle server list',
 					click: function() {
 						sidebar.toggle();
-					}
-				},
-				{
-					label: 'Toggle DevTools',
-					accelerator: 'Ctrl+Shift+I',
-					click: function() {
-						remote.getCurrentWindow().toggleDevTools();
 					}
 				}
 			]
@@ -247,6 +384,16 @@ if (process.platform === 'darwin') {
 					type: 'separator',
 					id: 'server-list-separator',
 					visible: false
+				},
+				{
+					label: 'Add new server',
+					accelerator: 'Ctrl+N',
+					click: function() {
+						servers.clearActive();
+					}
+				},
+				{
+					type: 'separator'
 				},
 				{
 					label: 'Close',

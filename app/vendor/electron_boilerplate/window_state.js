@@ -9,11 +9,20 @@ export default function (name, defaults) {
 
     var userDataDir = jetpack.cwd(app.getPath('userData'));
     var stateStoreFile = 'window-state-' + name +'.json';
-
-    var state = userDataDir.read(stateStoreFile, 'json') || {
+    var state = {
         width: defaults.width,
         height: defaults.height
     };
+
+    try {
+        var loadedState = userDataDir.read(stateStoreFile, 'json');
+        if (loadedState != null) {
+            state = loadedState;
+        }
+    } catch (err) {
+        // For some reason json can't be read.
+        // No worries, we have defaults.
+    }
 
     var saveState = function (win) {
         if (!win.isMaximized() && !win.isMinimized()) {
@@ -25,6 +34,8 @@ export default function (name, defaults) {
             state.height = size[1];
         }
         state.isMaximized = win.isMaximized();
+        state.isMinimized = win.isMinimized();
+        state.isHidden = !win.isMinimized() && !win.isVisible();
         userDataDir.write(stateStoreFile, state, { atomic: true });
     };
 
@@ -34,6 +45,8 @@ export default function (name, defaults) {
         get width() { return state.width; },
         get height() { return state.height; },
         get isMaximized() { return state.isMaximized; },
+        get isMinimized() { return state.isMinimized; },
+        get isHidden() { return state.isHidden; },
         saveState: saveState
     };
 }

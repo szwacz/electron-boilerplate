@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8" />
+	<style>
+		html {
+			background-color: #ececec;
+			font-family: helvetica;
+			text-align: center;
+			padding: 10px;
+		}
+
+		body {
+			margin: 0px;
+		}
+
+		img {
+			height: 60px;
+			margin-bottom: 10px;
+		}
+
+		.app-name {
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+		.app-version {
+			font-size: 11px;
+			position: fixed;
+			bottom: 30px;
+			left: 0;
+			right: 0;
+		}
+	</style>
+</head>
+	<body>
+		<img src="images/icon.png">
+		<div class="app-name">
+
+		</div>
+		<div class="app-version">
+
+		</div>
+		<script>
+			var remote = require('remote');
+			document.querySelector('.app-name').innerHTML = remote.app.getName();
+			document.querySelector('.app-version').innerHTML = 'Version '+remote.app.getVersion();
+		</script>
+	</body>
+</html>

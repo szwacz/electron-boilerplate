@@ -1,14 +1,14 @@
 import { EventEmitter } from 'events';
 import { remote } from 'electron';
 import { servers } from './servers';
-import { menu, menuTemplate } from './menus';
+import { webview } from './webview';
+import { menuTemplate } from './menus';
 
-var MenuItem = remote.MenuItem;
 var Menu = remote.Menu;
 
-var windowMenuPosition = menuTemplate.findIndex(function(i) {return i.id === 'window'});
+var windowMenuPosition = menuTemplate.findIndex(function(i) {return i.id === 'window';});
 var windowMenu = menuTemplate[windowMenuPosition];
-var serverListSeparatorPosition = windowMenu.submenu.findIndex(function(i) {return i.id === 'server-list-separator'});
+var serverListSeparatorPosition = windowMenu.submenu.findIndex(function(i) {return i.id === 'server-list-separator';});
 var serverListSeparator = windowMenu.submenu[serverListSeparatorPosition];
 
 class SideBar extends EventEmitter {
@@ -72,7 +72,7 @@ class SideBar extends EventEmitter {
 			img.style.display = 'initial';
 			initials.style.display = 'none';
 		};
-		img.src = `${url}/assets/favicon.svg?v=3`;
+		img.src = `${url}/assets/favicon.svg?v=${Math.round(Math.random()*10000)}`;
 
 		var hotkey = document.createElement('div');
 		hotkey.classList.add('name');
@@ -105,9 +105,12 @@ class SideBar extends EventEmitter {
 		var menuItem = {
 			label: host.title,
 			accelerator: 'CmdOrCtrl+' + this.hostCount,
-			position: "before=server-list-separator",
+			position: 'before=server-list-separator',
 			id: url,
 			click: () => {
+				var mainWindow = remote.getCurrentWindow();
+				mainWindow.restore();
+				mainWindow.show();
 				this.emit('click', host.url);
 				servers.setActive(host.url);
 			}
@@ -122,7 +125,7 @@ class SideBar extends EventEmitter {
 		if (el) {
 			el.remove();
 
-			var index = windowMenu.submenu.findIndex(function(i) {return i.id === hostUrl});
+			var index = windowMenu.submenu.findIndex(function(i) {return i.id === hostUrl;});
 			windowMenu.submenu.splice(index, 1);
 			Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
 		}
@@ -169,7 +172,11 @@ class SideBar extends EventEmitter {
 
 		if (badge !== null && badge !== undefined && badge !== '') {
 			item.classList.add('unread');
-			badgeEl.innerHTML = badge;
+			if (isNaN(parseInt(badge))) {
+				badgeEl.innerHTML = '';
+			} else {
+				badgeEl.innerHTML = badge;
+			}
 		} else {
 			badge = undefined;
 			item.classList.remove('unread');
@@ -181,15 +188,16 @@ class SideBar extends EventEmitter {
 	getGlobalBadge() {
 		var count = 0;
 		var alert = '';
-		var badgeEls = this.listElement.querySelectorAll(`li.instance .badge`);
-		for (var i = badgeEls.length - 1; i >= 0; i--) {
-			var badgeEl = badgeEls[i];
-			var text = badgeEl.innerHTML;
+		var instanceEls = this.listElement.querySelectorAll('li.instance');
+		for (var i = instanceEls.length - 1; i >= 0; i--) {
+			var instanceEl = instanceEls[i];
+			var text = instanceEl.querySelector('.badge').innerHTML;
 			if (!isNaN(parseInt(text))) {
 				count += parseInt(text);
 			}
-			if (alert === '' && text === '•') {
-				alert = text;
+
+			if (alert === '' && instanceEl.classList.contains('unread') === true) {
+				alert = '•';
 			}
 		}
 
@@ -230,6 +238,11 @@ export var sidebar = new SideBar();
 
 var selectedInstance = null;
 var instanceMenu = remote.Menu.buildFromTemplate([{
+	label: 'Reload server',
+	click: function() {
+		webview.getByUrl(selectedInstance.dataset.host).reload();
+	}
+}, {
 	label: 'Remove server',
 	click: function() {
 		servers.removeHost(selectedInstance.dataset.host);
@@ -237,7 +250,7 @@ var instanceMenu = remote.Menu.buildFromTemplate([{
 }, {
 	label: 'Open DevTools',
 	click: function() {
-		document.querySelector(`webview[server="${selectedInstance.dataset.host}"]`).openDevTools();
+		webview.getByUrl(selectedInstance.dataset.host).openDevTools();
 	}
 }]);
 

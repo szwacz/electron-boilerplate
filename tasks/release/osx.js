@@ -4,7 +4,7 @@ var Q = require('q');
 var gulpUtil = require('gulp-util');
 var jetpack = require('fs-jetpack');
 var asar = require('asar');
-var utils = require('./utils');
+var utils = require('../utils');
 var child_process = require('child_process');
 
 var projectDir;
@@ -68,6 +68,9 @@ var finalize = function () {
 
     // Copy icon
     projectDir.copy('app/images/osx/icon.icns', finalAppDir.path('Contents/Resources/icon.icns'));
+
+    // Copy dictionaries
+    projectDir.copy('dictionaries', finalAppDir.path('Contents/Resources/dictionaries'));
 
     return new Q();
 };
@@ -181,13 +184,13 @@ var cleanClutter = function () {
 
 module.exports = function () {
     return init()
-    .then(copyRuntime)
-    .then(cleanupRuntime)
-    .then(packageBuiltApp)
-    .then(finalize)
-    .then(renameApp)
-    .then(signApp)
-    .then(packToDmgFile)
-    .then(cleanClutter)
-    .catch(console.error);
+        .then(copyRuntime)
+        .then(cleanupRuntime)
+        .then(packageBuiltApp)
+        .then(finalize)
+        .then(renameApp)
+        .then(signApp)
+        .then(packToDmgFile)
+        .then(cleanClutter)
+        .catch(console.error);
 };
