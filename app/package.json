@@ -8,6 +8,7 @@
   "copyright": "© 2016, your company here",
   "main": "background.js",
   "dependencies": {
+    "dnode": "^1.2.2",
     "fs-jetpack": "^0.7.0"
   }
 }

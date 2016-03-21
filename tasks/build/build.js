@@ -8,10 +8,24 @@ var watch = require('gulp-watch');
 var batch = require('gulp-batch');
 var plumber = require('gulp-plumber');
 var jetpack = require('fs-jetpack');
+var dnode = require('dnode');
 
 var bundle = require('./bundle');
 var generateSpecImportsFile = require('./generate_spec_imports');
 var utils = require('../utils');
+var ClientReceiver = require('../../app/spec_helpers/client_receiver');
+if (utils.getEnvName() === 'test') {
+    var receiver = new ClientReceiver;
+    var server = dnode({
+        specDone: receiver.specDone.bind(receiver),
+        jasmineDone: () => {
+            setTimeout(() => {
+                receiver.jasmineDone();
+            }, 100);
+        }
+    });
+    server.listen(5004);
+}
 
 var projectDir = jetpack;
 var srcDir = projectDir.cwd('./app');
@@ -21,6 +35,7 @@ var paths = {
     copyFromAppDir: [
         './node_modules/**',
         './vendor/**',
+        './spec_helpers/**',
         './**/*.html',
         './**/*.+(jpg|png|svg)'
     ],

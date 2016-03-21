@@ -24,5 +24,8 @@
     "start": "gulp start",
     "test": "gulp start --env=test",
     "install-native": "node ./tasks/install_native_module"
+  },
+  "dependencies": {
+    "dnode": "^1.2.2"
   }
 }
