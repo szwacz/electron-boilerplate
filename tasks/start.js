@@ -13,3 +13,12 @@ gulp.task('start', ['build', 'watch'], function () {
         process.exit();
     });
 });
+
+gulp.task('test', ['build'], function () {
+    childProcess.spawn(electron, ['./build'], {
+        stdio: 'inherit'
+    })
+    .on('close', function () {
+        process.exit();
+    });
+});

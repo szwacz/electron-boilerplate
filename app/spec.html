@@ -9,6 +9,15 @@
     <script src="vendor/jasmine/jasmine.js"></script>
     <script src="vendor/jasmine/jasmine-html.js"></script>
     <script src="vendor/jasmine/boot.js"></script>
+    <script>
+        var dnode = require('dnode');
+        var ClientReporter = require('./spec_helpers/client_reporter');
+        var clientReporter = new ClientReporter();
+        jasmine.getEnv().addReporter(clientReporter);
+        dnode.connect(5004).on('remote', function(remote) {
+            clientReporter.setEmitter(remote);
+        });
+    </script>
     <script src="spec.js"></script>
 </head>
 <body>
