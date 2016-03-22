@@ -39,8 +39,7 @@ module.exports = function (src, dest) {
         // pollute the global namespace.
         var isolatedCode = '(function () {' + result.code + '\n}());';
         return Q.all([
-                jetpack.writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
-                jetpack.writeAsync(dest + '.map', result.map.toString()),
+                jetpack.writeAsync(dest, isolatedCode)
             ]);
     }).then(function () {
         deferred.resolve();

@@ -9,6 +9,10 @@
     "gulp-plumber": "^1.1.0",
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.3.5",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-electron": "^3.0.3",
+    "karma-jasmine": "^0.3.8",
     "q": "^1.4.1",
     "rollup": "^0.25.4",
     "yargs": "^4.2.0"
@@ -22,7 +26,8 @@
     "build": "gulp build",
     "release": "gulp release --env=production",
     "start": "gulp start",
-    "test": "gulp start --env=test",
+    "pretest": "npm run build",
+    "test": "karma start",
     "install-native": "node ./tasks/install_native_module"
   }
 }
