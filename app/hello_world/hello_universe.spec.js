@@ -1,4 +1,3 @@
-// Default imports test
 import { expect } from 'chai';
 import greet from './hello_universe';
 

@@ -1,4 +1,3 @@
-// Named imports test
 import { expect } from 'chai';
 import { greet, bye } from './hello_world';
 
