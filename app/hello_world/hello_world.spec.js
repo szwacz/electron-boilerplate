@@ -1,14 +1,15 @@
 // Named imports test
+import { expect } from 'chai';
 import { greet, bye } from './hello_world';
 
 describe("hello world", function () {
 
     it("greets", function () {
-        expect(greet()).toBe('Hello World!');
+        expect(greet()).to.equal('Hello World!');
     });
 
     it("says goodbye", function () {
-        expect(bye()).toBe('See ya!');
+        expect(bye()).to.equal('See ya!');
     });
 
 });
