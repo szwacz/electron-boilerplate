@@ -3,10 +3,15 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     browsers: ['Electron'],
     preprocessors: {
-      './build/**/*.spec.js': ['electron', 'jasmine']
+      './jasmine.shim.js': ['electron'],
+      './build/**/*.spec.js': ['electron'],
     },
     files: [
-      { pattern: "./build/**/*.spec.js", watched: true, included: true, served: true }
+      './jasmine.shim.js',
+      './build/**/*.spec.js',
+    ],
+    exclude: [
+      '**/node_modules/**/*.js',
     ]
   });
 };
