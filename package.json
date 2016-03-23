@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "asar": "^0.10.0",
+    "chai": "^3.5.0",
     "electron-prebuilt": "^0.36.0",
     "fs-jetpack": "^0.7.0",
     "gulp": "^3.9.0",
@@ -22,7 +23,8 @@
     "build": "gulp build",
     "release": "gulp release --env=production",
     "start": "gulp start",
-    "test": "gulp start --env=test",
+    "pretest": "gulp build --env=test",
+    "test": "electron-mocha build",
     "install-native": "node ./tasks/install_native_module"
   }
 }
