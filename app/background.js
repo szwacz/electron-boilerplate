@@ -32,11 +32,7 @@ app.on('ready', function () {
         mainWindow.maximize();
     }
 
-    if (env.name === 'test') {
-        mainWindow.loadURL('file://' + __dirname + '/spec.html');
-    } else {
-        mainWindow.loadURL('file://' + __dirname + '/app.html');
-    }
+    mainWindow.loadURL('file://' + __dirname + '/app.html');
 
     if (env.name !== 'production') {
         devHelper.setDevMenu();
