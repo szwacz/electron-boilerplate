@@ -1,15 +1,14 @@
-[comment]: # (Answer below questions about your current setup)
+[instruction]: # (Answer the questions below about your current setup)
 
 * My OS name and version:
 * My current app version:
 
 --
-[comment]: # (Answer below questions checking items [x] )
+[instruction]: # (Answer the questions below by checking items with x, like [x] )
 
 - [ ] I have tested with the latest application version
 - [ ] I can simulate the issue easily
 
 --
-
-[comment]: # (Add more information about your issue below)
+[instruction]: # (Add more information about your issue below)
 
