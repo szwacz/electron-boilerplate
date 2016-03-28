@@ -49,8 +49,8 @@ export default function (name, options) {
     var resetToDefaults = function (windowState) {
         var bounds = screen.getPrimaryDisplay().bounds;
         return Object.assign({}, defaultSize, {
-            x: bounds.x + defaultSize.width - bounds.width / 2,
-            y: bounds.y + defaultSize.height - bounds.height / 2
+            x: (bounds.width - defaultSize.width) / 2,
+            y: (bounds.height - defaultSize.height) / 2
         });
     };
 
