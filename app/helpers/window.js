@@ -67,7 +67,7 @@ export default function (name, options) {
     };
 
     var saveState = function () {
-        if (!win.isMinimized()) {
+        if (!win.isMinimized() && !win.isMaximized()) {
             Object.assign(state, getCurrentPosition());
         }
         userDataDir.write(stateStoreFile, state, { atomic: true });
