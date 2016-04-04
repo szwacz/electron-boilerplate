@@ -16,5 +16,6 @@
     "MAS": "3rd Party Mac Developer Application: Company Name (APPIDENTITY)",
     "MASInstaller": "3rd Party Mac Developer Installer: Company Name (APPIDENTITY)"
   },
+  "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
   "LSApplicationCategoryType": "public.app-category.productivity"
 }
