@@ -1,4 +1,4 @@
-electron-boilerplate
+Rocket.Chat.Electron
 ==============
 Comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).
 
