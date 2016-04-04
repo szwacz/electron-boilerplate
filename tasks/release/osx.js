@@ -97,22 +97,22 @@ var signApp = function () {
             process.exit(0);
         }
         var cmds = [
-            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libffmpeg.dylib"',
-            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libnode.dylib"',
-            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A"',
-            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper.app/"',
-            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper EH.app/"',
-            'codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper NP.app/"'
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements resources/osx/child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libffmpeg.dylib"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements resources/osx/child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A/Libraries/libnode.dylib"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements resources/osx/child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/Electron Framework.framework/Versions/A"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements resources/osx/child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper.app/"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements resources/osx/child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper EH.app/"',
+            'codesign --deep -f -s "' + MASIdentity + '" --entitlements resources/osx/child.plist -v "' + finalAppDir.path() + '/Contents/Frameworks/' + manifest.productName + ' Helper NP.app/"'
         ];
 
         if (finalAppDir.exists('Contents/Frameworks/Squirrel.framework/Versions/A')) {
             // # Signing a non-MAS build.
-            cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/Mantle.framework/Versions/A"');
-            cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/ReactiveCocoa.framework/Versions/A"');
-            cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements child.plist "' + finalAppDir.path() + '/Contents/Frameworks/Squirrel.framework/Versions/A"');
+            cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements resources/osx/child.plist "' + finalAppDir.path() + '/Contents/Frameworks/Mantle.framework/Versions/A"');
+            cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements resources/osx/child.plist "' + finalAppDir.path() + '/Contents/Frameworks/ReactiveCocoa.framework/Versions/A"');
+            cmds.push('codesign --deep -f -s "' + MASIdentity + '" --entitlements resources/osx/child.plist "' + finalAppDir.path() + '/Contents/Frameworks/Squirrel.framework/Versions/A"');
         }
 
-        cmds.push('codesign -f -s "' + MASIdentity + '" --entitlements parent.plist -v "' + finalAppDir.path() + '"');
+        cmds.push('codesign -f -s "' + MASIdentity + '" --entitlements resources/osx/parent.plist -v "' + finalAppDir.path() + '"');
 
         cmds.push('productbuild --component "' + finalAppDir.path() + '" /Applications --sign "' + MASInstallerIdentity + '" "' + releasesDir.path(manifest.productName + '.pkg') + '"');
 
