@@ -118,12 +118,13 @@ var paths = {
 
 #### Unit tests
 
-electron-boilerplate has preconfigured [jasmine](http://jasmine.github.io/2.0/introduction.html) test runner. To run the tests go with standard:
+electron-boilerplate has preconfigured [mocha](https://mochajs.org/) test runner with the [chai](http://chaijs.com/api/assert/) assertion library. To run the tests go with standard:
 ```
 npm test
 ```
 You don't have to declare paths to spec files in any particular place. The runner will search through the project for all `*.spec.js` files and include them automatically.
 
+Those tests can be plugged into [continuous integration system](https://github.com/atom/electron/blob/master/docs/tutorial/testing-on-headless-ci.md).
 
 # Making a release
 
