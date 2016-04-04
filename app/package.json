@@ -1,21 +1,23 @@
 {
   "name": "electron-boilerplate",
   "productName": "Electron Boilerplate",
-  "identifier": "com.example.electron-boilerplate",
   "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
   "version": "0.1.0",
-  "build": "1",
   "author": "Mr Gumby",
   "copyright": "© 2016, your company here",
   "main": "background.js",
   "dependencies": {
     "fs-jetpack": "^0.7.0"
   },
-  "//codeSignIdentitiy": {
-    "dmg": "Developer ID Application: Company Name (APPIDENTITY)",
-    "MAS": "3rd Party Mac Developer Application: Company Name (APPIDENTITY)",
-    "MASInstaller": "3rd Party Mac Developer Installer: Company Name (APPIDENTITY)"
-  },
   "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
-  "LSApplicationCategoryType": "public.app-category.productivity"
+  "osx": {
+    "build": "1",
+    "identifier": "com.example.electron-boilerplate",
+    "LSApplicationCategoryType": "public.app-category.productivity",
+    "//codeSignIdentitiy": {
+      "dmg": "Developer ID Application: Company Name (APPIDENTITY)",
+      "MAS": "3rd Party Mac Developer Application: Company Name (APPIDENTITY)",
+      "MASInstaller": "3rd Party Mac Developer Installer: Company Name (APPIDENTITY)"
+    }
+  }
 }

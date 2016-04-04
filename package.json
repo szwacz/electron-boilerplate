@@ -1,14 +1,18 @@
 {
   "devDependencies": {
     "asar": "^0.10.0",
-    "electron-prebuilt": "^0.36.0",
+    "chai": "^3.5.0",
+    "electron-mocha": "^1.0.0",
+    "electron-prebuilt": "^0.37.4",
     "fs-jetpack": "^0.7.0",
     "gulp": "^3.9.0",
+    "gulp-batch": "^1.0.5",
     "gulp-less": "^3.0.3",
+    "gulp-plumber": "^1.1.0",
     "gulp-util": "^3.0.6",
+    "gulp-watch": "^4.3.5",
     "q": "^1.4.1",
     "rollup": "^0.25.4",
-    "tree-kill": "^0.1.1",
     "yargs": "^4.2.0"
   },
   "optionalDependencies": {
@@ -19,8 +23,9 @@
     "postinstall": "cd app && npm install",
     "build": "gulp build",
     "release": "gulp release --env=production",
-    "start": "node ./tasks/start",
-    "test": "node ./tasks/start --env=test",
+    "start": "gulp start",
+    "pretest": "gulp build --env=test",
+    "test": "electron-mocha build",
     "install-native": "node ./tasks/install_native_module"
   }
 }
