@@ -50,11 +50,11 @@ var finalize = function () {
     var info = projectDir.read('resources/osx/Info.plist');
     info = utils.replace(info, {
         productName: manifest.productName,
-        identifier: manifest.identifier,
+        identifier: manifest.osx.identifier,
         version: manifest.version,
-        build: manifest.build,
+        build: manifest.osx.build,
         copyright: manifest.copyright,
-        LSApplicationCategoryType: manifest.LSApplicationCategoryType
+        LSApplicationCategoryType: manifest.osx.LSApplicationCategoryType
     });
 
     finalAppDir.write('Contents/Info.plist', info);
