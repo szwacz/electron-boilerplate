@@ -149,6 +149,7 @@ npm run release -- --sign A123456789
 
 #### Mac App Store
 **CAUTION**: until [atom/electron/issues#3871](https://github.com/atom/electron/issues/3871) isn't resolved, the signing procedure probably will make your application crash right after run.
+
 You should install the Electron build for MAS
 ```
 export npm_config_platform=mas
