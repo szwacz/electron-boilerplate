@@ -122,14 +122,6 @@ if (localStorage.getItem('spellcheckerDictionaries')) {
 	}
 }
 
-if (enabledDictionaries.length === 0) {
-	if (localStorage.getItem('userLanguage')) {
-		enabledDictionaries.push(localStorage.getItem('userLanguage'));
-	}
-
-	enabledDictionaries.push(navigator.language.replace('-', '_'));
-}
-
 const saveEnabledDictionaries = function() {
 	localStorage.setItem('spellcheckerDictionaries', JSON.stringify(enabledDictionaries));
 };
@@ -211,6 +203,59 @@ try {
 			'es_ES',
 			'pt_BR'
 		];
+	}
+
+	availableDictionaries = availableDictionaries.sort(function(a, b) {
+		if (a > b) {
+			return 1;
+		}
+		if (a < b) {
+			return -1;
+		}
+		return 0;
+	});
+
+	for (var i = enabledDictionaries.length - 1; i >= 0; i--) {
+		if (availableDictionaries.indexOf(enabledDictionaries[i]) === -1) {
+			enabledDictionaries.splice(i, 1);
+		}
+	}
+
+	if (enabledDictionaries.length === 0) {
+		if (localStorage.getItem('userLanguage')) {
+			let userLanguage = localStorage.getItem('userLanguage').replace('-', '_');
+			if (availableDictionaries.indexOf(userLanguage) > -1) {
+				enabledDictionaries.push(userLanguage);
+			}
+			if (userLanguage.indexOf('_') > -1) {
+				userLanguage = userLanguage.split('_')[0];
+				if (availableDictionaries.indexOf(userLanguage) > -1) {
+					enabledDictionaries.push(userLanguage);
+				}
+			}
+		}
+
+		let navigatorLanguage = navigator.language.replace('-', '_');
+		if (availableDictionaries.indexOf(navigatorLanguage) > -1) {
+			enabledDictionaries.push(navigatorLanguage);
+		}
+		if (navigatorLanguage.indexOf('_') > -1) {
+			navigatorLanguage = navigatorLanguage.split('_')[0];
+			if (availableDictionaries.indexOf(navigatorLanguage) > -1) {
+				enabledDictionaries.push(navigatorLanguage);
+			}
+		}
+	}
+
+	if (enabledDictionaries.length === 0) {
+		let defaultLanguage = 'en_US';
+		if (availableDictionaries.indexOf(defaultLanguage) > -1) {
+			enabledDictionaries.push(defaultLanguage);
+		}
+		defaultLanguage = defaultLanguage.split('_')[0];
+		if (availableDictionaries.indexOf(defaultLanguage) > -1) {
+			enabledDictionaries.push(defaultLanguage);
+		}
 	}
 
 	languagesMenu = {
