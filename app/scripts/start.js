@@ -70,7 +70,7 @@ export var start = function() {
                     resolve();
                 }, function(status) {
                     // If the url begins with HTTP, mark as invalid
-                    if (/^http:\/\/.+/.test(host) || status === 'basic-auth') {
+                    if (/^https?:\/\/.+/.test(host) || status === 'basic-auth') {
                         button.value = 'Invalid url';
                         invalidUrl.style.display = 'block';
                         switch (status) {
@@ -89,11 +89,11 @@ export var start = function() {
                         return;
                     }
 
-                    // If the url begins with HTTPS, fallback to HTTP
-                    if (/^https:\/\/.+/.test(host)) {
-                        hostField.value = host.replace('https://', 'http://');
-                        return execValidation();
-                    }
+                    // // If the url begins with HTTPS, fallback to HTTP
+                    // if (/^https:\/\/.+/.test(host)) {
+                    //     hostField.value = host.replace('https://', 'http://');
+                    //     return execValidation();
+                    // }
 
                     // If the url isn't localhost, don't have dots and don't have protocol
                     // try as a .rocket.chat subdomain
