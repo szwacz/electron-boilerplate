@@ -3,7 +3,7 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-import { app, BrowserWindow, dialog } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import devHelper from './vendor/electron_boilerplate/dev_helper';
 import windowStateKeeper from './vendor/electron_boilerplate/window_state';
 import certificate from './certificate';
@@ -18,7 +18,6 @@ if (process.platform !== 'darwin') {
     var shouldQuit = app.makeSingleInstance(function() {
         // Someone tried to run a second instance, we should focus our window.
         if (mainWindow) {
-            mainWindow.restore();
             mainWindow.show();
             mainWindow.focus();
         }

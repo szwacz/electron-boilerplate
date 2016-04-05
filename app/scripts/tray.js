@@ -36,7 +36,6 @@ function createAppTray() {
     }, {
         label: 'Show',
         click: function() {
-            mainWindow.restore();
             mainWindow.show();
         }
     }, {
@@ -50,7 +49,6 @@ function createAppTray() {
 
     if (process.platform === 'darwin' || process.platform === 'win32') {
         _tray.on('double-click', function() {
-            mainWindow.restore();
             mainWindow.show();
         });
     } else {
@@ -65,7 +63,6 @@ function createAppTray() {
             } else {
                 clearTimeout(dblClickTimeoutFct);
                 dblClickTimeoutFct = null;
-                mainWindow.restore();
                 mainWindow.show();
             }
         });

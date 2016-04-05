@@ -112,7 +112,6 @@ class SideBar extends EventEmitter {
 			id: host.url,
 			click: () => {
 				var mainWindow = remote.getCurrentWindow();
-				mainWindow.restore();
 				mainWindow.show();
 				this.emit('click', host.url);
 				servers.setActive(host.url);

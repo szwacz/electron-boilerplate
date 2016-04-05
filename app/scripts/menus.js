@@ -211,7 +211,6 @@ if (process.platform === 'darwin') {
 					accelerator: 'Command+N',
 					click: function() {
 						var mainWindow = remote.getCurrentWindow();
-						mainWindow.restore();
 						mainWindow.show();
 						servers.clearActive();
 					}
@@ -223,7 +222,6 @@ if (process.platform === 'darwin') {
 					label: 'Bring All to Front',
 					click: function() {
 						var mainWindow = remote.getCurrentWindow();
-						mainWindow.restore();
 						mainWindow.show();
 					}
 				}
