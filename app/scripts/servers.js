@@ -1,6 +1,8 @@
 /* globals $ */
 
 import { EventEmitter } from 'events';
+import { remote } from 'electron';
+const remoteServers = remote.require('./servers');
 
 class Servers extends EventEmitter {
 	constructor() {
@@ -61,6 +63,7 @@ class Servers extends EventEmitter {
 		}
 
 		this._hosts = hosts;
+		remoteServers.loadServers(this._hosts);
 		this.emit('loaded');
 	}
 
@@ -93,13 +96,21 @@ class Servers extends EventEmitter {
 				resolved = true;
 				console.log('HostUrl valid', hostUrl);
 				resolve();
-			},function(request) {
+			}, function(request) {
+				if (request.status === 401) {
+					let authHeader = request.getResponseHeader('www-authenticate');
+					if (authHeader && authHeader.toLowerCase().indexOf('basic ') === 0) {
+						resolved = true;
+						console.log('HostUrl needs basic auth', hostUrl);
+						reject('basic-auth');
+					}
+				}
 				if (resolved) {
 					return;
 				}
 				resolved = true;
 				console.log('HostUrl invalid', hostUrl);
-				reject(request.status);
+				reject('invalid');
 			});
 			if (timeout) {
 				setTimeout(function() {
@@ -108,7 +119,7 @@ class Servers extends EventEmitter {
 					}
 					resolved = true;
 					console.log('Validating hostUrl TIMEOUT', hostUrl);
-					reject();
+					reject('timeout');
 				}, timeout);
 			}
 		});
@@ -123,19 +134,35 @@ class Servers extends EventEmitter {
 	addHost(hostUrl) {
 		var hosts = this.hosts;
 
+		let match = hostUrl.match(/^(https?:\/\/)([^:]+):([^@]+)@(.+)$/);
+		let username;
+		let password;
+		let authUrl;
+		if (match) {
+			authUrl = hostUrl;
+			hostUrl = match[1] + match[4];
+			username = match[2];
+			password = match[3];
+		}
+
 		if (this.hostExists(hostUrl) === true) {
 			return false;
 		}
 
 		hosts[hostUrl] = {
 			title: hostUrl,
-			url: hostUrl
+			url: hostUrl,
+			authUrl: authUrl,
+			username: username,
+			password: password
 		};
 		this.hosts = hosts;
 
+		remoteServers.loadServers(this.hosts);
+
 		this.emit('host-added', hostUrl);
 
-		return true;
+		return hostUrl;
 	}
 
 	removeHost(hostUrl) {
@@ -143,6 +170,9 @@ class Servers extends EventEmitter {
 		if (hosts[hostUrl]) {
 			delete hosts[hostUrl];
 			this.hosts = hosts;
+
+			remoteServers.loadServers(this.hosts);
+
 			if (this.active === hostUrl) {
 				this.clearActive();
 			}
@@ -164,7 +194,7 @@ class Servers extends EventEmitter {
 	}
 
 	restoreActive() {
-		servers.setActive(servers.active);
+		this.setActive(this.active);
 	}
 
 	clearActive() {

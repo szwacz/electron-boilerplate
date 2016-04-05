@@ -65,6 +65,10 @@ class WebView extends EventEmitter {
 			}
 		});
 
+		webviewObj.addEventListener('dom-ready', () => {
+			this.emit('dom-ready', host.url);
+		});
+
 		this.webviewParentElement.appendChild(webviewObj);
 
 		webviewObj.src = host.lastPath || host.url;

@@ -6,6 +6,9 @@ module.exports = {
         'node': true,
         'jquery': true
     },
+    'parserOptions': {
+        'sourceType': 'module'
+    },
     'rules': {
         // 'no-alert': 0,
         // 'no-array-constructor': 0,

@@ -68,11 +68,22 @@ export var start = function() {
                     button.value = 'Connect';
                     button.disabled = false;
                     resolve();
-                }, function() {
+                }, function(status) {
                     // If the url begins with HTTP, mark as invalid
-                    if (/^http:\/\/.+/.test(host)) {
+                    if (/^http:\/\/.+/.test(host) || status === 'basic-auth') {
                         button.value = 'Invalid url';
                         invalidUrl.style.display = 'block';
+                        switch (status) {
+                            case 'basic-auth':
+                                invalidUrl.innerHTML = 'Auth needed, try <b>username:password@host</b>';
+                                break;
+                            case 'invalid':
+                                invalidUrl.innerHTML = 'No valid server found at the URL';
+                                break;
+                            case 'timeout':
+                                invalidUrl.innerHTML = 'Timeout trying to connect';
+                                break;
+                        }
                         hostField.classList.add('wrong');
                         reject();
                         return;
@@ -86,7 +97,7 @@ export var start = function() {
 
                     // If the url isn't localhost, don't have dots and don't have protocol
                     // try as a .rocket.chat subdomain
-                    if (!/(^https?:\/\/)|(\.)|(^localhost(:\d+)?$)/.test(host)) {
+                    if (!/(^https?:\/\/)|(\.)|(^([^:]+:[^@]+@)?localhost(:\d+)?$)/.test(host)) {
                         hostField.value = `https://${host}.rocket.chat`;
                         return execValidation();
                     }
@@ -115,11 +126,11 @@ export var start = function() {
                 url = defaultInstance;
             }
 
-            if (servers.addHost(url) === true) {
+            url = servers.addHost(url);
+            if (url !== false) {
                 sidebar.show();
+                servers.setActive(url);
             }
-
-            servers.setActive(url);
 
             input.value = '';
         }, function() {});

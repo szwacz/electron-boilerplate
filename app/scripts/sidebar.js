@@ -43,6 +43,10 @@ class SideBar extends EventEmitter {
 			this.setLabel(hostUrl, title);
 		});
 
+		webview.on('dom-ready', (hostUrl) => {
+			this.setImage(hostUrl);
+		});
+
 		if (this.isHidden()) {
 			this.hide();
 		} else {
@@ -71,7 +75,7 @@ class SideBar extends EventEmitter {
 			img.style.display = 'initial';
 			initials.style.display = 'none';
 		};
-		img.src = `${host.url}/assets/favicon.svg?v=${Math.round(Math.random()*10000)}`;
+		// img.src = `${host.url}/assets/favicon.svg?v=${Math.round(Math.random()*10000)}`;
 
 		var hotkey = document.createElement('div');
 		hotkey.classList.add('name');
@@ -117,6 +121,11 @@ class SideBar extends EventEmitter {
 
 		windowMenu.submenu.push(menuItem);
 		Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+	}
+
+	setImage(hostUrl) {
+		const img = this.getByUrl(hostUrl).querySelector('img');
+		img.src = `${hostUrl}/assets/favicon.svg?v=${Math.round(Math.random()*10000)}`;
 	}
 
 	remove(hostUrl) {
