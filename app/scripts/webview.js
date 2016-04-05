@@ -30,26 +30,26 @@ class WebView extends EventEmitter {
 	}
 
 	add(host) {
-		var webview = this.getByUrl(host.url);
-		if (webview) {
+		var webviewObj = this.getByUrl(host.url);
+		if (webviewObj) {
 			return;
 		}
 
-		webview = document.createElement('webview');
-		webview.setAttribute('server', host.url);
-		webview.setAttribute('preload', './scripts/preload.js');
-		webview.setAttribute('allowpopups', 'on');
-		webview.setAttribute('disablewebsecurity', 'on');
+		webviewObj = document.createElement('webview');
+		webviewObj.setAttribute('server', host.url);
+		webviewObj.setAttribute('preload', './scripts/preload.js');
+		webviewObj.setAttribute('allowpopups', 'on');
+		webviewObj.setAttribute('disablewebsecurity', 'on');
 
-		webview.addEventListener('did-navigate-in-page', (lastPath) => {
+		webviewObj.addEventListener('did-navigate-in-page', (lastPath) => {
 			this.saveLastPath(host.url, lastPath.url);
 		});
 
-		webview.addEventListener('console-message', function(e) {
+		webviewObj.addEventListener('console-message', function(e) {
 			console.log('webview:', e.message);
 		});
 
-		webview.addEventListener('ipc-message', (event) => {
+		webviewObj.addEventListener('ipc-message', (event) => {
 			this.emit('ipc-message-'+event.channel, host.url, event.args);
 
 			switch (event.channel) {
@@ -65,9 +65,9 @@ class WebView extends EventEmitter {
 			}
 		});
 
-		this.webviewParentElement.appendChild(webview);
+		this.webviewParentElement.appendChild(webviewObj);
 
-		webview.src = host.lastPath || host.url;
+		webviewObj.src = host.lastPath || host.url;
 	}
 
 	remove(hostUrl) {
@@ -88,7 +88,7 @@ class WebView extends EventEmitter {
 	}
 
 	getActive() {
-		return document.querySelector(`webview.active`);
+		return document.querySelector('webview.active');
 	}
 
 	isActive(hostUrl) {
@@ -97,7 +97,7 @@ class WebView extends EventEmitter {
 
 	deactiveAll() {
 		var item;
-		while (!!(item = this.getActive())) {
+		while (!(item = this.getActive()) === false) {
 			item.classList.remove('active');
 		}
 	}

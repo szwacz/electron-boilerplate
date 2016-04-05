@@ -20,12 +20,6 @@ export var start = function() {
     var defaultInstance = 'https://demo.rocket.chat';
 
     // connection check
-    if (!navigator.onLine) {
-        offline();
-    }
-    window.addEventListener('online', online);
-    window.addEventListener('offline', offline);
-
     function online() {
         document.body.classList.remove('offline');
     }
@@ -33,6 +27,12 @@ export var start = function() {
     function offline() {
         document.body.classList.add('offline');
     }
+
+    if (!navigator.onLine) {
+        offline();
+    }
+    window.addEventListener('online', online);
+    window.addEventListener('offline', offline);
     // end connection check
 
     var form = document.querySelector('form');
