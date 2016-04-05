@@ -11,6 +11,8 @@ var Menu = remote.Menu;
 var APP_NAME = remote.app.getName();
 var template;
 
+var certificate = remote.require('./certificate');
+
 document.title = APP_NAME;
 
 if (process.platform === 'darwin') {
@@ -164,6 +166,20 @@ if (process.platform === 'darwin') {
 					click: function() {
 						sidebar.toggle();
 					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Clear',
+					submenu: [
+						{
+							label: 'Clear Trusted Certificates',
+							click: function() {
+								certificate.clear();
+							}
+						}
+					]
 				}
 			]
 		},
@@ -373,6 +389,20 @@ if (process.platform === 'darwin') {
 					click: function() {
 						sidebar.toggle();
 					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Clear',
+					submenu: [
+						{
+							label: 'Clear Trusted Certificates',
+							click: function() {
+								certificate.clear();
+							}
+						}
+					]
 				}
 			]
 		},

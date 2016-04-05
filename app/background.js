@@ -3,9 +3,10 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog } from 'electron';
 import devHelper from './vendor/electron_boilerplate/dev_helper';
 import windowStateKeeper from './vendor/electron_boilerplate/window_state';
+import certificate from './certificate';
 
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
@@ -86,6 +87,8 @@ app.on('ready', function () {
     mainWindow.webContents.on('will-navigate', function(event) {
         event.preventDefault();
     });
+
+    certificate.initWindow(mainWindow);
 });
 
 app.on('window-all-closed', function () {

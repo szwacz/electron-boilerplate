@@ -1,6 +1,6 @@
 /* globals $ */
 
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 import { servers } from './servers';
 import { sidebar } from './sidebar';
 import { webview } from './webview';
@@ -114,6 +114,11 @@ export var start = function() {
     }
 
     hostField.addEventListener('blur', function() {
+        validateHost().then(function() {}, function() {});
+    });
+
+    ipcRenderer.on('certificate-reload', function(event, url) {
+        hostField.value = url.replace(/\/api\/info$/, '');
         validateHost().then(function() {}, function() {});
     });
 
