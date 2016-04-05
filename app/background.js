@@ -67,16 +67,22 @@ app.on('ready', function () {
     }
 
     mainWindow.on('close', function (event) {
-        mainWindowState.saveState(mainWindow);
         if (mainWindow.forceClose) {
+            mainWindowState.saveState(mainWindow);
             return;
         }
         event.preventDefault();
         mainWindow.hide();
+        mainWindowState.saveState(mainWindow);
     });
 
     app.on('before-quit', function() {
+        mainWindowState.saveState(mainWindow);
         mainWindow.forceClose = true;
+    });
+
+    app.on('quit', function() {
+        mainWindowState.saveState(mainWindow);
     });
 
     app.on('activate', function(){
