@@ -252,7 +252,7 @@ if (process.platform === 'darwin') {
 } else {
 	template = [
 		{
-			label: APP_NAME,
+			label: '&' + APP_NAME,
 			submenu: [
 				{
 					label: 'About ' + APP_NAME,
@@ -275,7 +275,7 @@ if (process.platform === 'darwin') {
 			]
 		},
 		{
-			label: 'Edit',
+			label: '&Edit',
 			submenu: [
 				{
 					label: 'Undo',
@@ -313,7 +313,7 @@ if (process.platform === 'darwin') {
 			]
 		},
 		{
-			label: 'View',
+			label: '&View',
 			submenu: [
 				{
 					label: 'Original Zoom',
@@ -405,7 +405,7 @@ if (process.platform === 'darwin') {
 			]
 		},
 		{
-			label: 'Window',
+			label: '&Window',
 			id: 'window',
 			submenu: [
 				{
