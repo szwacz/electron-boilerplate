@@ -83,7 +83,11 @@ app.on('ready', function () {
         mainWindow.forceClose = true;
     });
 
-    app.on('quit', function() {
+    mainWindow.on('resize', function() {
+        mainWindowState.saveState(mainWindow);
+    });
+
+    mainWindow.on('move', function() {
         mainWindowState.saveState(mainWindow);
     });
 
