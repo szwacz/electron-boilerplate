@@ -56,7 +56,6 @@ var finalize = function () {
         copyright: manifest.copyright,
         LSApplicationCategoryType: manifest.osx.LSApplicationCategoryType
     });
-
     finalAppDir.write('Contents/Info.plist', info);
 
     // Prepare Info.plist of Helper apps
@@ -145,7 +144,7 @@ var packToDmgFile = function () {
     var deferred = Q.defer();
 
     var appdmg = require('appdmg');
-    var dmgName = manifest.name + '_' + manifest.version + '.dmg';
+    var dmgName = utils.getReleasePackageName(manifest) + '.dmg';
 
     // Prepare appdmg config
     var dmgManifest = projectDir.read('resources/osx/appdmg.json');
@@ -160,7 +159,7 @@ var packToDmgFile = function () {
     // Delete DMG file with this name if already exists
     releasesDir.remove(dmgName);
 
-    gulpUtil.log('Packaging to DMG file...');
+    gulpUtil.log('Packaging to DMG file... (' + dmgName + ')');
 
     var readyDmgPath = releasesDir.path(dmgName);
     appdmg({

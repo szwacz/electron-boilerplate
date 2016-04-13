@@ -24,13 +24,13 @@ var paths = {
         './**/*.html',
         './**/*.+(jpg|png|svg)'
     ],
-}
+};
 
 // -------------------------------------
 // Tasks
 // -------------------------------------
 
-gulp.task('clean', function (callback) {
+gulp.task('clean', function () {
     return destDir.dirAsync('.', { empty: true });
 });
 

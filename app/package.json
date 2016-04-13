@@ -9,6 +9,7 @@
   "dependencies": {
     "fs-jetpack": "^0.7.0"
   },
+  "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
   "osx": {
     "build": "1",
     "identifier": "com.example.electron-boilerplate",
