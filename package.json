@@ -1,7 +1,6 @@
 {
   "devDependencies": {
     "asar": "^0.10.0",
-    "browser-sync": "^2.11.2",
     "chai": "^3.5.0",
     "electron-mocha": "^1.0.0",
     "electron-prebuilt": "^0.37.4",
