@@ -1,3 +1,5 @@
+import { app, BrowserWindow } from 'electron';
+
 export var devMenuTemplate = {
     label: 'Development',
     submenu: [{
