@@ -89,10 +89,10 @@ div.server-list li:before {
 }
 
 .server-list img {
-	width: 70px;
+	width: 50px;
 	height: 50px;
 	top: 5px;
-	left: 5px;
+	left: 15px;
 	position: absolute;
 	display: none;
 	opacity: 0.6;
