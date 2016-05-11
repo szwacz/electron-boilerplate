@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "asar": "^0.10.0",
+    "asar": "^0.11.0",
     "chai": "^3.5.0",
     "electron-mocha": "^1.0.0",
     "electron-prebuilt": "^1.0.1",
@@ -12,7 +12,7 @@
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.3.5",
     "q": "^1.4.1",
-    "rollup": "^0.25.4",
+    "rollup": "^0.26.3",
     "yargs": "^4.2.0"
   },
   "optionalDependencies": {
