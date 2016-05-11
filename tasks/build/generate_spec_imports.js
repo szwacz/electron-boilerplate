@@ -15,10 +15,10 @@ var whatToInclude = [
 ];
 
 module.exports = function () {
-    return srcDir.findAsync('.', { matching: whatToInclude }, 'relativePath')
+    return srcDir.findAsync('.', { matching: whatToInclude })
         .then(function (specPaths) {
             var fileContent = specPaths.map(function (path) {
-                return 'import "' + path + '";';
+                return 'import "./' + path + '";';
             }).join('\n');
             return srcDir.writeAsync(fileName, fileBanner + fileContent);
         })

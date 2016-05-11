@@ -4,7 +4,7 @@
     "chai": "^3.5.0",
     "electron-mocha": "^1.0.0",
     "electron-prebuilt": "^1.0.1",
-    "fs-jetpack": "^0.7.0",
+    "fs-jetpack": "^0.9.0",
     "gulp": "^3.9.0",
     "gulp-batch": "^1.0.5",
     "gulp-less": "^3.0.3",
