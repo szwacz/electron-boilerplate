@@ -32,7 +32,7 @@ module.exports.getReleasePackageName = function(manifest) {
         platform: process.platform,
         arch: process.arch
     });
-}
+};
 
 module.exports.getEnvName = function () {
     return argv.env || 'development';
