@@ -18,7 +18,7 @@ module.exports = function () {
     return srcDir.findAsync('.', { matching: whatToInclude })
         .then(function (specPaths) {
             var fileContent = specPaths.map(function (path) {
-                return 'import "./' + path.replace('\\', '/') + '";';
+                return 'import "./' + path.replace(/\\/g, '/') + '";';
             }).join('\n');
             return srcDir.writeAsync(fileName, fileBanner + fileContent);
         })
