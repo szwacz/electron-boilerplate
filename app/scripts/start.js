@@ -7,8 +7,6 @@ import { webview } from './webview';
 import tray from './tray';
 import './menus';
 
-require('electron-notification-shim')();
-
 sidebar.on('badge-setted', function() {
     var badge = sidebar.getGlobalBadge();
 
