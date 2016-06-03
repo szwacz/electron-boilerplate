@@ -1,22 +1,24 @@
-// Simple module exposes environment variables to rest of the code.
+// Simple module exposing environment variables to rest of the code.
 
 import jetpack from 'fs-jetpack';
 
-let env;
-
-if (process.env.NODE_ENV === 'test') {
-    // For test environment 'normal way' won't work, so grab the variables directly.
-    env = jetpack.cwd(__dirname).read('../config/env_test.json', 'json');
+// Normal way of obtaining env variables: They are written to package.json file.
+var env;
+var app;
+if (process.type === 'renderer') {
+    app = require('electron').remote.app;
 } else {
-    // Normal way of obtaining env variables: They are written to package.json file.
-    let app;
-    if (process.type === 'renderer') {
-        app = require('electron').remote.app;
-    } else {
-        app = require('electron').app;
-    }
-    let appDir = jetpack.cwd(app.getAppPath());
-    env = appDir.read('package.json', 'json').env;
+    app = require('electron').app;
+}
+var appDir = jetpack.cwd(app.getAppPath());
+var manifest = appDir.read('package.json', 'json');
+
+if (manifest && manifest.env) {
+    env = manifest.env;
+} else {
+    // If 'normal way' failed, assume we're in test environment (where normal
+    // way won't work) and grab the variables in a ditry way.
+    env = jetpack.cwd(__dirname).read('../config/env_test.json', 'json');
 }
 
 export default env;
