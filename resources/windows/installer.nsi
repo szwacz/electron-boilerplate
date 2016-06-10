@@ -7,6 +7,8 @@
 
 !include LogicLib.nsh
 !include nsDialogs.nsh
+!include FileFunc.nsh
+!insertmacro GetParameters
 
 ; --------------------------------
 ;  Variables
@@ -81,12 +83,18 @@ Var LaunchAppCheckbox_State
 ;   --------------------------------
 
 Function .onInit
+    ; Set installer to silent if /silent switch was provided
+    ${GetParameters} $R0
+    ${GetOptionsS} $R0 "/silent" $0
+    IfErrors +2 0
+      SetSilent silent
+    ClearErrors
 
     ; Extract banner image for welcome page
     InitPluginsDir
     ReserveFile "${banner}"
     File /oname=$PLUGINSDIR\banner.bmp "${banner}"
-    
+
     ; Check if the application is currently running, show message if it is
     retryInstallation:
     FindWindow $0 "Chrome_WidgetWin_1" "${productName}"
@@ -125,7 +133,7 @@ Section "${productName} Client"
 
     ; Make this section a requirement
     SectionIn RO
-    
+
     WriteRegStr HKLM "${regkey}" "Install_Dir" "$INSTDIR"
     WriteRegStr HKLM "${uninstkey}" "DisplayName" "${productName}"
     WriteRegStr HKLM "${uninstkey}" "DisplayIcon" '"$INSTDIR\icon.ico"'
@@ -149,14 +157,14 @@ Section "Desktop shortcut"
 
     ; Create desktop shortcut
     CreateShortCut "$DESKTOP\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
-    
+
 SectionEnd
 
 Section "Autostart Entry"
 
     ; Create autostart entry
     CreateShortCut "$SMSTARTUP\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
-    
+
 SectionEnd
 
 Section "Start Menu Entry"
@@ -164,7 +172,7 @@ Section "Start Menu Entry"
     ; Create start menu entry
     SetShellVarContext all
     CreateShortCut "$SMPROGRAMS\${productName}.lnk" "$INSTDIR\${exec}" "" "$INSTDIR\icon.ico"
-    
+
 SectionEnd
 
 ;   --------------------------------
@@ -277,14 +285,14 @@ Section "Uninstall"
 
     ; Remove desktop shortcut
     Delete "$DESKTOP\${productName}.lnk"
-    
+
     ; Remove autostart entry
     Delete "$SMSTARTUP\${productName}.lnk"
-    
+
     ; Remove start menu entry
     SetShellVarContext all
     Delete "$SMPROGRAMS\${productName}.lnk"
-    
+
     ; Remove whole directory from installation directory
     RMDir /r "$INSTDIR"
 
