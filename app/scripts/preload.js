@@ -287,7 +287,7 @@ try {
 		}
 	});
 } catch(e) {
-	console.log('Spellchecker unavailable');
+	console.log('spellchecker module unavailable');
 }
 
 window.addEventListener('contextmenu', function(event){
