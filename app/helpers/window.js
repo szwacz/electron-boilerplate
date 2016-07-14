@@ -35,7 +35,8 @@ export default function (name, options) {
             x: position[0],
             y: position[1],
             width: size[0],
-            height: size[1]
+            height: size[1],
+			maximized: win.isMaximized()
         };
     };
 
@@ -65,18 +66,28 @@ export default function (name, options) {
         }
         return windowState;
     };
+	
+	function updateState() {
+		if (win.isMaximized()) {
+			state.maximized = true;
+		} else if (!win.isMinimized()) {
+            Object.assign(state, getCurrentPosition());
+		}
+	}
 
     var saveState = function () {
-        if (!win.isMinimized() && !win.isMaximized()) {
-            Object.assign(state, getCurrentPosition());
-        }
+		updateState();
         userDataDir.write(stateStoreFile, state, { atomic: true });
     };
 
     state = ensureVisibleOnSomeDisplay(restore());
 
     win = new BrowserWindow(Object.assign({}, options, state));
-
+	if (state.maximized)
+		win.maximize();
+	
+	win.on('move', updateState);
+	win.on('resize', updateState);
     win.on('close', saveState);
 
     return win;
