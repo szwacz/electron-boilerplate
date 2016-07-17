@@ -2,6 +2,9 @@
   "build": {
     "appId": "com.example.electron-boilerplate",
     "app-category-type": "your.app.category.type",
+    "win": {
+      "icon": "resources/windows/icon.ico"
+    },
     "mac": {
       "icon": "resources/osx/icon.icns"
     },
