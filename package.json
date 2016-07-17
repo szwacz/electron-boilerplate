@@ -17,7 +17,6 @@
     "app": "build"
   },
   "devDependencies": {
-    "asar": "^0.11.0",
     "chai": "^3.5.0",
     "electron-builder": "^5.12.1",
     "electron-mocha": "^2.0.0",
@@ -32,9 +31,6 @@
     "q": "^1.4.1",
     "rollup": "^0.26.3",
     "yargs": "^4.2.0"
-  },
-  "optionalDependencies": {
-    "rcedit": "^0.5.0"
   },
   "scripts": {
     "postinstall": "cd app && npm install",
