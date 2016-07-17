@@ -54,9 +54,11 @@ SubCaption 4 " "
 
 Page custom welcome
 Page instfiles
+Page custom finishfull endInstall
 
 Var Image
 Var ImageHandle
+Var cbox
 
 Function .onInit
 
@@ -111,6 +113,21 @@ Section "Install"
     WriteUninstaller "${uninstaller}"
 
 SectionEnd
+
+Function finishfull
+    nsDialogs::Create 1018
+    ${NSD_CreateLabel} 7.9u 14.77u 234.99u 14.15u "You have succesfully installed ${productName}"
+    ${NSD_CreateCheckbox} 7.9u 30.77u 169.16u 14.77u "Start ${productName}"
+        Pop $cbox
+    nsDialogs::Show
+FunctionEnd
+
+Function endInstall
+    ${NSD_GetState} $cbox $0
+    ${If} $0 == 1
+        Exec "$INSTDIR\${exec}"
+    ${EndIf}
+FunctionEnd
 
 ; --------------------------------
 ; Uninstaller
