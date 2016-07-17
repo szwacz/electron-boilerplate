@@ -1,7 +1,22 @@
 {
+  "build": {
+    "appId": "com.example.electron-boilerplate",
+    "app-category-type": "your.app.category.type",
+    "mac": {
+      "icon": "resources/osx/icon.icns"
+    },
+    "dmg": {
+      "icon": "resources/osx/dmg-icon.icns",
+      "background": "resources/osx/dmg-background.png"
+    }
+  },
+  "directories": {
+    "app": "build"
+  },
   "devDependencies": {
     "asar": "^0.11.0",
     "chai": "^3.5.0",
+    "electron-builder": "^5.12.1",
     "electron-mocha": "^2.0.0",
     "electron-prebuilt": "^1.0.1",
     "fs-jetpack": "^0.9.0",
@@ -16,13 +31,13 @@
     "yargs": "^4.2.0"
   },
   "optionalDependencies": {
-    "appdmg": "^0.3.2",
     "rcedit": "^0.5.0"
   },
   "scripts": {
     "postinstall": "cd app && npm install",
     "build": "gulp build",
-    "release": "gulp release --env=production",
+    "prerelease": "gulp build --env=production",
+    "release": "build --x64 --publish never",
     "start": "gulp start",
     "pretest": "gulp build --env=test",
     "test": "electron-mocha build --renderer",
