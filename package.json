@@ -40,7 +40,6 @@
     "release": "build --x64 --publish never",
     "start": "gulp start",
     "pretest": "gulp build --env=test",
-    "test": "electron-mocha build --renderer",
-    "install-native": "node ./tasks/install_native_module"
+    "test": "electron-mocha build --renderer"
   }
 }
