@@ -5,6 +5,11 @@
     "win": {
       "icon": "resources/windows/icon.ico"
     },
+    "nsis": {
+        "oneClick": "true",
+        "installerHeader": "resources/windows/setup-banner.bmp",
+        "installerHeaderIcon": "resources/windows/setup-icon.ico"
+    },
     "mac": {
       "icon": "resources/osx/icon.icns"
     },
