@@ -1,16 +1,10 @@
 electron-boilerplate
 ==============
-Comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).  
+Minimalistic yet comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).  
 
-Scope of this project:
+Provides cross-platform development environment, which works the same way on OSX, Windows and Linux, and allows you to generate ready for distribution installers of your app for those three operating systems.
 
-- Provide basic structure of the application so you can much easier grasp what should go where.
-- Give you cross-platform development environment, which works the same way on OSX, Windows and Linux.
-- Generate ready for distribution installers of your app for all three operating systems.
-
-Not in the scope:
-
-- Imposing on you any framework (e.g. Angular, React). You can integrate the one which makes most sense for you.
+At the same time this boilerplate does not impose on you any framework (like Angular or React). Tries to give you only the 'electron' part of technology stack so you can pick your favorite tools for 'the actual app' part.
 
 # Quick start
 The only development dependency of this project is [Node.js](https://nodejs.org). So just make sure you have it installed.
@@ -33,7 +27,7 @@ Sits on path: `electron-boilerplate/package.json`. Here you declare dependencies
 Also here you declare the version of Electron runtime you want to use:
 ```json
 "devDependencies": {
-  "electron-prebuilt": "^0.34.0"
+  "electron-prebuilt": "^1.2.0"
 }
 ```
 
@@ -44,32 +38,22 @@ Sits on path: `electron-boilerplate/app/package.json`. This is **real** manifest
 1. Native npm modules (those written in C, not JavaScript) need to be compiled, and here we have two different compilation targets for them. Those used in application need to be compiled against electron runtime, and all `devDependencies` need to be compiled against your locally installed node.js. Thanks to having two files this is trivial.
 2. When you package the app for distribution there is no need to add up to size of the app with your `devDependencies`. Here those are always not included (because reside outside the `app` directory).
 
-### Project's folders
-
-- `app` - code of your application goes here.
-- `config` - place where you can declare environment specific stuff for your app.
-- `build` - in this folder lands built, runnable application.
-- `dist` - ready for distribution installers will land here.
-- `resources` - resources needed for particular operating system.
-- `tasks` - build and development environment scripts.
-
-
 # Development
 
-#### Installation
+### Installation
 
 ```
 npm install
 ```
 It will also download Electron runtime, and install dependencies for second `package.json` file inside `app` folder.
 
-#### Starting the app
+### Starting the app
 
 ```
 npm start
 ```
 
-#### Adding npm modules to your app
+### Adding npm modules to your app
 
 Remember to add your dependency to `app/package.json` file, so do:
 ```
@@ -77,9 +61,9 @@ cd app
 npm install name_of_npm_module --save
 ```
 
-#### Working with modules
+### Working with modules
 
-How about being future proof and using ES6 modules all the time in your app? Thanks to [rollup](https://github.com/rollup/rollup) you can do that. It will transpile the imports to proper `require()` statements, so even though ES6 modules aren't natively supported yet you can start using them today.
+How about being future proof and using ES6 modules everywhere in your app? Thanks to [rollup](https://github.com/rollup/rollup) you can do that. It will transpile the imports to proper `require()` statements, so even though ES6 modules aren't natively supported yet you can start using them today.
 
 You can use it on those kinds of modules:
 ```js
@@ -93,7 +77,7 @@ import { app } from 'electron';
 import moment from 'moment';
 ```
 
-#### Including files to your project
+### Including files to your project
 
 The build script copies files from `app` to `build` directory and the application is started from `build`. Therefore if you want to use any special file/folder in your app make sure it will be copied via some of glob patterns in `tasks/build/build.js`:
 
@@ -108,7 +92,7 @@ var paths = {
 }
 ```
 
-#### Unit tests
+## Unit tests
 
 electron-boilerplate has preconfigured [mocha](https://mochajs.org/) test runner with the [chai](http://chaijs.com/api/assert/) assertion library. To run the tests go with standard:
 ```
