@@ -3,7 +3,12 @@
     "appId": "com.example.electron-boilerplate",
     "app-category-type": "your.app.category.type",
     "win": {
+      "target": ["nsis"],
       "icon": "resources/windows/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "installerHeaderIcon": "resources/windows/setup-icon.ico"
     },
     "mac": {
       "icon": "resources/osx/icon.icns"
