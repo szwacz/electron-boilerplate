@@ -5,19 +5,10 @@
   "version": "0.1.0",
   "author": "Mr. Gumby <mr.gumby@example.com>",
   "copyright": "© 2016, your company here",
+  "homepage": "http://example.org",
+  "license": "MIT",
   "main": "background.js",
   "dependencies": {
     "fs-jetpack": "^0.9.0"
-  },
-  "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
-  "osx": {
-    "build": "1",
-    "identifier": "com.example.electron-boilerplate",
-    "LSApplicationCategoryType": "public.app-category.productivity",
-    "//codeSignIdentitiy": {
-      "dmg": "Developer ID Application: Company Name (APPIDENTITY)",
-      "MAS": "3rd Party Mac Developer Application: Company Name (APPIDENTITY)",
-      "MASInstaller": "3rd Party Mac Developer Installer: Company Name (APPIDENTITY)"
-    }
   }
 }
