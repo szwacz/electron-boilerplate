@@ -39,13 +39,12 @@
     "yargs": "^4.2.0"
   },
   "scripts": {
-    "postinstall": "cd app && npm install",
+    "postinstall": "install-app-deps",
     "build": "gulp build",
     "prerelease": "gulp build --env=production",
     "release": "build --x64 --publish never",
     "start": "gulp start",
     "pretest": "gulp build --env=test",
-    "test": "electron-mocha build --renderer",
-    "install-native": "node ./tasks/install_native_module"
+    "test": "electron-mocha build --renderer"
   }
 }
