@@ -1,11 +1,11 @@
 {
   "name": "electron-boilerplate",
   "productName": "Electron Boilerplate",
-  "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
-  "version": "0.1.0",
+  "description": "Starter for your Electron application",
+  "version": "0.0.0",
   "author": "Mr. Gumby <mr.gumby@example.com>",
-  "copyright": "© 2016, your company here",
-  "homepage": "http://example.org",
+  "copyright": "© 2016, Gumby inc.",
+  "homepage": "http://example.com",
   "license": "MIT",
   "main": "background.js",
   "dependencies": {
