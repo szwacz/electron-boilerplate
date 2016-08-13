@@ -19,8 +19,7 @@
     }
   },
   "directories": {
-    "buildResources": "resources",
-    "app": "build"
+    "buildResources": "resources"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -39,12 +38,12 @@
     "yargs": "^4.2.0"
   },
   "scripts": {
-    "postinstall": "install-app-deps",
+    "postinstall": "gulp build && install-app-deps",
     "build": "gulp build",
     "prerelease": "gulp build --env=production",
     "release": "build --x64 --publish never",
     "start": "gulp start",
     "pretest": "gulp build --env=test",
-    "test": "electron-mocha build --renderer"
+    "test": "electron-mocha app --renderer"
   }
 }

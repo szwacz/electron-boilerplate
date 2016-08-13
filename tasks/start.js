@@ -5,7 +5,7 @@ var electron = require('electron-prebuilt');
 var gulp = require('gulp');
 
 gulp.task('start', ['build', 'watch'], function () {
-    childProcess.spawn(electron, ['./build'], {
+    childProcess.spawn(electron, ['./app'], {
         stdio: 'inherit'
     })
     .on('close', function () {

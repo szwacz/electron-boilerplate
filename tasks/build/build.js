@@ -14,12 +14,11 @@ var generateSpecImportsFile = require('./generate_spec_imports');
 var utils = require('../utils');
 
 var projectDir = jetpack;
-var srcDir = projectDir.cwd('./app');
-var destDir = projectDir.cwd('./build');
+var srcDir = projectDir.cwd('./src');
+var destDir = projectDir.cwd('./app');
 
 var paths = {
-    copyFromAppDir: [
-        './node_modules/**',
+    copyFromSrcDir: [
         './helpers/**',
         './**/*.html',
         './**/*.+(jpg|png|svg)'
@@ -31,14 +30,21 @@ var paths = {
 // -------------------------------------
 
 gulp.task('clean', function () {
-    return destDir.dirAsync('.', { empty: true });
+    return destDir.dirAsync('.')
+    .then(function () {
+        return destDir.findAsync({ matching: '!node_modules' });
+    })
+    .then(function (found) {
+        var removingPromises = found.map(destDir.removeAsync);
+        return Q.all(removingPromises);
+    });
 });
 
 
 var copyTask = function () {
-    return projectDir.copyAsync('app', destDir.path(), {
+    return projectDir.copyAsync(srcDir.path(), destDir.path(), {
             overwrite: true,
-            matching: paths.copyFromAppDir
+            matching: paths.copyFromSrcDir
         });
 };
 gulp.task('copy', ['clean'], copyTask);
@@ -69,7 +75,7 @@ gulp.task('bundle-watch', bundleTask);
 
 
 var lessTask = function () {
-    return gulp.src('app/stylesheets/main.less')
+    return gulp.src(srcDir.path('stylesheets/main.less'))
         .pipe(plumber())
         .pipe(less())
         .pipe(gulp.dest(destDir.path('stylesheets')));
@@ -99,13 +105,13 @@ gulp.task('package-json', ['clean'], function () {
 
 
 gulp.task('watch', function () {
-    watch('app/**/*.js', batch(function (events, done) {
+    watch('src/**/*.js', batch(function (events, done) {
         gulp.start('bundle-watch', done);
     }));
-    watch(paths.copyFromAppDir, { cwd: 'app' }, batch(function (events, done) {
+    watch(paths.copyFromSrcDir, { cwd: 'src' }, batch(function (events, done) {
         gulp.start('copy-watch', done);
     }));
-    watch('app/**/*.less', batch(function (events, done) {
+    watch('src/**/*.less', batch(function (events, done) {
         gulp.start('less-watch', done);
     }));
 });
