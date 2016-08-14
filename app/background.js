@@ -128,6 +128,13 @@ var setApplicationMenu = function () {
     electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(menus));
 };
 
+if (env.name !== 'production') {
+    var userDataPath = electron.app.getPath('userData');
+    console.log(userDataPath);
+    electron.app.setPath('userData', userDataPath + ' (' + env.name + ')');
+    console.log(electron.app.getPath('userData'));
+}
+
 electron.app.on('ready', function () {
     setApplicationMenu();
 

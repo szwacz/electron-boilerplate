@@ -4,8 +4,8 @@
 // window from here.
 
 import { app, Menu } from 'electron';
-import { devMenuTemplate } from './helpers/dev_menu_template';
-import { editMenuTemplate } from './helpers/edit_menu_template';
+import { devMenuTemplate } from './menu/dev_menu_template';
+import { editMenuTemplate } from './menu/edit_menu_template';
 import createWindow from './helpers/window';
 
 // Special module holding environment variables which you declared
@@ -21,6 +21,14 @@ var setApplicationMenu = function () {
     }
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
+
+// Save userData in separate folders for each environment.
+// Thanks to this you can use production and development versions of the app
+// on same machine like those are two separate apps.
+if (env.name !== 'production') {
+    var userDataPath = app.getPath('userData');
+    app.setPath('userData', userDataPath + ' (' + env.name + ')');
+}
 
 app.on('ready', function () {
     setApplicationMenu();
