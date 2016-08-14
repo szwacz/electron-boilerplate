@@ -45,7 +45,7 @@ Sits on path: `electron-boilerplate/app/package.json`. This is **real** manifest
 
 The applicaiton is split between two main folders...
 
-`src` - this folder is intended for files which need to be transpiled or compiled (can't be used directly by electron).
+`src` - this folder is intended for files which need to be transpiled or compiled (files which can't be used directly by electron).
 
 `app` - contains all static assets (put here images, css, html etc.) which don't need any pre-processing.
 
@@ -53,7 +53,7 @@ Build process compiles all stuff from `src` folder and puts it into `app` folder
 
 Treat `src` and `app` folders like two halves of one bigger thing.
 
-Drawback of this design is that `app` folder contains some files which should be git-ignored and some which should not (see `.gitignore` file). But much faster development builds are worth it.
+Drawback of this design is that `app` folder contains some files which should be git-ignored and some which should not (see `.gitignore` file). But thanks to this split development builds are much much faster.
 
 # Development
 
@@ -80,9 +80,9 @@ npm install name_of_npm_module --save
 
 ### Working with modules
 
-Thanks to [rollup](https://github.com/rollup/rollup) you can and should be using ES6 modules for all code in `src` folder. But because it's still not natively supported you can't use it in `app` folder.
+Thanks to [rollup](https://github.com/rollup/rollup) you can (and should) use ES6 modules for all code in `src` folder. But because ES6 modules still aren't natively supported you can't use it in `app` folder.
 
-So file in `src` folder do this:
+So for file in `src` folder do this:
 ```js
 import myStuff from './my_lib/my_stuff';
 ```
@@ -114,7 +114,7 @@ It will start the packaging process for operating system you are running this co
 
 You can create Windows installer only when running on Windows, the same is true for Linux and OSX. So to generate all three installers you need all three operating systems.
 
-All packaging actions are handled by [electron-builder](https://github.com/electron-userland/electron-builder) module. See docs of that tool if you want to customize something.
+All packaging actions are handled by [electron-builder](https://github.com/electron-userland/electron-builder). See docs of this tool if you want to customize something.
 
 # License
 
