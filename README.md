@@ -2,7 +2,7 @@ electron-boilerplate
 ==============
 Minimalistic yet comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).  
 
-Provides cross-platform development environment, which works the same way on OSX, Windows and Linux, and allows you to generate ready for distribution installers of your app for those three operating systems.
+Provides cross-platform development environment, which works the same way on OSX, Windows and Linux, and allows you to generate ready for distribution installers of your app for those operating systems.
 
 At the same time this boilerplate does not impose on you any framework (like Angular or React). Tries to give you only the 'electron' part of technology stack so you can pick your favorite tools for 'the actual app' part.
 
@@ -19,24 +19,41 @@ npm start
 
 # Structure of the project
 
-There are **two** `package.json` files:  
+## Declaring dependencies
 
-#### 1. For development
+There are **two** `package.json` files:
+
+#### 1. `package.json` for development
 Sits on path: `electron-boilerplate/package.json`. Here you declare dependencies for your development environment and build scripts. **This file is not distributed with real application!**
 
 Also here you declare the version of Electron runtime you want to use:
 ```json
 "devDependencies": {
-  "electron-prebuilt": "^1.2.0"
+  "electron": "1.3.3"
 }
 ```
+Note: [Electron authors advise](http://electron.atom.io/docs/tutorial/electron-versioning/) to use fixed version here.
 
-#### 2. For your application
+#### 2. `package.json` for your application
 Sits on path: `electron-boilerplate/app/package.json`. This is **real** manifest of your application. Declare your app dependencies here.
 
 #### OMG, but seriously why there are two `package.json`?
 1. Native npm modules (those written in C, not JavaScript) need to be compiled, and here we have two different compilation targets for them. Those used in application need to be compiled against electron runtime, and all `devDependencies` need to be compiled against your locally installed node.js. Thanks to having two files this is trivial.
-2. When you package the app for distribution there is no need to add up to size of the app with your `devDependencies`. Here those are always not included (because reside outside the `app` directory).
+2. When you package the app for distribution there is no need to add up to size of the app with your `devDependencies`. Here those are always not included (reside outside the `app` directory).
+
+## Folders
+
+The applicaiton is split between two main folders...
+
+`src` - this folder is intended for files which need to be transpiled or compiled (can't be used directly by electron).
+
+`app` - contains all static assets (put here images, css, html etc.) which don't need any pre-processing.
+
+Build process compiles all stuff from `src` folder and puts it into `app` folder, so after build finished `app` contains full, runnable application.
+
+Treat `src` and `app` folders like two halves of one bigger thing.
+
+Drawback of this design is that `app` folder contains some files which should be git-ignored and some which should not (see `.gitignore` file). But much faster development builds are worth it.
 
 # Development
 
@@ -63,33 +80,16 @@ npm install name_of_npm_module --save
 
 ### Working with modules
 
-How about being future proof and using ES6 modules everywhere in your app? Thanks to [rollup](https://github.com/rollup/rollup) you can do that. It will transpile the imports to proper `require()` statements, so even though ES6 modules aren't natively supported yet you can start using them today.
+Thanks to [rollup](https://github.com/rollup/rollup) you can and should be using ES6 modules for all code in `src` folder. But because it's still not natively supported you can't use it in `app` folder.
 
-You can use it on those kinds of modules:
+So file in `src` folder do this:
 ```js
-// Modules authored by you
-import { myStuff } from './my_lib/my_stuff';
-// Node.js native
-import fs from 'fs';
-// Electron native
-import { app } from 'electron';
-// Loaded from npm
-import moment from 'moment';
+import myStuff from './my_lib/my_stuff';
 ```
 
-### Including files to your project
-
-The build script copies files from `app` to `build` directory and the application is started from `build`. Therefore if you want to use any special file/folder in your app make sure it will be copied via some of glob patterns in `tasks/build/build.js`:
-
+But in file in `app` folder the same line must look as follows:
 ```js
-var paths = {
-    copyFromAppDir: [
-        './node_modules/**',
-        './vendor/**',
-        './**/*.html',
-        './**/*.+(jpg|png|svg)'
-    ],
-}
+var myStuff = require('./my_lib/my_stuff');
 ```
 
 ## Unit tests
@@ -114,7 +114,7 @@ It will start the packaging process for operating system you are running this co
 
 You can create Windows installer only when running on Windows, the same is true for Linux and OSX. So to generate all three installers you need all three operating systems.
 
-All packaging actions are handled by [electron-builder](https://github.com/electron-userland/electron-builder) module. See docs of that tool if you want to customize something or just see what's available.
+All packaging actions are handled by [electron-builder](https://github.com/electron-userland/electron-builder) module. See docs of that tool if you want to customize something.
 
 # License
 
