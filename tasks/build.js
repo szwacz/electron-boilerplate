@@ -1,7 +1,6 @@
 'use strict';
 
 var pathUtil = require('path');
-var Q = require('q');
 var gulp = require('gulp');
 var less = require('gulp-less');
 var watch = require('gulp-watch');
@@ -22,7 +21,7 @@ var destDir = projectDir.cwd('./app');
 // -------------------------------------
 
 var bundleApplication = function () {
-    return Q.all([
+    return Promise.all([
             bundle(srcDir.path('background.js'), destDir.path('background.js')),
             bundle(srcDir.path('app.js'), destDir.path('app.js')),
         ]);
