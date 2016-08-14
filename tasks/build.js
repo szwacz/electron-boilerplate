@@ -34,40 +34,32 @@ var bundleSpecs = function () {
     });
 };
 
-var bundleTask = function () {
+gulp.task('bundle', function () {
     if (utils.getEnvName() === 'test') {
         return bundleSpecs();
     }
     return bundleApplication();
-};
-gulp.task('bundle', bundleTask);
-gulp.task('bundle-watch', bundleTask);
+});
 
-
-var lessTask = function () {
+gulp.task('less', function () {
     return gulp.src(srcDir.path('stylesheets/main.less'))
         .pipe(plumber())
         .pipe(less())
         .pipe(gulp.dest(destDir.path('stylesheets')));
-};
-gulp.task('less', lessTask);
-gulp.task('less-watch', lessTask);
-
+});
 
 gulp.task('environment', function () {
     var configFile = 'config/env_' + utils.getEnvName() + '.json';
     projectDir.copy(configFile, destDir.path('env.json'), { overwrite: true });
 });
 
-
 gulp.task('watch', function () {
     watch('src/**/*.js', batch(function (events, done) {
-        gulp.start('bundle-watch', done);
+        gulp.start('bundle', done);
     }));
     watch('src/**/*.less', batch(function (events, done) {
-        gulp.start('less-watch', done);
+        gulp.start('less', done);
     }));
 });
-
 
 gulp.task('build', ['bundle', 'less', 'environment']);
