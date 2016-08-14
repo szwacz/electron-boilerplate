@@ -1,6 +1,6 @@
 'use strict';
 
-var pathUtil = require('path');
+var path = require('path');
 var jetpack = require('fs-jetpack');
 var rollup = require('rollup').rollup;
 
@@ -32,7 +32,7 @@ module.exports = function (src, dest) {
     .then(function (bundle) {
         cached[src] = bundle;
 
-        var jsFile = pathUtil.basename(dest);
+        var jsFile = path.basename(dest);
         var result = bundle.generate({
             format: 'cjs',
             sourceMap: true,
