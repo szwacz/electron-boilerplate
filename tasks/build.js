@@ -10,8 +10,8 @@ var plumber = require('gulp-plumber');
 var jetpack = require('fs-jetpack');
 
 var bundle = require('./bundle');
-var generateSpecImportsFile = require('./generate_spec_imports');
-var utils = require('../utils');
+var generateSpecsEntryFile = require('./generate_specs_entry_file');
+var utils = require('./utils');
 
 var projectDir = jetpack;
 var srcDir = projectDir.cwd('./src');
@@ -21,19 +21,6 @@ var destDir = projectDir.cwd('./app');
 // Tasks
 // -------------------------------------
 
-gulp.task('clean', function () {
-    return Q();
-    // return destDir.dirAsync('.')
-    // .then(function () {
-    //     return destDir.findAsync({ matching: '!node_modules' });
-    // })
-    // .then(function (found) {
-    //     var removingPromises = found.map(destDir.removeAsync);
-    //     return Q.all(removingPromises);
-    // });
-});
-
-
 var bundleApplication = function () {
     return Q.all([
             bundle(srcDir.path('background.js'), destDir.path('background.js')),
@@ -42,8 +29,8 @@ var bundleApplication = function () {
 };
 
 var bundleSpecs = function () {
-    return generateSpecImportsFile().then(function (specEntryPointPath) {
-        return bundle(specEntryPointPath, destDir.path('spec.js'));
+    return generateSpecsEntryFile().then(function (specEntryPointPath) {
+        return bundle(specEntryPointPath, destDir.path('app.js'));
     });
 };
 
@@ -53,7 +40,7 @@ var bundleTask = function () {
     }
     return bundleApplication();
 };
-gulp.task('bundle', ['clean'], bundleTask);
+gulp.task('bundle', bundleTask);
 gulp.task('bundle-watch', bundleTask);
 
 
@@ -63,11 +50,11 @@ var lessTask = function () {
         .pipe(less())
         .pipe(gulp.dest(destDir.path('stylesheets')));
 };
-gulp.task('less', ['clean'], lessTask);
+gulp.task('less', lessTask);
 gulp.task('less-watch', lessTask);
 
 
-gulp.task('environment', ['clean'], function () {
+gulp.task('environment', function () {
     var configFile = 'config/env_' + utils.getEnvName() + '.json';
     projectDir.copy(configFile, destDir.path('env.json'), { overwrite: true });
 });

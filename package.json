@@ -44,6 +44,6 @@
     "release": "build --x64 --publish never",
     "start": "gulp start",
     "pretest": "gulp build --env=test",
-    "test": "electron-mocha app --renderer"
+    "test": "electron-mocha app/app.js --renderer"
   }
 }
