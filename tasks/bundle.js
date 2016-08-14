@@ -21,29 +21,29 @@ var generateExternalModulesList = function () {
     return [].concat(nodeBuiltInModules, electronBuiltInModules, npmModulesUsedInApp());
 };
 
+var cached = {};
+
 module.exports = function (src, dest) {
-    return new Promise(function (resolve, reject) {
-        rollup({
-            entry: src,
-            external: generateExternalModulesList(),
-        }).then(function (bundle) {
-            var jsFile = pathUtil.basename(dest);
-            var result = bundle.generate({
-                format: 'cjs',
-                sourceMap: true,
-                sourceMapFile: jsFile,
-            });
-            // Wrap code in self invoking function so the variables don't
-            // pollute the global namespace.
-            var isolatedCode = '(function () {' + result.code + '\n}());';
-            return Promise.all([
-                    jetpack.writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
-                    jetpack.writeAsync(dest + '.map', result.map.toString()),
-                ]);
-        }).then(function () {
-            resolve();
-        }).catch(function (err) {
-            reject(err);
+    return rollup({
+        entry: src,
+        external: generateExternalModulesList(),
+        cache: cached[src],
+    })
+    .then(function (bundle) {
+        cached[src] = bundle;
+
+        var jsFile = pathUtil.basename(dest);
+        var result = bundle.generate({
+            format: 'cjs',
+            sourceMap: true,
+            sourceMapFile: jsFile,
         });
+        // Wrap code in self invoking function so the variables don't
+        // pollute the global namespace.
+        var isolatedCode = '(function () {' + result.code + '\n}());';
+        return Promise.all([
+            jetpack.writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
+            jetpack.writeAsync(dest + '.map', result.map.toString()),
+        ]);
     });
 };
