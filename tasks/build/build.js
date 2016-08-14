@@ -17,38 +17,21 @@ var projectDir = jetpack;
 var srcDir = projectDir.cwd('./src');
 var destDir = projectDir.cwd('./app');
 
-var paths = {
-    copyFromSrcDir: [
-        './helpers/**',
-        './**/*.html',
-        './**/*.+(jpg|png|svg)'
-    ],
-};
-
 // -------------------------------------
 // Tasks
 // -------------------------------------
 
 gulp.task('clean', function () {
-    return destDir.dirAsync('.')
-    .then(function () {
-        return destDir.findAsync({ matching: '!node_modules' });
-    })
-    .then(function (found) {
-        var removingPromises = found.map(destDir.removeAsync);
-        return Q.all(removingPromises);
-    });
+    return Q();
+    // return destDir.dirAsync('.')
+    // .then(function () {
+    //     return destDir.findAsync({ matching: '!node_modules' });
+    // })
+    // .then(function (found) {
+    //     var removingPromises = found.map(destDir.removeAsync);
+    //     return Q.all(removingPromises);
+    // });
 });
-
-
-var copyTask = function () {
-    return projectDir.copyAsync(srcDir.path(), destDir.path(), {
-            overwrite: true,
-            matching: paths.copyFromSrcDir
-        });
-};
-gulp.task('copy', ['clean'], copyTask);
-gulp.task('copy-watch', copyTask);
 
 
 var bundleApplication = function () {
@@ -90,26 +73,9 @@ gulp.task('environment', ['clean'], function () {
 });
 
 
-gulp.task('package-json', ['clean'], function () {
-    var manifest = srcDir.read('package.json', 'json');
-
-    // Add "dev" suffix to name, so Electron will write all data like cookies
-    // and localStorage in separate places for production and development.
-    if (utils.getEnvName() === 'development') {
-        manifest.name += '-dev';
-        manifest.productName += ' Dev';
-    }
-
-    destDir.write('package.json', manifest);
-});
-
-
 gulp.task('watch', function () {
     watch('src/**/*.js', batch(function (events, done) {
         gulp.start('bundle-watch', done);
-    }));
-    watch(paths.copyFromSrcDir, { cwd: 'src' }, batch(function (events, done) {
-        gulp.start('copy-watch', done);
     }));
     watch('src/**/*.less', batch(function (events, done) {
         gulp.start('less-watch', done);
@@ -117,4 +83,4 @@ gulp.task('watch', function () {
 });
 
 
-gulp.task('build', ['bundle', 'less', 'copy', 'environment', 'package-json']);
+gulp.task('build', ['bundle', 'less', 'environment']);

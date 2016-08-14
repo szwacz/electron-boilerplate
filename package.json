@@ -38,7 +38,7 @@
     "yargs": "^4.2.0"
   },
   "scripts": {
-    "postinstall": "gulp build && install-app-deps",
+    "postinstall": "install-app-deps",
     "build": "gulp build",
     "prerelease": "gulp build --env=production",
     "release": "build --x64 --publish never",
