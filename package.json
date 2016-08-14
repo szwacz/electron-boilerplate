@@ -30,7 +30,7 @@
     "release": "build --x64 --publish never",
     "start": "gulp start",
     "pretest": "gulp build --env=test",
-    "test": "electron-mocha app/app.js --renderer"
+    "test": "electron-mocha app/app.js --renderer --require source-map-support/register"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -45,6 +45,7 @@
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.3.5",
     "rollup": "^0.34.7",
+    "source-map-support": "^0.4.2",
     "yargs": "^4.2.0"
   }
 }
