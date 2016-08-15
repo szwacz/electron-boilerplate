@@ -98,7 +98,7 @@ electron-boilerplate has preconfigured test environments...
 
 ### Unit tests
 
-Using [mocha](https://mochajs.org/) test runner with the [chai](http://chaijs.com/api/assert/) assertion library. To run the tests go with standard:
+Using [electron-mocha](https://github.com/jprichardson/electron-mocha) test runner with the [chai](http://chaijs.com/api/assert/) assertion library. To run the tests go with standard:
 ```
 npm test
 ```
