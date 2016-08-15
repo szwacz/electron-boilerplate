@@ -1,9 +1,8 @@
 'use strict';
 
-var pathUtil = require('path');
+var path = require('path');
 var jetpack = require('fs-jetpack');
-var rollup = require('rollup');
-var Q = require('q');
+var rollup = require('rollup').rollup;
 
 var nodeBuiltInModules = ['assert', 'buffer', 'child_process', 'cluster',
     'console', 'constants', 'crypto', 'dgram', 'dns', 'domain', 'events',
@@ -14,7 +13,7 @@ var nodeBuiltInModules = ['assert', 'buffer', 'child_process', 'cluster',
 var electronBuiltInModules = ['electron'];
 
 var npmModulesUsedInApp = function () {
-    var appManifest = require('../../app/package.json');
+    var appManifest = require('../app/package.json');
     return Object.keys(appManifest.dependencies);
 };
 
@@ -22,14 +21,18 @@ var generateExternalModulesList = function () {
     return [].concat(nodeBuiltInModules, electronBuiltInModules, npmModulesUsedInApp());
 };
 
-module.exports = function (src, dest) {
-    var deferred = Q.defer();
+var cached = {};
 
-    rollup.rollup({
+module.exports = function (src, dest) {
+    return rollup({
         entry: src,
         external: generateExternalModulesList(),
-    }).then(function (bundle) {
-        var jsFile = pathUtil.basename(dest);
+        cache: cached[src],
+    })
+    .then(function (bundle) {
+        cached[src] = bundle;
+
+        var jsFile = path.basename(dest);
         var result = bundle.generate({
             format: 'cjs',
             sourceMap: true,
@@ -38,15 +41,9 @@ module.exports = function (src, dest) {
         // Wrap code in self invoking function so the variables don't
         // pollute the global namespace.
         var isolatedCode = '(function () {' + result.code + '\n}());';
-        return Q.all([
-                jetpack.writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
-                jetpack.writeAsync(dest + '.map', result.map.toString()),
-            ]);
-    }).then(function () {
-        deferred.resolve();
-    }).catch(function (err) {
-        deferred.reject(err);
+        return Promise.all([
+            jetpack.writeAsync(dest, isolatedCode + '\n//# sourceMappingURL=' + jsFile + '.map'),
+            jetpack.writeAsync(dest + '.map', result.map.toString()),
+        ]);
     });
-
-    return deferred.promise;
 };
