@@ -92,15 +92,27 @@ But in file in `app` folder the same line must look as follows:
 var myStuff = require('./my_lib/my_stuff');
 ```
 
-## Unit tests
+# Testing
 
-electron-boilerplate has preconfigured [mocha](https://mochajs.org/) test runner with the [chai](http://chaijs.com/api/assert/) assertion library. To run the tests go with standard:
+electron-boilerplate has preconfigured test environments...
+
+### Unit tests
+
+Using [mocha](https://mochajs.org/) test runner with the [chai](http://chaijs.com/api/assert/) assertion library. To run the tests go with standard:
 ```
 npm test
 ```
-You don't have to declare paths to spec files in any particular place. The runner will search through the project for all `*.spec.js` files and include them automatically.
+Test task searches for all files in `src` directory which respect pattern `*.spec.js`.
 
 Those tests can be plugged into [continuous integration system](https://github.com/atom/electron/blob/master/docs/tutorial/testing-on-headless-ci.md).
+
+### End to end tests
+
+Using [mocha](https://mochajs.org/) test runner and [spectron](http://electron.atom.io/spectron/). Run with command:
+```
+npm run e2e
+```
+The task searches for all files in `e2e` directory which respect pattern `*.e2e.js`.
 
 # Making a release
 
