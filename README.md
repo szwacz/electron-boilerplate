@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/itbeaver/electron-boilerplate.svg?branch=master)](https://travis-ci.org/itbeaver/electron-boilerplate)
+
 electron-boilerplate
 ==============
 Minimalistic yet comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).  
