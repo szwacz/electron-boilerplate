@@ -11,6 +11,7 @@ import certificate from './certificate';
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
 import env from './env';
+import systemIdle from './systemIdle';
 
 var mainWindow;
 
