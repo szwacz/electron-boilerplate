@@ -1,0 +1,26 @@
+build: off
+
+os: unstable
+
+branches:
+  only:
+    - master
+
+skip_tags: true
+
+environment:
+  nodejs_version: "6.3.0"
+
+cache:
+  - node_modules -> package.json
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - npm install npm
+  - .\node_modules\.bin\npm install
+
+test_script:
+  - node --version
+  - .\node_modules\.bin\npm --version
+  - .\node_modules\.bin\npm test
+  - .\node_modules\.bin\npm run e2e
