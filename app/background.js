@@ -3,7 +3,7 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import devHelper from './vendor/electron_boilerplate/dev_helper';
 import windowStateKeeper from './vendor/electron_boilerplate/window_state';
 import certificate from './certificate';
@@ -11,7 +11,10 @@ import certificate from './certificate';
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
 import env from './env';
-import systemIdle from './systemIdle';
+
+/* serverside system idle integration */
+var ffi = require('ffi'),
+    idle = require('@paulcbetts/system-idle-time');
 
 var mainWindow;
 
@@ -105,4 +108,10 @@ app.on('ready', function () {
 
 app.on('window-all-closed', function () {
     app.quit();
+});
+
+/* system idle time synchronous event process */
+ipcMain.on('getSystemIdleTime', function(event) {
+    /* why does this fire twice?!?!? */
+    event.returnValue = idle.getIdleTime();
 });
