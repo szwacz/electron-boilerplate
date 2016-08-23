@@ -36,6 +36,21 @@ var mainWindowState = windowStateKeeper('main', {
     height: 600
 });
 
+// ==== Quick check to fetch OS Name and set Toaster notifications on/off ==>>
+// Add here any OS without native support for notifications
+var useToaster = false;
+
+// Windows 7 / 2008 R2
+if (navigator.userAgent.indexOf("Windows NT 6.2")!=-1) useToaster = true;
+
+// Windows Vista / 2008
+if (navigator.userAgent.indexOf("Windows NT 6.0")!=-1) useToaster = true;
+
+// Windows XP / 2003
+if (navigator.userAgent.indexOf("Windows NT 5.2")!=-1) useToaster = true;
+if (navigator.userAgent.indexOf("Windows NT 5.1")!=-1) useToaster = true;
+// =========================================================================>>
+
 app.on('ready', function () {
 
     mainWindow = new BrowserWindow({
@@ -101,19 +116,23 @@ app.on('ready', function () {
         event.preventDefault();
     });
 
-    toaster.init(mainWindow);
+	if(useToaster) {
+		
+	    toaster.init(mainWindow);
 
-    ipcMain.on('notification-shim', (e, msg) => {
+		ipcMain.on('notification-shim', (e, msg) => {
         
-        mainWindow.webContents.executeJavaScript(`
-            require('electron').ipcRenderer.send('electron-toaster-message', {
-                title: '${msg.title}',
-                message: \`${msg.options.body}\`,
-                width: 400,
-                htmlFile: 'file://'+__dirname+'/notification.html?'
-            });
-        `);
-    });
+			mainWindow.webContents.executeJavaScript(`
+				require('electron').ipcRenderer.send('electron-toaster-message', {
+					title: '${msg.title}',
+					message: \`${msg.options.body}\`,
+					width: 400,
+					htmlFile: 'file://'+__dirname+'/notification.html?'
+				});
+			`);
+		});
+	};
+
 
     certificate.initWindow(mainWindow);
 });
