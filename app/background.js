@@ -8,7 +8,6 @@ import devHelper from './vendor/electron_boilerplate/dev_helper';
 import windowStateKeeper from './vendor/electron_boilerplate/window_state';
 import certificate from './certificate';
 import Toaster from 'electron-toaster';
-import os from 'os';
 const toaster = new Toaster();
 
 // Special module holding environment variables which you declared
@@ -37,14 +36,19 @@ var mainWindowState = windowStateKeeper('main', {
     height: 600
 });
 
-// ==== Quick check to fetch Operating System and it's version ==>>
-// Add here any OS without native support for notifications to Toaster is used
+// ==== Quick check to fetch OS Name and set Toaster notifications on/off ==>>
+// Add here any OS without native support for notifications
 var useToaster = false;
 
-// Windows 7 or older
-if (os.platform() === 'win32' || os.platform() === 'win64') {
-    if (parseFloat(os.release) < 6.2) useToaster = true;
-};
+// Windows 7 / 2008 R2
+if (navigator.userAgent.indexOf("Windows NT 6.2")!=-1) useToaster = true;
+
+// Windows Vista / 2008
+if (navigator.userAgent.indexOf("Windows NT 6.0")!=-1) useToaster = true;
+
+// Windows XP / 2003
+if (navigator.userAgent.indexOf("Windows NT 5.2")!=-1) useToaster = true;
+if (navigator.userAgent.indexOf("Windows NT 5.1")!=-1) useToaster = true;
 // =========================================================================>>
 
 app.on('ready', function () {
