@@ -43,7 +43,7 @@ Sits on path: `electron-boilerplate/app/package.json`. This is **real** manifest
 
 ## Folders
 
-The applicaiton is split between two main folders...
+The application is split between two main folders...
 
 `src` - this folder is intended for files which need to be transpiled or compiled (files which can't be used directly by electron).
 
