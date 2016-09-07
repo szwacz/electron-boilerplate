@@ -5,7 +5,7 @@ description: Rocket.Chat Desktop app
 apps:
   rocketchat:
     command: desktop-launch $SNAP/rocketchat
-    plugs: [x11, unity7, opengl, network, process-control]
+    plugs: [x11, unity7, opengl, network, network-bind, process-control]
 
 parts:
   rocketchat:
