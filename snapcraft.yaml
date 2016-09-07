@@ -1,0 +1,31 @@
+name: rocketchat-desktop
+version: 1.3.1
+summary: Desktop app for Rocket.Chat
+description: Rocket.Chat Desktop app
+apps:
+  rocketchat:
+    command: desktop-launch $SNAP/rocketchat
+    plugs: [x11, unity7, opengl, network, process-control]
+
+parts:
+  rocketchat:
+    plugin: copy
+    stage-packages:
+      - libnss3
+      - fontconfig-config
+      - gnome-themes-standard
+      - overlay-scrollbar-gtk2
+      - libgail-3-0
+      - libatk-bridge2.0-0
+      - unity-gtk-module-common
+      - libcanberra-gtk-module
+    files:
+      node_modules/electron-prebuilt/dist/electron: rocketchat
+      node_modules/electron-prebuilt/dist/icudtl.dat: icudtl.dat
+      node_modules/electron-prebuilt/dist/snapshot_blob.bin: snapshot_blob.bin
+      node_modules/electron-prebuilt/dist/natives_blob.bin: natives_blob.bin
+      node_modules/electron-prebuilt/dist/resources/* : resources
+      app.asar: resources/app.asar
+      node_modules/electron-prebuilt/dist/libnode.so: usr/lib/x86_64-linux-gnu/libnode.so
+      node_modules/electron-prebuilt/dist/libffmpeg.so: usr/lib/x86_64-linux-gnu/libffmpeg.so
+    after: [desktop-gtk3]
