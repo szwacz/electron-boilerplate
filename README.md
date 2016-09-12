@@ -1,3 +1,6 @@
+Travis-ci (linux, macOS): [![Build Status](https://travis-ci.org/itbeaver/electron-boilerplate.svg?branch=master)](https://travis-ci.org/itbeaver/electron-boilerplate)  
+Appveyor (windows): [![Build status](https://ci.appveyor.com/api/projects/status/1d73w4yiq4d63xlm/branch/master?svg=true)](https://ci.appveyor.com/project/misteral/electron-boilerplate/branch/master)
+
 electron-boilerplate
 ==============
 Minimalistic yet comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).  
