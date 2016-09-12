@@ -1,8 +1,8 @@
-Travis-ci (linux, macOS): [![Build Status](https://travis-ci.org/itbeaver/electron-boilerplate.svg?branch=master)](https://travis-ci.org/itbeaver/electron-boilerplate)  
-Appveyor (windows): [![Build status](https://ci.appveyor.com/api/projects/status/1d73w4yiq4d63xlm/branch/master?svg=true)](https://ci.appveyor.com/project/misteral/electron-boilerplate/branch/master)
-
 electron-boilerplate
 ==============
+
+[![Build Status](https://travis-ci.org/szwacz/electron-boilerplate.svg?branch=master)](https://travis-ci.org/szwacz/electron-boilerplate) [![Build status](https://ci.appveyor.com/api/projects/status/s9htc1k5ojkn08fr?svg=true)](https://ci.appveyor.com/project/szwacz/electron-boilerplate)
+
 Minimalistic yet comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).  
 
 Provides cross-platform development environment, which works the same way on OSX, Windows and Linux, and allows you to generate ready for distribution installers of your app for those operating systems.
@@ -107,8 +107,6 @@ npm test
 ```
 Test task searches for all files in `src` directory which respect pattern `*.spec.js`.
 
-Those tests can be plugged into [continuous integration system](https://github.com/atom/electron/blob/master/docs/tutorial/testing-on-headless-ci.md).
-
 ### End to end tests
 
 Using [mocha](https://mochajs.org/) test runner and [spectron](http://electron.atom.io/spectron/). Run with command:
@@ -116,6 +114,10 @@ Using [mocha](https://mochajs.org/) test runner and [spectron](http://electron.a
 npm run e2e
 ```
 The task searches for all files in `e2e` directory which respect pattern `*.e2e.js`.
+
+### Continuous integration
+
+Electron [can be plugged](https://github.com/atom/electron/blob/master/docs/tutorial/testing-on-headless-ci.md) into CI systems. Here two CIs are already configured for you. [Travis CI](https://travis-ci.org/) covers testing on OSX and Linux and [App Veyour](https://www.appveyor.com) on Windows.
 
 # Making a release
 
