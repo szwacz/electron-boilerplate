@@ -349,8 +349,6 @@ setInterval(function(){
 	try {
 		if(getSystemIdleTime() < UserPresence.awayTime) {
 			UserPresence.setOnline()
-		} else {
-			UserPresence.setAway();
 		}
 	} catch(e) {}
 },1e3)
