@@ -9,7 +9,9 @@
     "q": "^1.4.1",
     "rollup": "^0.25.4",
     "tree-kill": "^0.1.1",
-    "yargs": "^4.2.0"
+    "yargs": "^4.2.0",
+    "electron-toaster": "^2.0.1",
+    "electron-notification-shim": "^1.1.0"
   },
   "optionalDependencies": {
     "appdmg": "^0.3.2",
@@ -27,5 +29,9 @@
     "type": "git",
     "url": "https://github.com/RocketChat/Rocket.Chat.Electron.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "electron-notification-shim": "^1.1.0",
+    "electron-toaster": "^2.0.1"
+  }
 }

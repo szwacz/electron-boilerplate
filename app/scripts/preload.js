@@ -3,6 +3,8 @@
 
 var IPC = require('electron').ipcRenderer;
 
+require('electron-notification-shim')();
+
 class Notification extends window.Notification {
 	get onclick() {
 		return super.onclick;
