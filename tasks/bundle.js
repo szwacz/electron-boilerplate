@@ -23,11 +23,14 @@ var generateExternalModulesList = function () {
 
 var cached = {};
 
-module.exports = function (src, dest) {
+module.exports = function (src, dest, opts) {
+    opts = opts || {};
+    opts.rollupPlugins = opts.rollupPlugins || [];
     return rollup({
         entry: src,
         external: generateExternalModulesList(),
         cache: cached[src],
+        plugins: opts.rollupPlugins,
     })
     .then(function (bundle) {
         cached[src] = bundle;
