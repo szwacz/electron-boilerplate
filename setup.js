@@ -7,7 +7,8 @@ module.exports = {
         { file: 'resources/osx/icon.icns' },
         { file: 'resources/windows/icon.ico' },
         { file: 'resources/windows/setup-icon.ico' },
-        { folder: 'src/hello_world' }
+        { folder: 'src/hello_world' },
+        { file: 'setup.js' }
     ],
     clean: [
         {
