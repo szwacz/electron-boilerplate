@@ -1,18 +1,6 @@
-var istanbul = require('istanbul'),
+var istanbul = require('istanbul');
 
-/**
- * Expose `Istanbul`.
- */
-exports = module.exports = Istanbul;
-
-/**
- * Initialize a new Istanbul reporter.
- *
- * @param {Runner} runner
- * @param {Object} options
- * @public
- */
-function Istanbul(runner, options) {
+module.exports = function (runner, options) {
     mocha.reporters.Base.call(this, runner);
 
     var reporterOpts = { dir: 'coverage' },
@@ -35,5 +23,4 @@ function Istanbul(runner, options) {
         });
 
     });
-
-}
+};
