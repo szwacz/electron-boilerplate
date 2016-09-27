@@ -111,6 +111,14 @@ npm run e2e
 ```
 The task searches for all files in `e2e` directory which respect pattern `*.e2e.js`.
 
+### Code coverage
+
+Using [istanbul](http://gotwarlost.github.io/istanbul/) code coverage tool. Run with command:
+```
+npm run coverage
+```
+You can set the reporter(s) by setting `ISTANBUL_REPORTERS` environment variable (defaults to `text-summary` and `html`). The report directory can be set with `ISTANBUL_REPORT_DIR` (defaults to `coverage`).
+
 ### Continuous integration
 
 Electron [can be plugged](https://github.com/atom/electron/blob/master/docs/tutorial/testing-on-headless-ci.md) into CI systems. Here two CIs are preconfigured for you. [Travis CI](https://travis-ci.org/) covers testing on OSX and Linux and [App Veyor](https://www.appveyor.com) on Windows.

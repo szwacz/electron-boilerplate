@@ -12,3 +12,5 @@ Thumbs.db
 /app/**/*.map
 
 /dist
+
+/coverage
