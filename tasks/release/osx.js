@@ -24,7 +24,7 @@ var init = function () {
 };
 
 var copyRuntime = function () {
-    return projectDir.copyAsync('node_modules/electron-prebuilt/dist/Electron.app', finalAppDir.path());
+    return projectDir.copyAsync('node_modules/electron/dist/Electron.app', finalAppDir.path());
 };
 
 var cleanupRuntime = function () {

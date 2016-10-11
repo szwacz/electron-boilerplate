@@ -1,4 +1,4 @@
-/* globals Meteor, Tracker, RocketChat */
+/* globals Meteor, Tracker, RocketChat, UserPresence */
 'use strict';
 
 var IPC = require('electron').ipcRenderer;
@@ -40,7 +40,7 @@ window.addEventListener('load', function() {
 	});
 });
 
-var shell = require('shell');
+const {shell} = require('electron');
 
 var supportExternalLinks = function(e) {
 	var href;
@@ -70,15 +70,16 @@ var supportExternalLinks = function(e) {
 
 document.addEventListener('click', supportExternalLinks, false);
 
-var webFrame = require('web-frame');
-var remote = require('remote');
-var webContents = remote.getCurrentWebContents();
-var Menu = remote.require('menu');
-var menu = new Menu();
 
-var path = remote.require('path');
+// const {webFrame} = require('electron');
+const {remote} = require('electron');
 
-// set the initial context menu so that a context menu exists even before spellcheck is called
+// var webContents = remote.getCurrentWebContents();
+var menu = new remote.Menu();
+
+// var path = remote.require('path');
+
+// // set the initial context menu so that a context menu exists even before spellcheck is called
 var getTemplate = function() {
 	return [
 		{
@@ -111,11 +112,11 @@ var getTemplate = function() {
 	];
 };
 
-let languagesMenu;
-let checker;
+// let languagesMenu;
+// let checker;
 const enabledDictionaries = [];
-let availableDictionaries = [];
-let dictionariesPath;
+// let availableDictionaries = [];
+// let dictionariesPath;
 
 if (localStorage.getItem('spellcheckerDictionaries')) {
 	let spellcheckerDictionaries = JSON.parse(localStorage.getItem('spellcheckerDictionaries'));
@@ -124,220 +125,220 @@ if (localStorage.getItem('spellcheckerDictionaries')) {
 	}
 }
 
-const saveEnabledDictionaries = function() {
-	localStorage.setItem('spellcheckerDictionaries', JSON.stringify(enabledDictionaries));
-};
+// const saveEnabledDictionaries = function() {
+// 	localStorage.setItem('spellcheckerDictionaries', JSON.stringify(enabledDictionaries));
+// };
 
-const isCorrect = function(text) {
-	if (!checker) {
-		return true;
-	}
+// const isCorrect = function(text) {
+// 	if (!checker) {
+// 		return true;
+// 	}
 
-	let isCorrect = false;
-	enabledDictionaries.forEach(function(enabledDictionary) {
-		if (availableDictionaries.indexOf(enabledDictionary) === -1) {
-			return;
-		}
+// 	let isCorrect = false;
+// 	enabledDictionaries.forEach(function(enabledDictionary) {
+// 		if (availableDictionaries.indexOf(enabledDictionary) === -1) {
+// 			return;
+// 		}
 
-		checker.setDictionary(enabledDictionary, dictionariesPath);
-		if (!checker.isMisspelled(text)) {
-			isCorrect = true;
-		}
-	});
+// 		checker.setDictionary(enabledDictionary, dictionariesPath);
+// 		if (!checker.isMisspelled(text)) {
+// 			isCorrect = true;
+// 		}
+// 	});
 
-	return isCorrect;
-};
+// 	return isCorrect;
+// };
 
-const getCorrections = function(text) {
-	// Create an array of arrays of corrections
-	// One array of corrections per language
-	let allCorrections = [];
-	enabledDictionaries.forEach(function(enabledDictionary) {
-		if (availableDictionaries.indexOf(enabledDictionary) === -1) {
-			return;
-		}
+// const getCorrections = function(text) {
+// 	// Create an array of arrays of corrections
+// 	// One array of corrections per language
+// 	let allCorrections = [];
+// 	enabledDictionaries.forEach(function(enabledDictionary) {
+// 		if (availableDictionaries.indexOf(enabledDictionary) === -1) {
+// 			return;
+// 		}
 
-		checker.setDictionary(enabledDictionary, dictionariesPath);
-		const languageCorrections = checker.getCorrectionsForMisspelling(text);
-		if (languageCorrections.length > 0) {
-			allCorrections.push(languageCorrections);
-		}
-	});
+// 		checker.setDictionary(enabledDictionary, dictionariesPath);
+// 		const languageCorrections = checker.getCorrectionsForMisspelling(text);
+// 		if (languageCorrections.length > 0) {
+// 			allCorrections.push(languageCorrections);
+// 		}
+// 	});
 
-	// Get the size of biggest array
-	let length = 0;
-	allCorrections.forEach(function(items) {
-		length = Math.max(length, items.length);
-	});
+// 	// Get the size of biggest array
+// 	let length = 0;
+// 	allCorrections.forEach(function(items) {
+// 		length = Math.max(length, items.length);
+// 	});
 
-	// Merge all arrays until the size of the biggest array
-	// To get the best suggestions of each language first
-	// Ex: [[1,2,3], [a,b]] => [1,a,2,b,3]
-	const corrections = [];
-	for (let i = 0; i < length; i++) {
-		for (var j = 0; j < allCorrections.length; j++) {
-			if (allCorrections[j][i]) {
-				corrections.push(allCorrections[j][i]);
-			}
-		}
-	}
+// 	// Merge all arrays until the size of the biggest array
+// 	// To get the best suggestions of each language first
+// 	// Ex: [[1,2,3], [a,b]] => [1,a,2,b,3]
+// 	const corrections = [];
+// 	for (let i = 0; i < length; i++) {
+// 		for (var j = 0; j < allCorrections.length; j++) {
+// 			if (allCorrections[j][i]) {
+// 				corrections.push(allCorrections[j][i]);
+// 			}
+// 		}
+// 	}
 
-	// Remove duplicateds
-	corrections.forEach(function(item, index) {
-		const dupIndex = corrections.indexOf(item, index+1);
-		if (dupIndex > -1) {
-			corrections.splice(dupIndex, 1);
-		}
-	});
+// 	// Remove duplicateds
+// 	corrections.forEach(function(item, index) {
+// 		const dupIndex = corrections.indexOf(item, index+1);
+// 		if (dupIndex > -1) {
+// 			corrections.splice(dupIndex, 1);
+// 		}
+// 	});
 
-	return corrections;
-};
+// 	return corrections;
+// };
 
-try {
-	checker = require('spellchecker');
+// try {
+// 	checker = require('spellchecker');
 
-	availableDictionaries = checker.getAvailableDictionaries();
+// 	availableDictionaries = checker.getAvailableDictionaries();
 
-	if (availableDictionaries.length === 0) {
-		dictionariesPath = path.join(remote.app.getAppPath(), '../dictionaries');
-		availableDictionaries = [
-			'en_US',
-			'es_ES',
-			'pt_BR'
-		];
-	}
+// 	if (availableDictionaries.length === 0) {
+// 		dictionariesPath = path.join(remote.app.getAppPath(), '../dictionaries');
+// 		availableDictionaries = [
+// 			'en_US',
+// 			'es_ES',
+// 			'pt_BR'
+// 		];
+// 	}
 
-	availableDictionaries = availableDictionaries.sort(function(a, b) {
-		if (a > b) {
-			return 1;
-		}
-		if (a < b) {
-			return -1;
-		}
-		return 0;
-	});
+// 	availableDictionaries = availableDictionaries.sort(function(a, b) {
+// 		if (a > b) {
+// 			return 1;
+// 		}
+// 		if (a < b) {
+// 			return -1;
+// 		}
+// 		return 0;
+// 	});
 
-	for (var i = enabledDictionaries.length - 1; i >= 0; i--) {
-		if (availableDictionaries.indexOf(enabledDictionaries[i]) === -1) {
-			enabledDictionaries.splice(i, 1);
-		}
-	}
+// 	for (var i = enabledDictionaries.length - 1; i >= 0; i--) {
+// 		if (availableDictionaries.indexOf(enabledDictionaries[i]) === -1) {
+// 			enabledDictionaries.splice(i, 1);
+// 		}
+// 	}
 
-	if (enabledDictionaries.length === 0) {
-		if (localStorage.getItem('userLanguage')) {
-			let userLanguage = localStorage.getItem('userLanguage').replace('-', '_');
-			if (availableDictionaries.indexOf(userLanguage) > -1) {
-				enabledDictionaries.push(userLanguage);
-			}
-			if (userLanguage.indexOf('_') > -1) {
-				userLanguage = userLanguage.split('_')[0];
-				if (availableDictionaries.indexOf(userLanguage) > -1) {
-					enabledDictionaries.push(userLanguage);
-				}
-			}
-		}
+// 	if (enabledDictionaries.length === 0) {
+// 		if (localStorage.getItem('userLanguage')) {
+// 			let userLanguage = localStorage.getItem('userLanguage').replace('-', '_');
+// 			if (availableDictionaries.indexOf(userLanguage) > -1) {
+// 				enabledDictionaries.push(userLanguage);
+// 			}
+// 			if (userLanguage.indexOf('_') > -1) {
+// 				userLanguage = userLanguage.split('_')[0];
+// 				if (availableDictionaries.indexOf(userLanguage) > -1) {
+// 					enabledDictionaries.push(userLanguage);
+// 				}
+// 			}
+// 		}
 
-		let navigatorLanguage = navigator.language.replace('-', '_');
-		if (availableDictionaries.indexOf(navigatorLanguage) > -1) {
-			enabledDictionaries.push(navigatorLanguage);
-		}
-		if (navigatorLanguage.indexOf('_') > -1) {
-			navigatorLanguage = navigatorLanguage.split('_')[0];
-			if (availableDictionaries.indexOf(navigatorLanguage) > -1) {
-				enabledDictionaries.push(navigatorLanguage);
-			}
-		}
-	}
+// 		let navigatorLanguage = navigator.language.replace('-', '_');
+// 		if (availableDictionaries.indexOf(navigatorLanguage) > -1) {
+// 			enabledDictionaries.push(navigatorLanguage);
+// 		}
+// 		if (navigatorLanguage.indexOf('_') > -1) {
+// 			navigatorLanguage = navigatorLanguage.split('_')[0];
+// 			if (availableDictionaries.indexOf(navigatorLanguage) > -1) {
+// 				enabledDictionaries.push(navigatorLanguage);
+// 			}
+// 		}
+// 	}
 
-	if (enabledDictionaries.length === 0) {
-		let defaultLanguage = 'en_US';
-		if (availableDictionaries.indexOf(defaultLanguage) > -1) {
-			enabledDictionaries.push(defaultLanguage);
-		}
-		defaultLanguage = defaultLanguage.split('_')[0];
-		if (availableDictionaries.indexOf(defaultLanguage) > -1) {
-			enabledDictionaries.push(defaultLanguage);
-		}
-	}
+// 	if (enabledDictionaries.length === 0) {
+// 		let defaultLanguage = 'en_US';
+// 		if (availableDictionaries.indexOf(defaultLanguage) > -1) {
+// 			enabledDictionaries.push(defaultLanguage);
+// 		}
+// 		defaultLanguage = defaultLanguage.split('_')[0];
+// 		if (availableDictionaries.indexOf(defaultLanguage) > -1) {
+// 			enabledDictionaries.push(defaultLanguage);
+// 		}
+// 	}
 
-	languagesMenu = {
-		label: 'Spelling languages',
-		submenu: []
-	};
+// 	languagesMenu = {
+// 		label: 'Spelling languages',
+// 		submenu: []
+// 	};
 
-	availableDictionaries.forEach((dictionary) => {
-		const menu = {
-			label: dictionary,
-			type: 'checkbox',
-			checked: enabledDictionaries.indexOf(dictionary) > -1,
-			click: function(menuItem) {
-				menu.checked = menuItem.checked;
-				if (menuItem.checked) {
-					enabledDictionaries.push(dictionary);
-				} else {
-					enabledDictionaries.splice(enabledDictionaries.indexOf(dictionary), 1);
-				}
-				saveEnabledDictionaries();
-			}
-		};
-		languagesMenu.submenu.push(menu);
-	});
+// 	availableDictionaries.forEach((dictionary) => {
+// 		const menu = {
+// 			label: dictionary,
+// 			type: 'checkbox',
+// 			checked: enabledDictionaries.indexOf(dictionary) > -1,
+// 			click: function(menuItem) {
+// 				menu.checked = menuItem.checked;
+// 				if (menuItem.checked) {
+// 					enabledDictionaries.push(dictionary);
+// 				} else {
+// 					enabledDictionaries.splice(enabledDictionaries.indexOf(dictionary), 1);
+// 				}
+// 				saveEnabledDictionaries();
+// 			}
+// 		};
+// 		languagesMenu.submenu.push(menu);
+// 	});
 
-	webFrame.setSpellCheckProvider('', false, {
-		spellCheck: function(text) {
-			return isCorrect(text);
-		}
-	});
-} catch(e) {
-	console.log('Spellchecker module unavailable');
-}
+// 	webFrame.setSpellCheckProvider('', false, {
+// 		spellCheck: function(text) {
+// 			return isCorrect(text);
+// 		}
+// 	});
+// } catch(e) {
+// 	console.log('Spellchecker module unavailable');
+// }
 
 window.addEventListener('contextmenu', function(event){
 	event.preventDefault();
 
 	const template = getTemplate();
 
-	if (languagesMenu) {
-		template.unshift({ type: 'separator' });
-		template.unshift(languagesMenu);
-	}
+// 	if (languagesMenu) {
+// 		template.unshift({ type: 'separator' });
+// 		template.unshift(languagesMenu);
+// 	}
 
 	setTimeout(function() {
-		if (['TEXTAREA', 'INPUT'].indexOf(event.target.nodeName) > -1) {
-			const text = window.getSelection().toString().trim();
-			if (text !== '' && !isCorrect(text)) {
-				const options = getCorrections(text);
-				const maxItems = Math.min(options.length, 6);
+// 		if (['TEXTAREA', 'INPUT'].indexOf(event.target.nodeName) > -1) {
+// 			const text = window.getSelection().toString().trim();
+// 			if (text !== '' && !isCorrect(text)) {
+// 				const options = getCorrections(text);
+// 				const maxItems = Math.min(options.length, 6);
 
-				if (maxItems > 0) {
-					const suggestions = [];
-					const onClick = function(menuItem) {
-						webContents.replaceMisspelling(menuItem.label);
-					};
+// 				if (maxItems > 0) {
+// 					const suggestions = [];
+// 					const onClick = function(menuItem) {
+// 						webContents.replaceMisspelling(menuItem.label);
+// 					};
 
-					for (let i = 0; i < options.length; i++) {
-						const item = options[i];
-						suggestions.push({ label: item, click: onClick });
-					}
+// 					for (let i = 0; i < options.length; i++) {
+// 						const item = options[i];
+// 						suggestions.push({ label: item, click: onClick });
+// 					}
 
-					template.unshift({ type: 'separator' });
+// 					template.unshift({ type: 'separator' });
 
-					if (suggestions.length > maxItems) {
-						const morSuggestions = {
-							label: 'More spelling suggestions',
-							submenu: suggestions.slice(maxItems)
-						};
-						template.unshift(morSuggestions);
-					}
+// 					if (suggestions.length > maxItems) {
+// 						const morSuggestions = {
+// 							label: 'More spelling suggestions',
+// 							submenu: suggestions.slice(maxItems)
+// 						};
+// 						template.unshift(morSuggestions);
+// 					}
 
-					template.unshift.apply(template, suggestions.slice(0, maxItems));
-				} else {
-					template.unshift({ label: 'no suggestions', click: function() { } });
-				}
-			}
-		}
+// 					template.unshift.apply(template, suggestions.slice(0, maxItems));
+// 				} else {
+// 					template.unshift({ label: 'no suggestions', click: function() { } });
+// 				}
+// 			}
+// 		}
 
-		menu = Menu.buildFromTemplate(template);
+		menu = remote.Menu.buildFromTemplate(template);
 		menu.popup(remote.getCurrentWindow());
 	}, 0);
 }, false);
@@ -350,7 +351,9 @@ function getSystemIdleTime() {
 setInterval(function(){
 	try {
 		if(getSystemIdleTime() < UserPresence.awayTime) {
-			UserPresence.setOnline()
+			UserPresence.setOnline();
 		}
-	} catch(e) {}
-},1e3)
+	} catch(e) {
+		console.error(e);
+	}
+}, 1e3);
