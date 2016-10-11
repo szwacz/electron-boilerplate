@@ -3,12 +3,14 @@
   "productName": "Rocket.Chat+",
   "identifier": "chat.rocket",
   "description": "Rocket.Chat Native Cross-Platform Desktop Application via Electron.",
-  "version": "1.3.1",
+  "version": "1.3.3",
   "build": "15",
   "author": "Rocket.Chat Support <support@rocket.chat>",
   "copyright": "© 2016, Rocket.Chat",
   "main": "background.js",
   "dependencies": {
+    "@paulcbetts/system-idle-time": "^1.0.4",
+    "ffi": "^2.1.0",
     "electron-notification-shim": "^1.1.0",
     "electron-toaster": "^2.0.1",
     "fs-jetpack": "^0.7.0"
@@ -19,5 +21,8 @@
     "MAS": "3rd Party Mac Developer Application: Konecty Informatica Ltda (DX85ENM22A)",
     "MASInstaller": "3rd Party Mac Developer Installer: Konecty Informatica Ltda (DX85ENM22A)"
   },
-  "LSApplicationCategoryType": "public.app-category.productivity"
+  "LSApplicationCategoryType": "public.app-category.productivity",
+  "scripts": {
+    "postinstall": "node ../tasks/rebuild_native_modules"
+  }
 }

@@ -15,6 +15,10 @@ const toaster = new Toaster();
 // in config/env_xxx.json file.
 import env from './env';
 
+/* serverside system idle integration */
+var ffi = require('ffi'),
+    idle = require('@paulcbetts/system-idle-time');
+
 var mainWindow;
 
 if (process.platform !== 'darwin') {
@@ -135,4 +139,10 @@ app.on('ready', function () {
 
 app.on('window-all-closed', function () {
     app.quit();
+});
+
+/* system idle time synchronous event process */
+ipcMain.on('getSystemIdleTime', function(event) {
+    /* why does this fire twice?!?!? */
+    event.returnValue = idle.getIdleTime();
 });

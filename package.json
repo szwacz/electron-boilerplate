@@ -2,6 +2,7 @@
   "devDependencies": {
     "asar": "^0.10.0",
     "electron-prebuilt": "0.36.10",
+    "electron-rebuild": "^1.2.0",
     "fs-jetpack": "^0.7.0",
     "gulp": "^3.9.0",
     "gulp-less": "^3.0.3",
@@ -14,8 +15,8 @@
     "electron-notification-shim": "^1.1.0"
   },
   "optionalDependencies": {
-    "appdmg": "^0.3.2",
-    "rcedit": "^0.4.0"
+    "appdmg": "^0.4.5",
+    "rcedit": "^0.6.0"
   },
   "scripts": {
     "postinstall": "cd app && npm install",

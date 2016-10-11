@@ -341,3 +341,16 @@ window.addEventListener('contextmenu', function(event){
 		menu.popup(remote.getCurrentWindow());
 	}, 0);
 }, false);
+
+/* userPresence away timer based on system idle time */
+function getSystemIdleTime() {
+	return IPC.sendSync('getSystemIdleTime');
+}
+
+setInterval(function(){
+	try {
+		if(getSystemIdleTime() < UserPresence.awayTime) {
+			UserPresence.setOnline()
+		}
+	} catch(e) {}
+},1e3)
