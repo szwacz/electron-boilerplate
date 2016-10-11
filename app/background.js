@@ -3,6 +3,7 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
+import os from 'os';
 import { app, BrowserWindow, ipcMain } from 'electron';
 import devHelper from './vendor/electron_boilerplate/dev_helper';
 import windowStateKeeper from './vendor/electron_boilerplate/window_state';
