@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import { servers } from './servers';
 import { sidebar } from './sidebar';
+import { shell } from 'electron';
 
 class WebView extends EventEmitter {
 	constructor() {
@@ -67,6 +68,14 @@ class WebView extends EventEmitter {
 
 		webviewObj.addEventListener('dom-ready', () => {
 			this.emit('dom-ready', host.url);
+		});
+
+		// Open external app on clicked link. e.g. mailto:, tel:, etc...
+		webviewObj.addEventListener('new-window', (e) => {
+			if (/^https?:\/\//.test(e.url)) {
+				return;
+			}
+			shell.openExternal(e.url);
 		});
 
 		this.webviewParentElement.appendChild(webviewObj);
