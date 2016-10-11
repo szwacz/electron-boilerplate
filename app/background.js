@@ -11,6 +11,8 @@ import certificate from './certificate';
 import Toaster from 'electron-toaster';
 const toaster = new Toaster();
 
+process.env.GOOGLE_API_KEY = 'AIzaSyADqUh_c1Qhji3Cp1NE43YrcpuPkmhXD-c';
+
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
 import env from './env';
