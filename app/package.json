@@ -11,6 +11,8 @@
   "dependencies": {
     "@paulcbetts/system-idle-time": "^1.0.4",
     "ffi": "^2.1.0",
+    "electron-notification-shim": "^1.1.0",
+    "electron-toaster": "^2.0.1",
     "fs-jetpack": "^0.7.0"
   },
   "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
