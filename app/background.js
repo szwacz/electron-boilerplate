@@ -8,6 +8,8 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import devHelper from './vendor/electron_boilerplate/dev_helper';
 import windowStateKeeper from './vendor/electron_boilerplate/window_state';
 import certificate from './certificate';
+import Toaster from 'electron-toaster';
+const toaster = new Toaster();
 
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
@@ -38,6 +40,16 @@ var mainWindowState = windowStateKeeper('main', {
     width: 1000,
     height: 600
 });
+
+// ==== Quick check to fetch Operating System and it's version ==>>
+// Add here any OS without native support for notifications to Toaster is used
+var useToaster = false;
+
+// Windows 7 or older
+if (os.platform() === 'win32' || os.platform() === 'win64') {
+    if (parseFloat(os.release()) < 6.2) useToaster = true;
+};
+// =========================================================================>>
 
 app.on('ready', function () {
 
@@ -103,6 +115,24 @@ app.on('ready', function () {
     mainWindow.webContents.on('will-navigate', function(event) {
         event.preventDefault();
     });
+
+	if(useToaster) {
+
+	    toaster.init(mainWindow);
+
+		ipcMain.on('notification-shim', (e, msg) => {
+
+			mainWindow.webContents.executeJavaScript(`
+				require('electron').ipcRenderer.send('electron-toaster-message', {
+					title: '${msg.title}',
+					message: \`${msg.options.body}\`,
+					width: 400,
+					htmlFile: 'file://'+__dirname+'/notification.html?'
+				});
+			`);
+		});
+	};
+
 
     certificate.initWindow(mainWindow);
 });
