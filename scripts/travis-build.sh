@@ -15,4 +15,4 @@ node --version
 npm --version
 
 npm install
-npm test & npm run e2e
+npm run release && npm test & npm run e2e

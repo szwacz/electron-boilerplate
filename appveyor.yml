@@ -22,5 +22,6 @@ install:
 test_script:
   - node --version
   - .\node_modules\.bin\npm --version
+  - .\node_modules\.bin\npm run release
   - .\node_modules\.bin\npm test
   - .\node_modules\.bin\npm run e2e
