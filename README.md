@@ -1,5 +1,16 @@
 Rocket.Chat.Electron
 ==============
+
+All of Rocket.Chat's Desktop Apps - for Windows, Mac OSX, and Linux are based on the [Elecctron platform from GitHub](https://github.com/electron/electron).   This is the source code base for all desktop apps.
+
+### IMPORTANT
+
+Please join the community server channel for Rocket.Chat Electron app users for feedback, interactions, and important notification regarding this code:
+
+https://demo.rocket.chat/channel/electronapps
+
+#### Original README
+
 Comprehensive boilerplate application for [Electron runtime](http://electron.atom.io).
 
 Scope of this project:
