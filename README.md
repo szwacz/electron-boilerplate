@@ -3,9 +3,9 @@ electron-boilerplate
 
 [![Build Status](https://travis-ci.org/szwacz/electron-boilerplate.svg?branch=master)](https://travis-ci.org/szwacz/electron-boilerplate) [![Build status](https://ci.appveyor.com/api/projects/status/s9htc1k5ojkn08fr?svg=true)](https://ci.appveyor.com/project/szwacz/electron-boilerplate)
 
-Minimalistic yet comprehensive boilerplate application for [Electron runtime](http://electron.atom.io). Tested on OSX, Windows and Linux.  
+A minimalistic yet comprehensive boilerplate application for [Electron runtime](http://electron.atom.io). Tested on OSX, Windows and Linux.  
 
-This project does not impose on you any framework (like Angular or React). Tries to give you only the 'electron' part of technology stack so you can pick your favorite tools for the rest.
+This project does not impose on you any framework (like Angular or React). Instead, it tries to give you only the 'electron' part of technology stack so you can pick your favorite tools for the rest.
 
 # Quick start
 The only development dependency of this project is [Node.js](https://nodejs.org). So just make sure you have it installed.
@@ -16,7 +16,7 @@ cd electron-boilerplate
 npm install
 npm start
 ```
-... and boom! You have running desktop application on your screen.
+... and boom! You have a running desktop application on your screen.
 
 # Structure of the project
 
@@ -25,9 +25,9 @@ npm start
 There are **two** `package.json` files:
 
 #### 1. `package.json` for development
-Sits on path: `electron-boilerplate/package.json`. Here you declare dependencies for your development environment and build scripts. **This file is not distributed with real application!**
+Sits on path: `electron-boilerplate/package.json`. This is where you should declare dependencies for your development environment and build scripts. **This file is not distributed with real application!**
 
-Also here you declare the version of Electron runtime you want to use:
+It's also the place to specify the Electron runtime version you want to use:
 ```json
 "devDependencies": {
   "electron": "1.3.3"
@@ -50,11 +50,11 @@ The application is split between two main folders...
 
 `app` - contains all static assets (put here images, css, html etc.) which don't need any pre-processing.
 
-Build process compiles all stuff from `src` folder and puts it into `app` folder, so after finished build `app` contains full, runnable application.
+The build process compiles all stuff from the `src` folder and puts it into the `app` folder, so after the build has finished, your `app` folder contains the full, runnable application.
 
 Treat `src` and `app` folders like two halves of one bigger thing.
 
-Drawback of this design is that `app` folder contains some files which should be git-ignored and some which should not (see `.gitignore` file). But thanks to this two-folders split development builds are much (much!) faster.
+The drawback of this design is that `app` folder contains some files which should be git-ignored and some which shouldn't (see `.gitignore` file). But thanks to this two-folders split development builds are much (much!) faster.
 
 # Development
 
@@ -63,7 +63,7 @@ Drawback of this design is that `app` folder contains some files which should be
 ```
 npm install
 ```
-It will also download Electron runtime, and install dependencies for second `package.json` file inside `app` folder.
+It will also download Electron runtime and install dependencies for the second `package.json` file inside the `app` folder.
 
 ### Starting the app
 
@@ -73,7 +73,7 @@ npm start
 
 ### Adding npm modules to your app
 
-Remember to add your dependency to `app/package.json` file, so do:
+Remember to add your dependencies to `app/package.json` file:
 ```
 cd app
 npm install name_of_npm_module --save
@@ -81,14 +81,14 @@ npm install name_of_npm_module --save
 
 ### Working with modules
 
-Thanks to [rollup](https://github.com/rollup/rollup) you can (and should) use ES6 modules for all code in `src` folder. But because ES6 modules still aren't natively supported you can't use it in the `app` folder.
+Thanks to [rollup](https://github.com/rollup/rollup) you can (and should) use ES6 modules for all code in `src` folder. But because ES6 modules still aren't natively supported you can't use them in the `app` folder.
 
-So for file in `src` folder do this:
+Use ES6 syntax in the `src` folder like this:
 ```js
 import myStuff from './my_lib/my_stuff';
 ```
 
-But in file in `app` folder the same line must look as follows:
+But use CommonJS syntax in `app` folder. So the code from above should look as follows:
 ```js
 var myStuff = require('./my_lib/my_stuff');
 ```
@@ -97,11 +97,11 @@ var myStuff = require('./my_lib/my_stuff');
 
 ### Unit tests
 
-Using [electron-mocha](https://github.com/jprichardson/electron-mocha) test runner with the [chai](http://chaijs.com/api/assert/) assertion library. To run the tests go with standard:
+Using [electron-mocha](https://github.com/jprichardson/electron-mocha) test runner with the [chai](http://chaijs.com/api/assert/) assertion library. To run the tests go with standard and use the npm test script:
 ```
 npm test
 ```
-Test task searches for all files in `src` directory which respect pattern `*.spec.js`.
+This task searches for all files in `src` directory which respect pattern `*.spec.js`.
 
 ### End to end tests
 
@@ -109,7 +109,7 @@ Using [mocha](https://mochajs.org/) test runner and [spectron](http://electron.a
 ```
 npm run e2e
 ```
-The task searches for all files in `e2e` directory which respect pattern `*.e2e.js`.
+This task searches for all files in `e2e` directory which respect pattern `*.e2e.js`.
 
 ### Code coverage
 
