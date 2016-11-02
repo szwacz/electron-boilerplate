@@ -19,6 +19,8 @@ npm install
 ```
 It will also download Electron runtime, and install dependencies for second `package.json` file inside `app` folder.
 
+Debian users need to make sure they have the package `libxss-dev` installed.
+
 #### Starting the app
 
 ```
