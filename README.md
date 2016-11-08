@@ -1,7 +1,7 @@
 Rocket.Chat.Electron
 ==============
 
-All of Rocket.Chat's Desktop Apps - for Windows, Mac OSX, and Linux are based on the [Elecctron platform from GitHub](https://github.com/electron/electron).   This is the source code base for all desktop apps.
+All of Rocket.Chat's Desktop Apps - for Windows, Mac OSX, and Linux are based on the [Electron platform from GitHub](https://github.com/electron/electron).   This is the source code base for all desktop apps.
 
 ### IMPORTANT
 
