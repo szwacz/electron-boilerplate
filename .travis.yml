@@ -8,6 +8,9 @@ branches:
 
 env:
   - NODE_VERSION="6.3.0"
+  
+before_script:
+ - chmod +x ./scripts/travis-build.sh
 
 script: ./scripts/travis-build.sh
 
