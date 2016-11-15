@@ -135,6 +135,8 @@ You can create Windows installer only when running on Windows, the same is true 
 
 All packaging actions are handled by [electron-builder](https://github.com/electron-userland/electron-builder). See docs of this tool if you want to customize something.
 
+To disable the use of asar archive, change asar to false in the developement package.json
+
 **Note:** There are various icons and bitmap files in `resources` directory. Those are used in installers and intended to be replaced by your own graphics.
 
 # License
