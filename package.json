@@ -18,7 +18,8 @@
     "dmg": {
       "icon": "resources/osx/dmg-icon.icns",
       "background": "resources/osx/dmg-background.png"
-    }
+    },
+    "asar: true
   },
   "directories": {
     "buildResources": "resources"
