@@ -1,16 +1,6 @@
 {
   "build": {
-    "appId": "com.example.electron-boilerplate",
-    "win": {
-      "target": [
-        "nsis"
-      ],
-      "icon": "resources/windows/icon.ico"
-    },
-    "nsis": {
-      "oneClick": true,
-      "installerHeaderIcon": "resources/windows/setup-icon.ico"
-    }
+    "appId": "com.example.electron-boilerplate"
   },
   "directories": {
     "buildResources": "resources"
