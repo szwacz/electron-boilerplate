@@ -2,9 +2,6 @@
   "build": {
     "appId": "com.example.electron-boilerplate"
   },
-  "directories": {
-    "buildResources": "resources"
-  },
   "scripts": {
     "postinstall": "install-app-deps",
     "build": "gulp build",
