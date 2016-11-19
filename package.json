@@ -1,7 +1,6 @@
 {
   "build": {
     "appId": "com.example.electron-boilerplate",
-    "app-category-type": "your.app.category.type",
     "win": {
       "target": [
         "nsis"
@@ -38,7 +37,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "electron": "^1.4.7",
-    "electron-builder": "^5.12.1",
+    "electron-builder": "^8.6.0",
     "electron-mocha": "^3.0.0",
     "fs-jetpack": "^0.10.2",
     "gulp": "^3.9.0",
