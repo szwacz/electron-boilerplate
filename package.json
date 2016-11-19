@@ -10,13 +10,6 @@
     "nsis": {
       "oneClick": true,
       "installerHeaderIcon": "resources/windows/setup-icon.ico"
-    },
-    "mac": {
-      "icon": "resources/osx/icon.icns"
-    },
-    "dmg": {
-      "icon": "resources/osx/dmg-icon.icns",
-      "background": "resources/osx/dmg-background.png"
     }
   },
   "directories": {
