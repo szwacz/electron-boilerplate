@@ -30,7 +30,7 @@ Sits on path: `electron-boilerplate/package.json`. This is where you should decl
 It's also the place to specify the Electron runtime version you want to use:
 ```json
 "devDependencies": {
-  "electron": "1.3.3"
+  "electron": "1.4.7"
 }
 ```
 Note: [Electron authors advise](http://electron.atom.io/docs/tutorial/electron-versioning/) to use fixed version here.
