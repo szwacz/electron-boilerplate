@@ -12,13 +12,14 @@ var nodeBuiltInModules = ['assert', 'buffer', 'child_process', 'cluster',
 
 var electronBuiltInModules = ['electron'];
 
-var npmModulesUsedInApp = function () {
-    var appManifest = require('../app/package.json');
-    return Object.keys(appManifest.dependencies);
-};
-
 var generateExternalModulesList = function () {
-    return [].concat(nodeBuiltInModules, electronBuiltInModules, npmModulesUsedInApp());
+    var appManifest = jetpack.read('./package.json', 'json');
+    return [].concat(
+        nodeBuiltInModules,
+        electronBuiltInModules,
+        Object.keys(appManifest.dependencies),
+        Object.keys(appManifest.devDependencies)
+    );
 };
 
 var cached = {};

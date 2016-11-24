@@ -5,7 +5,7 @@ var beforeEach = function () {
     this.timeout(10000);
     this.app = new Application({
         path: electron,
-        args: ['app'],
+        args: ['.'],
         startTimeout: 10000,
         waitTimeout: 10000,
     });
