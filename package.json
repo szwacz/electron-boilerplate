@@ -10,7 +10,6 @@
   "main": "app/background.js",
   "build": {
     "appId": "com.example.electron-boilerplate",
-    "asar": false,
     "files": [
       "app/**/*",
       "node_modules/**/*",
