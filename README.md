@@ -2,7 +2,7 @@
 
 A minimalistic yet comprehensive boilerplate application for [Electron runtime](http://electron.atom.io). Tested on OSX, Windows and Linux.  
 
-This project does not impose on you any framework (like Angular or React). Tries to give you only the 'electron' part of technology stack so you can pick your favorite technologies to build the actual app.
+This project does not impose on you any framework (like Angular or React). It tries to give you only the 'electron' part of technology stack so you can pick your favorite technologies to build the actual app.
 
 # Quick start
 
