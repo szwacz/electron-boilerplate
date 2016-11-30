@@ -3,6 +3,7 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
+import path from 'path'
 import { app, Menu } from 'electron';
 import { devMenuTemplate } from './menu/dev_menu_template';
 import { editMenuTemplate } from './menu/edit_menu_template';
@@ -38,7 +39,7 @@ app.on('ready', function () {
         height: 600
     });
 
-    mainWindow.loadURL('file://' + __dirname + '/app.html');
+    mainWindow.loadURL(path.join('file://', __dirname, '/app.html'));
 
     if (env.name === 'development') {
         mainWindow.openDevTools();
