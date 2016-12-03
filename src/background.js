@@ -4,6 +4,7 @@
 // window from here.
 
 import path from 'path'
+import url from 'url'
 import { app, Menu } from 'electron';
 import { devMenuTemplate } from './menu/dev_menu_template';
 import { editMenuTemplate } from './menu/edit_menu_template';
@@ -39,7 +40,11 @@ app.on('ready', function () {
         height: 600
     });
 
-    mainWindow.loadURL(path.join('file://', __dirname, '/app.html'));
+    mainWindow.loadURL(url.format({
+      pathname: path.join(__dirname, '/app.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
 
     if (env.name === 'development') {
         mainWindow.openDevTools();
