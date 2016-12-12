@@ -3,8 +3,8 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-import path from 'path'
-import url from 'url'
+import path from 'path';
+import url from 'url';
 import { app, Menu } from 'electron';
 import { devMenuTemplate } from './menu/dev_menu_template';
 import { editMenuTemplate } from './menu/edit_menu_template';
