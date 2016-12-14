@@ -206,6 +206,10 @@ try {
 			'es_ES',
 			'pt_BR'
 		];
+	} else {
+		for (var i = 0; i < availableDictionaries.length; i++) {
+			availableDictionaries[i] = availableDictionaries[i].replace('-', '_');
+		}
 	}
 
 	availableDictionaries = availableDictionaries.sort(function(a, b) {
