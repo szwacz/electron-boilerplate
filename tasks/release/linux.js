@@ -28,7 +28,7 @@ var init = function () {
 };
 
 var copyRuntime = function () {
-    return projectDir.copyAsync('node_modules/electron-prebuilt/dist', readyAppDir.path(), { overwrite: true });
+    return projectDir.copyAsync('node_modules/electron/dist', readyAppDir.path(), { overwrite: true });
 };
 
 var packageBuiltApp = function () {
@@ -104,6 +104,45 @@ var packToDebFile = function () {
     return deferred.promise;
 };
 
+var packToRpmFile = function () {
+    var deferred = Q.defer();
+
+    var rpmFileName = packName + '.rpm';
+    var rpmPath = releasesDir.path(rpmFileName);
+
+    gulpUtil.log('Creating RPM package... (' + rpmFileName + ')');
+
+    // Preparing RPM Spec file
+    var spec = projectDir.read('resources/linux/RHEL/app.spec');
+    spec = utils.replace(spec, {
+        name: manifest.name,
+        description: manifest.description,
+        version: manifest.version,
+        author: manifest.author,
+    });
+    tmpDir.write('SPECS/app.spec', spec);
+
+    // Build the package...
+    childProcess.exec('fakeroot rpmbuild --quiet -D "_topdir `pwd`/tmp" -D "_builddir ' + packDir.path() + '" -bb ' + tmpDir.path('SPECS/app.spec').replace(/\s/g, '\\ '),
+        function (error, stdout, stderr) {
+            if (error || stderr) {
+                console.log('ERROR while building RPM package:');
+                console.log(error);
+                console.log(stderr);
+            } else {
+                // Copy to release directory
+                tmpDir.copy('RPMS/x86_64', releasesDir.path(), {
+                    matching: '*.rpm',
+                    overwrite: true
+                });
+                gulpUtil.log('RPM package ready!', rpmPath);
+            }
+            deferred.resolve();
+        });
+
+    return deferred.promise;
+};
+
 var cleanClutter = function () {
     return tmpDir.removeAsync('.');
 };
@@ -115,6 +154,7 @@ module.exports = function () {
         .then(finalize)
         .then(renameApp)
         .then(packToDebFile)
+        .then(packToRpmFile)
         .then(cleanClutter)
         .catch(console.error);
 };

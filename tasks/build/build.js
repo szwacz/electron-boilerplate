@@ -5,6 +5,7 @@ var Q = require('q');
 var gulp = require('gulp');
 var less = require('gulp-less');
 var jetpack = require('fs-jetpack');
+var asar = require('asar');
 
 var bundle = require('./bundle');
 var generateSpecImportsFile = require('./generate_spec_imports');
@@ -54,6 +55,8 @@ gulp.task('copy-watch', copyTask);
 var bundleApplication = function () {
     return Q.all([
             bundle(srcDir.path('background.js'), destDir.path('background.js')),
+            bundle(srcDir.path('servers.js'), destDir.path('servers.js')),
+            bundle(srcDir.path('certificate.js'), destDir.path('certificate.js')),
             bundle(srcDir.path('app.js'), destDir.path('app.js')),
         ]);
 };
@@ -117,5 +120,17 @@ gulp.task('watch', function () {
     gulp.watch('app/**/*.less', ['less-watch']);
 });
 
+var buildAsar = function () {
+    var deferred = Q.defer();
+
+    asar.createPackage(destDir.cwd(), projectDir.path('app.asar'), function () {
+        deferred.resolve();
+    });
+    deferred.resolve();
+
+    return deferred.promise;
+};
+
+gulp.task('build:asar', ['build'], buildAsar);
 
 gulp.task('build', ['bundle', 'less', 'copy', 'finalize']);

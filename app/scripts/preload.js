@@ -1,7 +1,9 @@
-/* globals Meteor, Tracker, RocketChat */
+/* globals Meteor, Tracker, RocketChat, UserPresence */
 'use strict';
 
 var IPC = require('electron').ipcRenderer;
+
+require('electron-notification-shim')();
 
 class Notification extends window.Notification {
 	get onclick() {
@@ -38,7 +40,7 @@ window.addEventListener('load', function() {
 	});
 });
 
-var shell = require('shell');
+const {shell} = require('electron');
 
 var supportExternalLinks = function(e) {
 	var href;
@@ -68,15 +70,16 @@ var supportExternalLinks = function(e) {
 
 document.addEventListener('click', supportExternalLinks, false);
 
-var webFrame = require('web-frame');
-var remote = require('remote');
+
+const {webFrame} = require('electron');
+const {remote} = require('electron');
+
 var webContents = remote.getCurrentWebContents();
-var Menu = remote.require('menu');
-var menu = new Menu();
+var menu = new remote.Menu();
 
 var path = remote.require('path');
 
-// set the initial context menu so that a context menu exists even before spellcheck is called
+// // set the initial context menu so that a context menu exists even before spellcheck is called
 var getTemplate = function() {
 	return [
 		{
@@ -120,14 +123,6 @@ if (localStorage.getItem('spellcheckerDictionaries')) {
 	if (Array.isArray(spellcheckerDictionaries)) {
 		enabledDictionaries.push.apply(enabledDictionaries, spellcheckerDictionaries);
 	}
-}
-
-if (enabledDictionaries.length === 0) {
-	if (localStorage.getItem('userLanguage')) {
-		enabledDictionaries.push(localStorage.getItem('userLanguage'));
-	}
-
-	enabledDictionaries.push(navigator.language.replace('-', '_'));
 }
 
 const saveEnabledDictionaries = function() {
@@ -211,6 +206,63 @@ try {
 			'es_ES',
 			'pt_BR'
 		];
+	} else {
+		for (var i = 0; i < availableDictionaries.length; i++) {
+			availableDictionaries[i] = availableDictionaries[i].replace('-', '_');
+		}
+	}
+
+	availableDictionaries = availableDictionaries.sort(function(a, b) {
+		if (a > b) {
+			return 1;
+		}
+		if (a < b) {
+			return -1;
+		}
+		return 0;
+	});
+
+	for (var i = enabledDictionaries.length - 1; i >= 0; i--) {
+		if (availableDictionaries.indexOf(enabledDictionaries[i]) === -1) {
+			enabledDictionaries.splice(i, 1);
+		}
+	}
+
+	if (enabledDictionaries.length === 0) {
+		if (localStorage.getItem('userLanguage')) {
+			let userLanguage = localStorage.getItem('userLanguage').replace('-', '_');
+			if (availableDictionaries.indexOf(userLanguage) > -1) {
+				enabledDictionaries.push(userLanguage);
+			}
+			if (userLanguage.indexOf('_') > -1) {
+				userLanguage = userLanguage.split('_')[0];
+				if (availableDictionaries.indexOf(userLanguage) > -1) {
+					enabledDictionaries.push(userLanguage);
+				}
+			}
+		}
+
+		let navigatorLanguage = navigator.language.replace('-', '_');
+		if (availableDictionaries.indexOf(navigatorLanguage) > -1) {
+			enabledDictionaries.push(navigatorLanguage);
+		}
+		if (navigatorLanguage.indexOf('_') > -1) {
+			navigatorLanguage = navigatorLanguage.split('_')[0];
+			if (availableDictionaries.indexOf(navigatorLanguage) > -1) {
+				enabledDictionaries.push(navigatorLanguage);
+			}
+		}
+	}
+
+	if (enabledDictionaries.length === 0) {
+		let defaultLanguage = 'en_US';
+		if (availableDictionaries.indexOf(defaultLanguage) > -1) {
+			enabledDictionaries.push(defaultLanguage);
+		}
+		defaultLanguage = defaultLanguage.split('_')[0];
+		if (availableDictionaries.indexOf(defaultLanguage) > -1) {
+			enabledDictionaries.push(defaultLanguage);
+		}
 	}
 
 	languagesMenu = {
@@ -242,7 +294,7 @@ try {
 		}
 	});
 } catch(e) {
-	console.log('Spellchecker unavailble');
+	console.log('Spellchecker module unavailable \n' + e.message);
 }
 
 window.addEventListener('contextmenu', function(event){
@@ -290,7 +342,22 @@ window.addEventListener('contextmenu', function(event){
 			}
 		}
 
-		menu = Menu.buildFromTemplate(template);
+		menu = remote.Menu.buildFromTemplate(template);
 		menu.popup(remote.getCurrentWindow());
 	}, 0);
 }, false);
+
+/* userPresence away timer based on system idle time */
+function getSystemIdleTime() {
+	return IPC.sendSync('getSystemIdleTime');
+}
+
+// setInterval(function(){
+// 	try {
+// 		if(getSystemIdleTime() < UserPresence.awayTime) {
+// 			UserPresence.setOnline();
+// 		}
+// 	} catch(e) {
+// 		console.error(e);
+// 	}
+// }, 1e3);

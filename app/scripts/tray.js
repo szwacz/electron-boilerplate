@@ -29,47 +29,30 @@ let _iconTrayAlert = path.join(__dirname, 'images', icons[process.platform].dir,
 function createAppTray() {
     let _tray = new Tray(_iconTray);
     var contextMenu = Menu.buildFromTemplate([{
-        label: 'Hide',
-        click: function() {
-            mainWindow.hide();
-        }
-    }, {
-        label: 'Show',
-        click: function() {
-            mainWindow.restore();
-            mainWindow.show();
-        }
-    }, {
         label: 'Quit',
         click: function() {
             remote.app.quit();
         }
     }]);
-    _tray.setToolTip(remote.app.getName());
-    _tray.setContextMenu(contextMenu);
 
-    if (process.platform === 'darwin' || process.platform === 'win32') {
-        _tray.on('double-click', function() {
-            mainWindow.restore();
+    _tray.setToolTip(remote.app.getName());
+
+    _tray.on('right-click', function(e, b) {
+        _tray.popUpContextMenu(contextMenu, b);
+    });
+
+    _tray.on('click', function(e, b) {
+        if (e.ctrlKey === true) {
+            _tray.popUpContextMenu(contextMenu, b);
+            return;
+        }
+
+        if (mainWindow.isVisible()) {
+            mainWindow.hide();
+        } else {
             mainWindow.show();
-        });
-    } else {
-        let dblClickDelay = 500,
-            dblClickTimeoutFct = null;
-        _tray.on('click', function() {
-            if (!dblClickTimeoutFct) {
-                dblClickTimeoutFct = setTimeout(function() {
-                    // Single click, do nothing for now
-                    dblClickTimeoutFct = null;
-                }, dblClickDelay);
-            } else {
-                clearTimeout(dblClickTimeoutFct);
-                dblClickTimeoutFct = null;
-                mainWindow.restore();
-                mainWindow.show();
-            }
-        });
-    }
+        }
+    });
 
     mainWindow = mainWindow;
     mainWindow.tray = _tray;

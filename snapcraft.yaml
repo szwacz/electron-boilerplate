@@ -1,0 +1,28 @@
+name: rocketchat-desktop
+version: 1.3.1
+summary: Desktop app for Rocket.Chat
+description: Rocket.Chat Desktop app
+apps:
+  rocketchat:
+    command: env TMPDIR=$SNAP_USER_DATA FONTCONFIG_PATH=$SNAP/etc/fonts FONTCONFIG_FILE=$SNAP/etc/fonts/fonts.conf desktop-launch $SNAP/rocketchat
+    plugs: [unity7, x11, home, x11, opengl, network, network-bind, browser-support]
+
+parts:
+  rocketchat:
+    plugin: copy
+    stage-packages:
+      - libnss3
+      - fontconfig-config
+      - gnome-themes-standard
+    files:
+      node_modules/electron/dist/electron: rocketchat
+      node_modules/electron/dist/icudtl.dat: icudtl.dat
+      node_modules/electron/dist/snapshot_blob.bin: snapshot_blob.bin
+      node_modules/electron/dist/natives_blob.bin: natives_blob.bin
+      node_modules/electron/dist/content_shell.pak: content_shell.pak
+      node_modules/electron/dist/resources/* : resources
+      node_modules/electron/dist/locales/* : locales
+      app.asar: resources/app.asar
+      node_modules/electron/dist/libnode.so: lib/x86_64-linux-gnu/libnode.so
+      node_modules/electron-/dist/libffmpeg.so: lib/x86_64-linux-gnu/libffmpeg.so
+    after: [desktop-gtk2]

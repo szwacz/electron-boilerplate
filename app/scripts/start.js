@@ -1,6 +1,6 @@
 /* globals $ */
 
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 import { servers } from './servers';
 import { sidebar } from './sidebar';
 import { webview } from './webview';
@@ -20,12 +20,6 @@ export var start = function() {
     var defaultInstance = 'https://demo.rocket.chat';
 
     // connection check
-    if (!navigator.onLine) {
-        offline();
-    }
-    window.addEventListener('online', online);
-    window.addEventListener('offline', offline);
-
     function online() {
         document.body.classList.remove('offline');
     }
@@ -33,6 +27,12 @@ export var start = function() {
     function offline() {
         document.body.classList.add('offline');
     }
+
+    if (!navigator.onLine) {
+        offline();
+    }
+    window.addEventListener('online', online);
+    window.addEventListener('offline', offline);
     // end connection check
 
     var form = document.querySelector('form');
@@ -68,25 +68,36 @@ export var start = function() {
                     button.value = 'Connect';
                     button.disabled = false;
                     resolve();
-                }, function() {
+                }, function(status) {
                     // If the url begins with HTTP, mark as invalid
-                    if (/^http:\/\/.+/.test(host)) {
+                    if (/^https?:\/\/.+/.test(host) || status === 'basic-auth') {
                         button.value = 'Invalid url';
                         invalidUrl.style.display = 'block';
+                        switch (status) {
+                            case 'basic-auth':
+                                invalidUrl.innerHTML = 'Auth needed, try <b>username:password@host</b>';
+                                break;
+                            case 'invalid':
+                                invalidUrl.innerHTML = 'No valid server found at the URL';
+                                break;
+                            case 'timeout':
+                                invalidUrl.innerHTML = 'Timeout trying to connect';
+                                break;
+                        }
                         hostField.classList.add('wrong');
                         reject();
                         return;
                     }
 
-                    // If the url begins with HTTPS, fallback to HTTP
-                    if (/^https:\/\/.+/.test(host)) {
-                        hostField.value = host.replace('https://', 'http://');
-                        return execValidation();
-                    }
+                    // // If the url begins with HTTPS, fallback to HTTP
+                    // if (/^https:\/\/.+/.test(host)) {
+                    //     hostField.value = host.replace('https://', 'http://');
+                    //     return execValidation();
+                    // }
 
                     // If the url isn't localhost, don't have dots and don't have protocol
                     // try as a .rocket.chat subdomain
-                    if (!/(^https?:\/\/)|(\.)|(^localhost(:\d+)?$)/.test(host)) {
+                    if (!/(^https?:\/\/)|(\.)|(^([^:]+:[^@]+@)?localhost(:\d+)?$)/.test(host)) {
                         hostField.value = `https://${host}.rocket.chat`;
                         return execValidation();
                     }
@@ -106,6 +117,11 @@ export var start = function() {
         validateHost().then(function() {}, function() {});
     });
 
+    ipcRenderer.on('certificate-reload', function(event, url) {
+        hostField.value = url.replace(/\/api\/info$/, '');
+        validateHost().then(function() {}, function() {});
+    });
+
     var submit = function() {
         validateHost().then(function() {
             var input = form.querySelector('[name="host"]');
@@ -115,11 +131,11 @@ export var start = function() {
                 url = defaultInstance;
             }
 
-            if (servers.addHost(url) === true) {
+            url = servers.addHost(url);
+            if (url !== false) {
                 sidebar.show();
+                servers.setActive(url);
             }
-
-            servers.setActive(url);
 
             input.value = '';
         }, function() {});

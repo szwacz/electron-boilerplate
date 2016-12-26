@@ -1,19 +1,20 @@
 {
   "devDependencies": {
-    "asar": "^0.10.0",
-    "electron-prebuilt": "0.36.10",
-    "fs-jetpack": "^0.7.0",
-    "gulp": "^3.9.0",
-    "gulp-less": "^3.0.3",
-    "gulp-util": "^3.0.6",
+    "asar": "^0.12.3",
+    "electron": "1.4.13",
+    "electron-rebuild": "^1.2.1",
+    "fs-jetpack": "^0.10.5",
+    "gulp": "^3.9.1",
+    "gulp-less": "^3.1.0",
+    "gulp-util": "^3.0.7",
     "q": "^1.4.1",
-    "rollup": "^0.25.4",
-    "tree-kill": "^0.1.1",
-    "yargs": "^4.2.0"
+    "rollup": "^0.38.0",
+    "tree-kill": "^1.1.0",
+    "yargs": "^6.5.0"
   },
   "optionalDependencies": {
-    "appdmg": "^0.3.2",
-    "rcedit": "^0.4.0"
+    "appdmg": "^0.4.5",
+    "rcedit": "^0.7.0"
   },
   "scripts": {
     "postinstall": "cd app && npm install",
@@ -21,11 +22,16 @@
     "release": "gulp release --env=production",
     "start": "node ./tasks/start",
     "test": "node ./tasks/start --env=test",
-    "install-native": "node ./tasks/install_native_module"
+    "install-native": "node ./tasks/install_native_module",
+    "build-asar": "gulp build:asar --env=production"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/RocketChat/Rocket.Chat.Electron.git"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "electron-notification-shim": "^1.1.0",
+    "electron-toaster": "^2.0.2"
+  }
 }

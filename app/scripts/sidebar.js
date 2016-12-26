@@ -43,6 +43,10 @@ class SideBar extends EventEmitter {
 			this.setLabel(hostUrl, title);
 		});
 
+		webview.on('dom-ready', (hostUrl) => {
+			this.setImage(hostUrl);
+		});
+
 		if (this.isHidden()) {
 			this.hide();
 		} else {
@@ -51,7 +55,6 @@ class SideBar extends EventEmitter {
 	}
 
 	add(host) {
-		var url = host.url;
 		var name = host.title.replace(/^https?:\/\/(?:www\.)?([^\/]+)(.*)/, '$1');
 		name = name.split('.');
 		name = name[0][0] + (name[1] ? name[1][0] : '');
@@ -72,7 +75,7 @@ class SideBar extends EventEmitter {
 			img.style.display = 'initial';
 			initials.style.display = 'none';
 		};
-		img.src = `${url}/assets/favicon.svg?v=${Math.round(Math.random()*10000)}`;
+		// img.src = `${host.url}/assets/favicon.svg?v=${Math.round(Math.random()*10000)}`;
 
 		var hotkey = document.createElement('div');
 		hotkey.classList.add('name');
@@ -89,8 +92,8 @@ class SideBar extends EventEmitter {
 		item.appendChild(img);
 		item.appendChild(hotkey);
 
-		item.dataset.host = url;
-		item.setAttribute('server', url);
+		item.dataset.host = host.url;
+		item.setAttribute('server', host.url);
 		item.classList.add('instance');
 
 		item.onclick = () => {
@@ -106,10 +109,9 @@ class SideBar extends EventEmitter {
 			label: host.title,
 			accelerator: 'CmdOrCtrl+' + this.hostCount,
 			position: 'before=server-list-separator',
-			id: url,
+			id: host.url,
 			click: () => {
 				var mainWindow = remote.getCurrentWindow();
-				mainWindow.restore();
 				mainWindow.show();
 				this.emit('click', host.url);
 				servers.setActive(host.url);
@@ -118,6 +120,11 @@ class SideBar extends EventEmitter {
 
 		windowMenu.submenu.push(menuItem);
 		Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+	}
+
+	setImage(hostUrl) {
+		const img = this.getByUrl(hostUrl).querySelector('img');
+		img.src = `${hostUrl}/assets/favicon.svg?v=${Math.round(Math.random()*10000)}`;
 	}
 
 	remove(hostUrl) {
@@ -136,7 +143,7 @@ class SideBar extends EventEmitter {
 	}
 
 	getActive() {
-		return this.listElement.querySelector(`.instance.active`);
+		return this.listElement.querySelector('.instance.active');
 	}
 
 	isActive(hostUrl) {
@@ -157,7 +164,7 @@ class SideBar extends EventEmitter {
 
 	deactiveAll() {
 		var item;
-		while (!!(item = this.getActive())) {
+		while (!(item = this.getActive()) === false) {
 			item.classList.remove('active');
 		}
 	}

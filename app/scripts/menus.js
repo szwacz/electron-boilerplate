@@ -4,12 +4,13 @@ import { remote } from 'electron';
 import { servers } from './servers';
 import { sidebar } from './sidebar';
 import { webview } from './webview';
-import webFrame from 'web-frame';
 import '../branding/branding.js';
 
 var Menu = remote.Menu;
 var APP_NAME = remote.app.getName();
 var template;
+
+var certificate = remote.require('./certificate');
 
 document.title = APP_NAME;
 
@@ -94,24 +95,18 @@ if (process.platform === 'darwin') {
 			submenu: [
 				{
 					label: 'Original Zoom',
-					accelerator: 'Command+0',
-					click: function() {
-						webFrame.setZoomLevel(0);
-					}
+					accelerator: 'CommandOrControl+0',
+					role: 'resetzoom'
 				},
 				{
 					label: 'Zoom In',
-					accelerator: 'Command+=',
-					click: function() {
-						webFrame.setZoomLevel(webFrame.getZoomLevel()+1);
-					}
+					accelerator: 'CommandOrControl+Plus',
+					role: 'zoomout'
 				},
 				{
 					label: 'Zoom Out',
-					accelerator: 'Command+-',
-					click: function() {
-						webFrame.setZoomLevel(webFrame.getZoomLevel()-1);
-					}
+					accelerator: 'CommandOrControl+-',
+					role: 'zoomin'
 				},
 				{
 					type: 'separator'
@@ -164,6 +159,20 @@ if (process.platform === 'darwin') {
 					click: function() {
 						sidebar.toggle();
 					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Clear',
+					submenu: [
+						{
+							label: 'Clear Trusted Certificates',
+							click: function() {
+								certificate.clear();
+							}
+						}
+					]
 				}
 			]
 		},
@@ -195,7 +204,6 @@ if (process.platform === 'darwin') {
 					accelerator: 'Command+N',
 					click: function() {
 						var mainWindow = remote.getCurrentWindow();
-						mainWindow.restore();
 						mainWindow.show();
 						servers.clearActive();
 					}
@@ -207,7 +215,6 @@ if (process.platform === 'darwin') {
 					label: 'Bring All to Front',
 					click: function() {
 						var mainWindow = remote.getCurrentWindow();
-						mainWindow.restore();
 						mainWindow.show();
 					}
 				}
@@ -238,7 +245,7 @@ if (process.platform === 'darwin') {
 } else {
 	template = [
 		{
-			label: APP_NAME,
+			label: '&' + APP_NAME,
 			submenu: [
 				{
 					label: 'About ' + APP_NAME,
@@ -261,7 +268,7 @@ if (process.platform === 'darwin') {
 			]
 		},
 		{
-			label: 'Edit',
+			label: '&Edit',
 			submenu: [
 				{
 					label: 'Undo',
@@ -299,28 +306,22 @@ if (process.platform === 'darwin') {
 			]
 		},
 		{
-			label: 'View',
+			label: '&View',
 			submenu: [
 				{
 					label: 'Original Zoom',
-					accelerator: 'Command+0',
-					click: function() {
-						webFrame.setZoomLevel(0);
-					}
+					accelerator: 'CommandOrControl+0',
+					role: 'resetzoom'
 				},
 				{
 					label: 'Zoom In',
-					accelerator: 'Command+=',
-					click: function() {
-						webFrame.setZoomLevel(webFrame.getZoomLevel()+1);
-					}
+					accelerator: 'CommandOrControl+Plus',
+					role: 'zoomout'
 				},
 				{
 					label: 'Zoom Out',
-					accelerator: 'Command+-',
-					click: function() {
-						webFrame.setZoomLevel(webFrame.getZoomLevel()-1);
-					}
+					accelerator: 'CommandOrControl+-',
+					role: 'zoomin'
 				},
 				{
 					type: 'separator'
@@ -373,11 +374,25 @@ if (process.platform === 'darwin') {
 					click: function() {
 						sidebar.toggle();
 					}
+				},
+				{
+					type: 'separator'
+				},
+				{
+					label: 'Clear',
+					submenu: [
+						{
+							label: 'Clear Trusted Certificates',
+							click: function() {
+								certificate.clear();
+							}
+						}
+					]
 				}
 			]
 		},
 		{
-			label: 'Window',
+			label: '&Window',
 			id: 'window',
 			submenu: [
 				{

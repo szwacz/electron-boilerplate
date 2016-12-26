@@ -8,4 +8,4 @@ Exec=/opt/{{name}}/{{name}}
 Path=/opt/{{name}}/
 Icon=/opt/{{name}}/icon.png
 Terminal=false
-Categories=Application;
+Categories=Network;InstantMessaging;Chat;

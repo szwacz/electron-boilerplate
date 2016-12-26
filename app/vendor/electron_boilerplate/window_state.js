@@ -25,7 +25,7 @@ export default function (name, defaults) {
     }
 
     var saveState = function (win) {
-        if (!win.isMaximized() && !win.isMinimized()) {
+        if (!win.isMaximized() && !win.isMinimized() && win.isVisible()) {
             var position = win.getPosition();
             var size = win.getSize();
             state.x = position[0];
