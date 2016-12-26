@@ -4,7 +4,6 @@ import { remote } from 'electron';
 import { servers } from './servers';
 import { sidebar } from './sidebar';
 import { webview } from './webview';
-import webFrame from 'web-frame';
 import '../branding/branding.js';
 
 var Menu = remote.Menu;
@@ -96,24 +95,18 @@ if (process.platform === 'darwin') {
 			submenu: [
 				{
 					label: 'Original Zoom',
-					accelerator: 'Command+0',
-					click: function() {
-						webFrame.setZoomLevel(0);
-					}
+					accelerator: 'CommandOrControl+0',
+					role: 'resetzoom'
 				},
 				{
 					label: 'Zoom In',
-					accelerator: 'Command+=',
-					click: function() {
-						webFrame.setZoomLevel(webFrame.getZoomLevel()+1);
-					}
+					accelerator: 'CommandOrControl+Plus',
+					role: 'zoomout'
 				},
 				{
 					label: 'Zoom Out',
-					accelerator: 'Command+-',
-					click: function() {
-						webFrame.setZoomLevel(webFrame.getZoomLevel()-1);
-					}
+					accelerator: 'CommandOrControl+-',
+					role: 'zoomin'
 				},
 				{
 					type: 'separator'
@@ -317,24 +310,18 @@ if (process.platform === 'darwin') {
 			submenu: [
 				{
 					label: 'Original Zoom',
-					accelerator: 'Command+0',
-					click: function() {
-						webFrame.setZoomLevel(0);
-					}
+					accelerator: 'CommandOrControl+0',
+					role: 'resetzoom'
 				},
 				{
 					label: 'Zoom In',
-					accelerator: 'Command+=',
-					click: function() {
-						webFrame.setZoomLevel(webFrame.getZoomLevel()+1);
-					}
+					accelerator: 'CommandOrControl+Plus',
+					role: 'zoomout'
 				},
 				{
 					label: 'Zoom Out',
-					accelerator: 'Command+-',
-					click: function() {
-						webFrame.setZoomLevel(webFrame.getZoomLevel()-1);
-					}
+					accelerator: 'CommandOrControl+-',
+					role: 'zoomin'
 				},
 				{
 					type: 'separator'

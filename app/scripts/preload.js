@@ -1,4 +1,4 @@
-/* globals Meteor, Tracker, RocketChat */
+/* globals Meteor, Tracker, RocketChat, UserPresence */
 'use strict';
 
 var IPC = require('electron').ipcRenderer;
@@ -40,7 +40,7 @@ window.addEventListener('load', function() {
 	});
 });
 
-var shell = require('shell');
+const {shell} = require('electron');
 
 var supportExternalLinks = function(e) {
 	var href;
@@ -70,15 +70,16 @@ var supportExternalLinks = function(e) {
 
 document.addEventListener('click', supportExternalLinks, false);
 
-var webFrame = require('web-frame');
-var remote = require('remote');
+
+const {webFrame} = require('electron');
+const {remote} = require('electron');
+
 var webContents = remote.getCurrentWebContents();
-var Menu = remote.require('menu');
-var menu = new Menu();
+var menu = new remote.Menu();
 
 var path = remote.require('path');
 
-// set the initial context menu so that a context menu exists even before spellcheck is called
+// // set the initial context menu so that a context menu exists even before spellcheck is called
 var getTemplate = function() {
 	return [
 		{
@@ -205,6 +206,10 @@ try {
 			'es_ES',
 			'pt_BR'
 		];
+	} else {
+		for (var i = 0; i < availableDictionaries.length; i++) {
+			availableDictionaries[i] = availableDictionaries[i].replace('-', '_');
+		}
 	}
 
 	availableDictionaries = availableDictionaries.sort(function(a, b) {
@@ -289,7 +294,7 @@ try {
 		}
 	});
 } catch(e) {
-	console.log('Spellchecker module unavailable');
+	console.log('Spellchecker module unavailable \n' + e.message);
 }
 
 window.addEventListener('contextmenu', function(event){
@@ -337,7 +342,7 @@ window.addEventListener('contextmenu', function(event){
 			}
 		}
 
-		menu = Menu.buildFromTemplate(template);
+		menu = remote.Menu.buildFromTemplate(template);
 		menu.popup(remote.getCurrentWindow());
 	}, 0);
 }, false);
@@ -347,10 +352,12 @@ function getSystemIdleTime() {
 	return IPC.sendSync('getSystemIdleTime');
 }
 
-setInterval(function(){
-	try {
-		if(getSystemIdleTime() < UserPresence.awayTime) {
-			UserPresence.setOnline()
-		}
-	} catch(e) {}
-},1e3)
+// setInterval(function(){
+// 	try {
+// 		if(getSystemIdleTime() < UserPresence.awayTime) {
+// 			UserPresence.setOnline();
+// 		}
+// 	} catch(e) {
+// 		console.error(e);
+// 	}
+// }, 1e3);
