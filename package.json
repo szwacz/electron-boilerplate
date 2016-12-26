@@ -1,16 +1,16 @@
 {
   "devDependencies": {
     "asar": "^0.12.3",
-    "electron": "1.4.3",
+    "electron": "1.4.13",
     "electron-rebuild": "^1.2.1",
-    "fs-jetpack": "^0.9.2",
+    "fs-jetpack": "^0.10.5",
     "gulp": "^3.9.1",
     "gulp-less": "^3.1.0",
     "gulp-util": "^3.0.7",
     "q": "^1.4.1",
-    "rollup": "^0.36.3",
+    "rollup": "^0.38.0",
     "tree-kill": "^1.1.0",
-    "yargs": "^5.0.0"
+    "yargs": "^6.5.0"
   },
   "optionalDependencies": {
     "appdmg": "^0.4.5",
