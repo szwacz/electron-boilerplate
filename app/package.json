@@ -13,7 +13,8 @@
     "ffi": "^2.1.0",
     "electron-notification-shim": "^1.1.0",
     "electron-toaster": "^2.0.2",
-    "fs-jetpack": "^0.7.0"
+    "fs-jetpack": "^0.7.0",
+    "spellchecker": "3.3.1"
   },
   "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
   "codeSignIdentity": {
