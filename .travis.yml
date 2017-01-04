@@ -4,12 +4,13 @@ matrix:
       dist: trusty
       sudo: required
     - os: osx
-      osx_image: xcode7.2
+      osx_image: xcode7.3.1
 
 branches:
   only:
   - develop
   - master
+  - travis
   - "/^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$/"
 
 git:
@@ -26,6 +27,8 @@ addons:
     - ubuntu-toolchain-r-test
     packages:
     - g++-4.8
+    - libnss3-dev
+    - pkg-config
 
 before_script:
 - rm -rf releases
