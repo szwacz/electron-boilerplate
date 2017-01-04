@@ -24,12 +24,8 @@ git:
 
 addons:
   apt:
-    sources:
-    - ubuntu-toolchain-r-test
     packages:
-    - g++-4.8
-    - libnss3-dev
-    - pkg-config
+    - rpm
 
 before_script:
 - rm -rf releases
@@ -37,7 +33,3 @@ before_script:
 
 script:
 - npm run release
-
-env:
-  global:
-  - CXX=g++-4.8
