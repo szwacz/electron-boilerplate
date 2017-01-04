@@ -3,8 +3,10 @@ matrix:
     - os: linux
       dist: trusty
       sudo: required
+      language: node_js
     - os: osx
       osx_image: xcode7.3.1
+      language: node_js
 
 branches:
   only:
@@ -15,8 +17,6 @@ branches:
 
 git:
   depth: 1
-
-language: node_js
 
 node_js:
 - '6'
