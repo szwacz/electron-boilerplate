@@ -5,24 +5,21 @@ cache:
   - node_modules
   - '%USERPROFILE%\.electron'
 
-environment:
-  TEST_FILES: BuildTest,extraMetadataTest,filesTest,globTest,nsisUpdaterTest
-
 install:
   - ps: Install-Product node 6 x64
   - choco install nsis -version 3.01.0.20160420
-  - dir "C:/Program Files (x86)/NSIS"
   - SET PATH=C:/Program Files (x86)/NSIS;%PATH%
-  - echo "%PATH%"
   - npm install npm
   - .\node_modules\.bin\npm install
 
 build_script:
+  - ps: |
+    (gc package.json) -replace '"version": "[0-9.]+"', ('"version": "'+[System.Environment]::ExpandEnvironmentVariables("%APPVEYOR_REPO_TAG_NAME%")+'"')
   - npm run release
 
 deploy:
   - provider: GitHub
-    artifact: releases\rocketchat-2.0.0-win32-x64.exe
+    artifact: releases\rocketchat-%APPVEYOR_REPO_TAG_NAME%-win32-x64.exe
     auth_token:
       secure: Jud2So5RX4jxHG9gJ44AE5QRhnKjdOVtdHNoEkBTDFh7JfwOkFETlXHjH/zGXdRo
     draft: false
