@@ -12,7 +12,7 @@ install:
   - ps: Install-Product node 6 x64
   - choco install nsis -version 3.01.0.20160420
   - dir "C:/Program Files (x86)/NSIS"
-  - setx PATH "%PATH%;C:/Program Files (x86)/NSIS"
+  - SET PATH="C:/Program Files (x86)/NSIS;%PATH%"
   - echo "%PATH%"
   - npm install npm
   - .\node_modules\.bin\npm install
