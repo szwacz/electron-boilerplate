@@ -35,7 +35,7 @@ deploy:
   file:
     - "/home/travis/build/RocketChat/Rocket.Chat.Electron/releases/rocketchat-v2.0.0-linux-x64.deb"
   skip_cleanup: true
-  description: 'Release description'
+  description: 'Release description 2'
   on:
     tags: true
     all_branches: true
