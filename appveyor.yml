@@ -10,7 +10,7 @@ environment:
 
 install:
   - ps: Install-Product node 6 x64
-  - choco install nsis --version 3.01
+  - choco install nsis -version 3.01.0.20160420
   - dir "C:/Program Files (x86)/NSIS"
   - echo "%PATH%"
   - setx PATH "%PATH%;C:/Program Files (x86)/NSIS"
