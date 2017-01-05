@@ -1,0 +1,17 @@
+platform:
+  - x64
+
+cache:
+  - node_modules
+  - '%USERPROFILE%\.electron'
+
+environment:
+  TEST_FILES: BuildTest,extraMetadataTest,filesTest,globTest,nsisUpdaterTest
+
+install:
+  - ps: Install-Product node 6 x64
+  - npm install npm
+  - .\node_modules\.bin\npm install
+
+build_script:
+  - npm run release
