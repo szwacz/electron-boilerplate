@@ -13,8 +13,7 @@ install:
   - .\node_modules\.bin\npm install
 
 build_script:
-  - ps:
-    - |
+  - ps: >-
       (gc package.json) -replace '"version": "[0-9.]+"', ('"version": "'+[System.Environment]::ExpandEnvironmentVariables("%APPVEYOR_REPO_TAG_NAME%")+'"')
   - npm run release
 
