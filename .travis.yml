@@ -22,6 +22,13 @@ matrix:
     language: generic
     node_js:
     - '6'
+    before_deploy:
+      - echo $CERTIFICATE_OSX_P12_DEVELOPER_ID_APPLICATION | base64 --decode > CERTIFICATE_OSX_P12_DEVELOPER_ID_APPLICATION.p12
+      - security create-keychain -p $KEYCHAIN_PASSWORD build.keychain
+      - security default-keychain -s build.keychain
+      - security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
+      - security import certificate.p12 -k build.keychain -T /usr/bin/codesign
+      - security find-identity -v
     deploy:
       provider: releases
       api_key:
