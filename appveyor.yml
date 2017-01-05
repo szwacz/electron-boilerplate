@@ -9,6 +9,7 @@ install:
   - ps: >-
       [System.Environment]::ExpandEnvironmentVariables("%APPVEYOR_REPO_TAG_NAME%")
   - ps: Install-Product node 6 x64
+  - echo "$(APPVEYOR_REPO_COMMIT)"
   - choco install nsis -version 3.01.0.20160420
   - SET PATH=C:/Program Files (x86)/NSIS;%PATH%
   - npm install npm
