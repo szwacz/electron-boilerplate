@@ -39,15 +39,15 @@ module.exports.getEnvName = function () {
 };
 
 module.exports.getSigningId = function (manifest) {
-    return argv.sign || (manifest.codeSignIdentitiy ? manifest.codeSignIdentitiy.dmg : undefined);
+    return argv.sign || (manifest.codeSignIdentity ? manifest.codeSignIdentity.dmg : undefined);
 };
 
 module.exports.getMASSigningId = function (manifest) {
-    return argv['mas-sign'] || (manifest.codeSignIdentitiy ? manifest.codeSignIdentitiy.MAS : undefined);
+    return argv['mas-sign'] || (manifest.codeSignIdentity ? manifest.codeSignIdentity.MAS : undefined);
 };
 
 module.exports.getMASInstallerSigningId = function (manifest) {
-    return argv['mas-installer-sign'] || (manifest.codeSignIdentitiy ? manifest.codeSignIdentitiy.MASInstaller : undefined);
+    return argv['mas-installer-sign'] || (manifest.codeSignIdentity ? manifest.codeSignIdentity.MASInstaller : undefined);
 };
 
 module.exports.releaseForMAS = function () {
