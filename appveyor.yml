@@ -21,6 +21,7 @@ build_script:
   - type app\package.json
   - npm run release
 
+
 artifacts:
   - path: 'releases\*.exe'
 
