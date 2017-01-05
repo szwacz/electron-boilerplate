@@ -14,7 +14,7 @@ install:
 
 build_script:
   - ps: >-
-      (gc package.json) -replace '"version": "[0-9.]+"', ('"version": "'+[System.Environment]::ExpandEnvironmentVariables("%APPVEYOR_REPO_TAG_NAME%")+'"')
+      (gc package.json) -replace '"version": "[0-9.]+"', ('"version": "'+[System.Environment]::ExpandEnvironmentVariables("%APPVEYOR_REPO_TAG_NAME%")+'"') | Set-Content package.json
   - npm run release
 
 artifacts:
