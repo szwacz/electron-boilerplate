@@ -13,7 +13,6 @@ matrix:
       file:
         - "$TRAVIS_BUILD_DIR/releases/rocketchat-v2.0.0-linux-x64.deb"
         # - "$TRAVIS_BUILD_DIR/releases/rocketchat-v2.0.0-linux-x64.rpm"
-      draft: true
       skip_cleanup: true
       on:
         tags: true
@@ -28,8 +27,7 @@ matrix:
       api_key:
         secure: DHzFJ9JGNAdeTfTmr2vLJFajTL0XHEYG1OKeD4DQhxB1mGDVLF2FX2T0PrRoqD1S084acnEKN1nElMn/NWc6eNPVksqQlC+8kVtYsX6EMOoiT8YnsQW7TbAsBEp30a/cuNWLfUFEmwsXN6zQQMgyF5vBoMjsycxDXq9MF5AQ9Y5BXM0Dky/v5fBmKyoVl76G/L6RkXM4SaTpthwfFmYlrAC9ctbCgA337qS3SmNLjh/EzdvgAkI9mKxewBizp1/T8hzagcOXs+UoDm/avhbZTTxfxf03PcBHs6/YwlVGKWnsIKD+BP0N7kt4q7QjXmetx5UDvKiYk269lyapqgJgF9QhODjuxufK8HD9dkOfDsG2kC0VR0BK7fHgkFCEItp6rvWwvvSDKVJN7ogT9V8XzQjeYTWwc03B58zu0f9hS4x5OMrZrs3z+NsZ/Qr+yaEjmJAiazkJPOpfPyQB0EllnPY+uugzo9iUMLmK99aYTgK0ZKOOHtJh0ziv6aQgKK6L8i9k7A4t99SfLlaKPCNITx4FH8TbLts6Oxm87iNhTQPafpOZUGUeuHtJywK1Rj+CfYffqIpZahG8jRkfllqMoLZ0QmBXE+CD7aPkTN3MF1Tj38Dbe3HjOGl8oJfS2VKH8dH6p6e9BBTXvU/bOKNCb8FBjNT2SY8UYAxnlDmzJDA=
       file:
-        - "$TRAVIS_BUILD_DIR/releases/rocketchat-v2.0.0-darwin-x64.dmg"
-      draft: true
+        - "$TRAVIS_BUILD_DIR/releases/rocketchat-v2.0.0-darwin-x64.dmg"draft: true
       skip_cleanup: true
       on:
         tags: true
