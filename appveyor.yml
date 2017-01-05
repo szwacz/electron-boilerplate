@@ -10,7 +10,7 @@ environment:
 
 install:
   - ps: Install-Product node 6 x64
-  - choco install nsis -pre
+  - choco install nsis
   - npm install npm
   - .\node_modules\.bin\npm install
 
