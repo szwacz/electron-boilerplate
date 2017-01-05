@@ -49,6 +49,8 @@ before_script:
 - travis_retry npm install
 - |
   perl -pe "s/(\"version\": )\"([0-9.]+)\"/ q{\"version\": \"$TRAVIS_TAG\"} /ge" -i app/package.json
+- |
+  perl -pe "s/(\"build\": )\"([0-9.]+)\"/ q{\"build\": \"$TRAVIS_BUILD_NUMBER\"} /ge" -i app/package.json
 script:
 - npm run release
 - ls releases/
