@@ -17,9 +17,12 @@ build_script:
       (gc package.json) -replace '"version": "[0-9.]+"', ('"version": "'+[System.Environment]::ExpandEnvironmentVariables("%APPVEYOR_REPO_TAG_NAME%")+'"')
   - npm run release
 
+artifacts:
+  - path: 'releases\*.exe'
+
 deploy:
   - provider: GitHub
-    artifact: 'releases\rocketchat-$(APPVEYOR_REPO_TAG_NAME)-win32-x64.exe'
+    artifact: /.*\.exe/
     auth_token:
       secure: Jud2So5RX4jxHG9gJ44AE5QRhnKjdOVtdHNoEkBTDFh7JfwOkFETlXHjH/zGXdRo
     draft: false
