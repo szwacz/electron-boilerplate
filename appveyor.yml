@@ -19,3 +19,14 @@ install:
 
 build_script:
   - npm run release
+
+deploy:
+  - provider: GitHub
+    artifact: releases\rocketchat-2.0.0-win32-x64.exe
+    auth_token:
+      secure: Jud2So5RX4jxHG9gJ44AE5QRhnKjdOVtdHNoEkBTDFh7JfwOkFETlXHjH/zGXdRo
+    draft: false
+    prerelease: false
+    on:
+      # branch: master                # release from master branch only
+      appveyor_repo_tag: true       # deploy on tag push only
