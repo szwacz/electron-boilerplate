@@ -18,7 +18,12 @@
       "app/**/*",
       "node_modules/**/*",
       "package.json"
-    ]
+    ],
+    "mac": {
+      "helperBundleId": "chat.rocket.electron.helper",
+      "category": "public.app-category.productivity",
+      "target": ["dmg", "mas", "pkg", "zip"]
+    }
   },
   "scripts": {
     "postinstall": "install-app-deps",
