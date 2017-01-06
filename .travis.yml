@@ -22,7 +22,7 @@ matrix:
     language: generic
     node_js:
     - '6'
-    before_deploy:
+    before_script:
       - echo $CERTIFICATE_OSX_P12_DEVELOPER_ID_APPLICATION | base64 --decode > CERTIFICATE_OSX_P12_DEVELOPER_ID_APPLICATION.p12
       - security create-keychain -p KEYCHAIN_PASSWORD build.keychain
       - security default-keychain -s build.keychain
