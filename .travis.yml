@@ -42,12 +42,6 @@ matrix:
       on:
         tags: true
         all_branches: true
-branches:
-  only:
-  - develop
-  - master
-  - travis
-  - /^(\d+\.)?(\d+\.)?(\*|\d+)$/
 git:
   depth: 1
 addons:
@@ -57,5 +51,9 @@ addons:
 before_script:
 - rm -rf releases
 - travis_retry npm install
+- |
+  perl -pe "s/(\"version\": )\"([0-9.]+)\"/ q{\"version\": \"${TRAVIS_TAG:-0.0.0}\"} /ge" -i app/package.json
+- |
+  perl -pe "s/(\"build\": )\"([0-9.]+)\"/ q{\"build\": \"${TRAVIS_BUILD_NUMBER:-0}\"} /ge" -i app/package.json
 after_script:
 - ls releases/
