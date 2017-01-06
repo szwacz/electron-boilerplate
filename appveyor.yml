@@ -13,6 +13,9 @@ install:
   - .\node_modules\.bin\npm install
 
 build_script:
+  - ps: >-
+      if (-not (Test-Path env:APPVEYOR_REPO_TAG_NAME)) { $env:APPVEYOR_REPO_TAG_NAME = '0.0.0' }
+      (gc app\package.json) -replace '"version": "[0-9.]+"', ('"version": "'+$env:APPVEYOR_REPO_TAG_NAME+'"') | Set-Content app\package.json
   - npm run release
 
 artifacts:
