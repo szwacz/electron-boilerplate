@@ -12,14 +12,19 @@ https://demo.rocket.chat/channel/desktopclient
 
 # Development
 
-#### Installation
+#### Requirements
+* Git (of course) - Install instructions can be found at [git-scm.com](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
-```
-npm install
-```
-It will also download Electron runtime, and install dependencies for second `package.json` file inside `app` folder.
+* [Node.js](https://nodejs.org/en/) - Installation instructions can be found on the [Node.js installation page](https://nodejs.org/en/download/package-manager/#windows)
 
-Debian users need to make sure they have the package `libxss-dev` installed.
+* [node-gyp](https://github.com/nodejs/node-gyp) - You don't need to directly install node-gyp, that's taken care of automatically later. You do however need to make sure that node-gyp will work once it's installed. Doing so means ensuring that you have a working compiler toolchain for your OS. Instructions for this can be found under the Installation section of the node-gyp GitHub page.
+  * **NOTE:** For (most) Debian users, `libxss-dev` is not installed by default or by `build-essentials`. You will likely have to install it with `sudo apt-get install libxss-dev`
+
+#### Getting Started
+* Now that you have the dependencies out of the way, you'll need a copy of the repository to work with. Navigate to whatever folder you store your projects in and run `git clone https://github.com/RocketChat/Rocket.Chat.Electron`.
+
+* Once the clone has finished, navigate into the created Rocket.Chat.Electron directory and run `npm install`. This installs dependencies based on the `package.json` files in the root of the directory and in the `app/` directory. This may take some time.
+  * If you see any errors during this process, go back and make sure you've met the requirements and look through the error messages to look for clues as to what went wrong.
 
 #### Starting the app
 
