@@ -42,12 +42,6 @@ matrix:
       on:
         tags: true
         all_branches: true
-branches:
-  only:
-  - develop
-  - master
-  - travis
-  - /^(\d+\.)?(\d+\.)?(\*|\d+)$/
 git:
   depth: 1
 addons:
