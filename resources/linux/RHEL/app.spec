@@ -1,5 +1,5 @@
 Name:     {{name}}
-Version:  v{{version}}
+Version:  {{version}}
 Release:  linux
 Summary:  {{description}}
 Group:    Applications/Communications

@@ -26,8 +26,8 @@ module.exports.replace = function (str, patterns) {
 module.exports.getReleasePackageName = function(manifest) {
     return module.exports.replace(manifest.packageNameTemplate, {
         name: manifest.name,
-        version: manifest.version,
-        build: manifest.build,
+        version: process.env.TRAVIS_TAG || process.env.APPVEYOR_REPO_TAG_NAME || manifest.version,
+        build: process.env.TRAVIS_BUILD_NUMBER || process.env.APPVEYOR_BUILD_NUMBER || manifest.build,
         productName: manifest.productName,
         platform: process.platform,
         arch: process.arch
@@ -39,15 +39,15 @@ module.exports.getEnvName = function () {
 };
 
 module.exports.getSigningId = function (manifest) {
-    return argv.sign || (manifest.codeSignIdentitiy ? manifest.codeSignIdentitiy.dmg : undefined);
+    return argv.sign || (manifest.codeSignIdentity ? manifest.codeSignIdentity.dmg : undefined);
 };
 
 module.exports.getMASSigningId = function (manifest) {
-    return argv['mas-sign'] || (manifest.codeSignIdentitiy ? manifest.codeSignIdentitiy.MAS : undefined);
+    return argv['mas-sign'] || (manifest.codeSignIdentity ? manifest.codeSignIdentity.MAS : undefined);
 };
 
 module.exports.getMASInstallerSigningId = function (manifest) {
-    return argv['mas-installer-sign'] || (manifest.codeSignIdentitiy ? manifest.codeSignIdentitiy.MASInstaller : undefined);
+    return argv['mas-installer-sign'] || (manifest.codeSignIdentity ? manifest.codeSignIdentity.MASInstaller : undefined);
 };
 
 module.exports.releaseForMAS = function () {
