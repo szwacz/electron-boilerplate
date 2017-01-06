@@ -10,7 +10,7 @@ var Menu = remote.Menu;
 var APP_NAME = remote.app.getName();
 var template;
 
-var certificate = remote.require('./certificate');
+var certificate = remote.require('./background/certificate');
 
 document.title = APP_NAME;
 
