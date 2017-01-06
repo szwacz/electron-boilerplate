@@ -26,8 +26,8 @@ module.exports.replace = function (str, patterns) {
 module.exports.getReleasePackageName = function(manifest) {
     return module.exports.replace(manifest.packageNameTemplate, {
         name: manifest.name,
-        version: manifest.version,
-        build: manifest.build,
+        version: process.env.TRAVIS_TAG || process.env.APPVEYOR_REPO_TAG_NAME || manifest.version,
+        build: process.env.TRAVIS_BUILD_NUMBER || process.env.APPVEYOR_BUILD_NUMBER || manifest.build,
         productName: manifest.productName,
         platform: process.platform,
         arch: process.arch

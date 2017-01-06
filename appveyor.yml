@@ -6,21 +6,14 @@ cache:
   - '%USERPROFILE%\.electron'
 
 install:
-  - ps: >-
-      [System.Environment]::ExpandEnvironmentVariables("%APPVEYOR_REPO_TAG_NAME%")
   - ps: Install-Product node 6 x64
-  - echo "$(APPVEYOR_REPO_COMMIT)"
   - choco install nsis -version 3.01.0.20160420
   - SET PATH=C:/Program Files (x86)/NSIS;%PATH%
   - npm install npm
   - .\node_modules\.bin\npm install
 
 build_script:
-  - ps: >-
-      (gc app\package.json) -replace '"version": "[0-9.]+"', ('"version": "'+[System.Environment]::ExpandEnvironmentVariables("%APPVEYOR_REPO_TAG_NAME%")+'"') | Set-Content app\package.json
-  - type app\package.json
   - npm run release
-
 
 artifacts:
   - path: 'releases\*.exe'
