@@ -1,111 +1,127 @@
-Rocket.Chat.Electron
-==============
+# electron-boilerplate [![Build Status](https://travis-ci.org/szwacz/electron-boilerplate.svg?branch=master)](https://travis-ci.org/szwacz/electron-boilerplate) [![Build status](https://ci.appveyor.com/api/projects/status/s9htc1k5ojkn08fr?svg=true)](https://ci.appveyor.com/project/szwacz/electron-boilerplate)
 
-All of Rocket.Chat's Desktop Apps - for Windows, Mac OSX, and Linux are based on the [Electron platform from GitHub](https://github.com/electron/electron).   This is the source code base for all desktop apps.
+A minimalistic yet comprehensive boilerplate application for [Electron runtime](http://electron.atom.io). Tested on macOS, Windows and Linux.  
 
-### IMPORTANT
+This project does not impose on you any framework (like Angular or React). It tries to give you only the 'electron' part of technology stack so you can pick your favorite technologies to build the actual app.
 
-Please join the community server channel for Rocket.Chat Electron app users for feedback, interactions, and important notification regarding this code:
+# Quick start
 
-https://demo.rocket.chat/channel/desktopclient
+The only development dependency of this project is [Node.js](https://nodejs.org), so just make sure you have it installed.
+Then type few commands known to every Node developer...
+```
+git clone https://github.com/szwacz/electron-boilerplate.git
+cd electron-boilerplate
+npm install
+npm start
+```
+... and boom! You have a running desktop application on your screen.
 
+# Structure of the project
+
+The application is split between two main folders...
+
+`src` - this folder is intended for files which need to be transpiled or compiled (files which can't be used directly by Electron).
+
+`app` - contains all static assets (put here images, css, html etc.) which don't need any pre-processing.
+
+The build process compiles all stuff from the `src` folder and puts it into the `app` folder, so after the build has finished, your `app` folder contains the full, runnable application.
+
+Treat `src` and `app` folders like two halves of one bigger thing.
+
+The drawback of this design is that `app` folder contains some files which should be git-ignored and some which shouldn't (see `.gitignore` file). But thanks to this two-folders split development builds are much (much!) faster.
 
 # Development
 
-#### Installation
-
-```
-npm install
-```
-It will also download Electron runtime, and install dependencies for second `package.json` file inside `app` folder.
-
-Debian users need to make sure they have the package `libxss-dev` installed.
-
-#### Starting the app
+## Starting the app
 
 ```
 npm start
 ```
 
-# Structure of the project
+## Upgrading Electron version
 
-There are **two** `package.json` files:
+The version of Electron runtime your app is using is declared in `package.json`:
+```json
+"devDependencies": {
+  "electron": "1.4.7"
+}
+```
+Side note: [Electron authors advise](http://electron.atom.io/docs/tutorial/electron-versioning/) to use fixed version here.
 
-#### 1. For development
-Sits at root of the application. Just used for development dependencies. **This file is not distributed with real application!**
+## The build pipeline
 
+Build process is founded upon [gulp](https://github.com/gulpjs/gulp) task runner and [rollup](https://github.com/rollup/rollup) bundler. There are two entry files for your code: `src/background.js` and `src/app.js`. Rollup will follow all `import` statements starting from those files and compile code of the whole dependency tree into one `.js` file for each entry point.
 
-#### 2. For your application
-Sits on path: `app/package.json`. This is **real** manifest of your application. App dependencies declared here.
+You can [add as many more entry points as you like](https://github.com/szwacz/electron-boilerplate/blob/master/tasks/build_app.js#L16) (e.g. to split your app into modules).
 
-### Project's folders
+By the way, [rollup has a lot of plugins](https://github.com/rollup/rollup/wiki/Plugins). You can add them in [this file](https://github.com/szwacz/electron-boilerplate/blob/master/tasks/bundle.js).
 
-- `app` - code of your application goes here.
-- `config` - place where you can declare environment specific stuff for your app.
-- `build` - in this folder lands built, runnable application.
-- `releases` - ready for distribution installers will land here.
-- `resources` - resources needed for particular operating system.
-- `tasks` - build and development environment scripts.
+## Adding npm modules to your app
+
+Remember to respect the split between `dependencies` and `devDependencies` in `package.json` file. Only modules listed in `dependencies` will be included into distributable app.
+
+Side note: If the module you want to use in your app is a native one (not pure JavaScript but compiled C code or something) you should first  run `npm install name_of_npm_module --save` and then `npm run postinstall` to rebuild the module for Electron. This needs to be done only once when you're first time installing the module. Later on postinstall script will fire automatically with every `npm install`.
+
+## Working with modules
+
+Thanks to [rollup](https://github.com/rollup/rollup) you can (and should) use ES6 modules for all code in `src` folder. But because ES6 modules still aren't natively supported you can't use them in the `app` folder.
+
+Use ES6 syntax in the `src` folder like this:
+```js
+import myStuff from './my_lib/my_stuff';
+```
+
+But use CommonJS syntax in `app` folder. So the code from above should look as follows:
+```js
+var myStuff = require('./my_lib/my_stuff');
+```
+
+# Testing
+
+## Unit tests
+
+```
+npm test
+```
+
+Using [electron-mocha](https://github.com/jprichardson/electron-mocha) test runner with the [chai](http://chaijs.com/api/assert/) assertion library. This task searches for all files in `src` directory which respect pattern `*.spec.js`.
+
+## End to end tests
+
+```
+npm run e2e
+```
+
+Using [mocha](https://mochajs.org/) test runner and [spectron](http://electron.atom.io/spectron/). This task searches for all files in `e2e` directory which respect pattern `*.e2e.js`.
+
+## Code coverage
+
+```
+npm run coverage
+```
+
+Using [istanbul](http://gotwarlost.github.io/istanbul/) code coverage tool.
+
+You can set the reporter(s) by setting `ISTANBUL_REPORTERS` environment variable (defaults to `text-summary` and `html`). The report directory can be set with `ISTANBUL_REPORT_DIR` (defaults to `coverage`).
+
+## Continuous integration
+
+Electron [can be plugged](https://github.com/atom/electron/blob/master/docs/tutorial/testing-on-headless-ci.md) into CI systems. Here two CIs are preconfigured for you. [Travis CI](https://travis-ci.org/) tests on macOS and Linux, [App Veyor](https://www.appveyor.com) tests on Windows.
 
 # Making a release
 
-**Note:** There are various icon and bitmap files in `resources` directory. Those are used in installers and are intended to be replaced by your own graphics.
+To package your app into an installer use command:
 
-To make ready for distribution installer use command:
 ```
 npm run release
 ```
-It will start the packaging process for operating system you are running this command on. Ready for distribution file will be outputted to `releases` directory.
 
-You can create Windows installer only when running on Windows, the same is true for Linux and OSX. So to generate all three installers you need all three operating systems.
+It will start the packaging process for operating system you are running this command on. Ready for distribution file will be outputted to `dist` directory.
 
-## Mac only
+You can create Windows installer only when running on Windows, the same is true for Linux and macOS. So to generate all three installers you need all three operating systems.
 
-#### App signing
+All packaging actions are handled by [electron-builder](https://github.com/electron-userland/electron-builder). It has a lot of [customization options](https://github.com/electron-userland/electron-builder/wiki/Options), which you can declare under ["build" key in package.json file](https://github.com/szwacz/electron-boilerplate/blob/master/package.json#L2).
 
-The Mac release supports [code signing](https://developer.apple.com/library/mac/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html). To sign the `.app` in the release image, include the certificate ID in the command as so,
-```shell
-npm run release -- --sign DX85ENM22A
-```
+# License
 
-#### Mac App Store
-You should install the Electron build for MAS
-```
-export npm_config_platform=mas
-rm -rf node_modules
-npm install
-```
-
-To sign your app for Mac App Store
-```shell
-npm run release -- --mas --mas-sign "3rd Party Mac Developer Application: Company Name (APPIDENTITY)" --mas-installer-sign "3rd Party Mac Developer Installer: Company Name (APPIDENTITY)"
-```
-
-Or edit the `app/package.json`, remove the `//` from `//codeSignIdentitiy` and update the values with your sign indentities
-```json
-  "//codeSignIdentitiy": {
-    "dmg": "Developer ID Application: Company Name (APPIDENTITY)",
-    "MAS": "3rd Party Mac Developer Application: Company Name (APPIDENTITY)",
-    "MASInstaller": "3rd Party Mac Developer Installer: Company Name (APPIDENTITY)"
-  }
-```
-
-You can change the application category too
-```json
-  "LSApplicationCategoryType": "public.app-category.productivity"
-```
-
-If you insert your indentities in the package.json you can compile for MAS like
-```
-npm run release -- --mas
-```
-
-## Windows only
-
-#### Installer
-
-The installer is built using [NSIS](http://nsis.sourceforge.net). You have to install NSIS version 3.0, and add its folder to PATH in Environment Variables, so it is reachable to scripts in this project. For example, `C:\Program Files (x86)\NSIS`.
-
-#### 32-bit build on 64-bit Windows
-
-There are still a lot of 32-bit Windows installations in use. If you want to support those systems and have 64-bit OS make sure you've installed 32-bit (instead of 64-bit) Node version. There are [versions managers](https://github.com/coreybutler/nvm-windows) if you feel the need for both architectures on the same machine.
+Released under the MIT license.
