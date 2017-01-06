@@ -117,8 +117,8 @@ var packToRpmFile = function () {
     spec = utils.replace(spec, {
         name: manifest.name,
         description: manifest.description,
-        version: manifest.version,
-        author: manifest.author,
+        version: process.env.TRAVIS_TAG || process.env.APPVEYOR_REPO_TAG_NAME || manifest.version,
+        author: manifest.author
     });
     tmpDir.write('SPECS/app.spec', spec);
 
