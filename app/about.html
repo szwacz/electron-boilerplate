@@ -43,7 +43,7 @@
 
 		</div>
 		<script>
-			var remote = require('remote');
+			var remote = require('electron').remote;
 			document.querySelector('.app-name').innerHTML = remote.app.getName();
 			document.querySelector('.app-version').innerHTML = 'Version '+remote.app.getVersion();
 		</script>
