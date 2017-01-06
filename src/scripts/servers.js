@@ -2,7 +2,7 @@
 
 import { EventEmitter } from 'events';
 import { remote } from 'electron';
-const remoteServers = remote.require('./background/servers');
+const remoteServers = remote.require('./background').remoteServers;
 
 class Servers extends EventEmitter {
 	constructor() {

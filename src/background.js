@@ -9,6 +9,10 @@ import { app, Menu } from 'electron';
 import { devMenuTemplate } from './menu/dev_menu_template';
 import { editMenuTemplate } from './menu/edit_menu_template';
 import createWindow from './helpers/window';
+import './background/certificate'
+
+export { default as remoteServers } from './background/servers'
+export { default as certificate } from './background/certificate'
 
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
