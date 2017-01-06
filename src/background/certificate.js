@@ -53,8 +53,9 @@ class CertificateStore {
 			this.data = JSON.parse(fs.readFileSync(this.storeFile, 'utf-8'));
 		}
 		catch (e) {
-			console.log(e);
+			console.warn('No file certificate.json found, generating one')
 			this.data = {};
+			this.save();
 		}
 	}
 
