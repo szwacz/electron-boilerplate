@@ -1,9 +1,9 @@
-/* globals Meteor, Tracker, RocketChat, UserPresence */
-'use strict';
+(function () {'use strict';
 
+/* globals Meteor, Tracker, RocketChat, UserPresence */
 var IPC = require('electron').ipcRenderer;
 
-require('electron-notification-shim')();
+// require('electron-notification-shim')();
 
 class Notification extends window.Notification {
 	get onclick() {
@@ -347,10 +347,7 @@ window.addEventListener('contextmenu', function(event){
 	}, 0);
 }, false);
 
-/* userPresence away timer based on system idle time */
-function getSystemIdleTime() {
-	return IPC.sendSync('getSystemIdleTime');
-}
+
 
 // setInterval(function(){
 // 	try {
@@ -361,3 +358,6 @@ function getSystemIdleTime() {
 // 		console.error(e);
 // 	}
 // }, 1e3);
+
+}());
+//# sourceMappingURL=preload.js.map
