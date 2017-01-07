@@ -28,7 +28,7 @@
       "target": ["nsis", "appx", "squirrel", "zip"]
     },
     "linux": {
-      "target": ["AppImage", "snap", "deb", "rpm", "pacman", "zip", "tar.gz"]
+      "target": ["deb", "rpm"]
     }
   },
   "scripts": {
