@@ -16,5 +16,4 @@ Thumbs.db
 /coverage
 
 /releases/
-/tmp/
-app/scripts/bugsnag_apikey.js
+/app/
