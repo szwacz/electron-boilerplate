@@ -6,6 +6,11 @@ os:
 #   only:
 #     - master
 
+addons:
+  apt:
+    packages:
+    - rpm
+
 env:
   - NODE_VERSION="6.3.0"
 
