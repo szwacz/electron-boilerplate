@@ -1,10 +1,10 @@
-build: off
+# build: off
 
 os: unstable
 
-branches:
-  only:
-    - master
+# branches:
+#   only:
+#     - master
 
 skip_tags: true
 
@@ -22,5 +22,8 @@ install:
 test_script:
   - node --version
   - .\node_modules\.bin\npm --version
-  - .\node_modules\.bin\npm test
-  - .\node_modules\.bin\npm run e2e
+  # - .\node_modules\.bin\npm test
+  # - .\node_modules\.bin\npm run e2e
+
+build_script:
+  - .\node_modules\.bin\npm run release
