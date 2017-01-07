@@ -251,7 +251,7 @@ if (process.platform === 'darwin') {
 					label: 'About ' + APP_NAME,
 					click: function() {
 						const win = new remote.BrowserWindow({ width: 310, height: 200, minWidth: 310, minHeight: 200, maxWidth: 310, maxHeight: 200, show: false, maximizable: false, minimizable: false, title: ' ' });
-						win.loadURL('file://' + __dirname + '/about.html');
+						win.loadURL('file://' + __dirname + '/public/about.html');
 						win.show();
 					}
 				},

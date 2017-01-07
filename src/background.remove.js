@@ -79,7 +79,7 @@ app.on('ready', function () {
     if (env.name === 'test') {
         mainWindow.loadURL('file://' + __dirname + '/spec.html');
     } else {
-        mainWindow.loadURL('file://' + __dirname + '/app.html');
+        mainWindow.loadURL('file://' + __dirname + '/public/app.html');
     }
 
     if (env.name !== 'production') {
@@ -129,7 +129,7 @@ app.on('ready', function () {
 					title: '${msg.title}',
 					message: \`${msg.options.body}\`,
 					width: 400,
-					htmlFile: 'file://'+__dirname+'/notification.html?'
+					htmlFile: 'file://'+__dirname+'/public/notification.html?'
 				});
 			`);
 		});
