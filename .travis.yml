@@ -1,6 +1,16 @@
-os:
-  - linux
-  - osx
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    sudo: required
+    language: node_js
+    node_js:
+    - '6'
+  - os: osx
+    osx_image: xcode7.3.1
+    language: generic
+    node_js:
+    - '6'
 
 # branches:
 #   only:
@@ -10,11 +20,6 @@ addons:
   apt:
     packages:
     - rpm
-    - gcc
-    - g++
-
-env:
-  - NODE_VERSION="6"
 
 before_script:
  - chmod +x ./scripts/travis-build.sh
