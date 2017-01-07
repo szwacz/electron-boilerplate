@@ -12,7 +12,7 @@ addons:
     - rpm
 
 env:
-  - NODE_VERSION="6.3.0"
+  - NODE_VERSION="6"
 
 before_script:
  - chmod +x ./scripts/travis-build.sh
