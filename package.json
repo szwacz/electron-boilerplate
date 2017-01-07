@@ -23,6 +23,12 @@
       "helperBundleId": "chat.rocket.electron.helper",
       "category": "public.app-category.productivity",
       "target": ["dmg", "mas", "pkg", "zip"]
+    },
+    "win": {
+      "target": ["nsis", "appx", "squirrel", "zip"]
+    },
+    "linux": {
+      "target": ["AppImage", "snap", "deb", "rpm", "pacman", "zip", "tar.gz"]
     }
   },
   "scripts": {
