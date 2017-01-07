@@ -10,8 +10,8 @@ addons:
   apt:
     packages:
     - rpm
-    - gcc-5
-    - g++-5
+    - gcc
+    - g++
 
 env:
   - NODE_VERSION="6"
