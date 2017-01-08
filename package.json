@@ -19,6 +19,9 @@
       "node_modules/**/*",
       "package.json"
     ],
+    "extraResources": [
+      "dictionaries/**/*"
+    ],
     "mac": {
       "helperBundleId": "chat.rocket.electron.helper",
       "category": "public.app-category.productivity",
