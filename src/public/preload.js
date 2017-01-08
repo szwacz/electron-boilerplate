@@ -130,7 +130,7 @@ const saveEnabledDictionaries = function() {
 };
 
 const isCorrect = function(text) {
-	if (!checker) {
+	if (!checker || enabledDictionaries.length === 0) {
 		return true;
 	}
 
