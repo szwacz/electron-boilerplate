@@ -1,7 +1,7 @@
 matrix:
   include:
   - os: linux
-    dist: trusty
+    dist: xenial
     sudo: required
     language: node_js
     node_js:
