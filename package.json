@@ -31,7 +31,7 @@
       "target": ["nsis"]
     },
     "linux": {
-      "target": ["deb", "rpm"]
+      "target": ["deb", "rpm", "snap"]
     }
   },
   "scripts": {
