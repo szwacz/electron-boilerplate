@@ -21,6 +21,7 @@ addons:
   apt:
     packages:
     - rpm
+    - g++-multilib
 
 before_script:
  - chmod +x ./scripts/travis-build.sh
