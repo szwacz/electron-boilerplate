@@ -5,7 +5,7 @@ description: Rocket.Chat Desktop app
 apps:
   rocketchat:
     command: env TMPDIR=$SNAP_USER_DATA FONTCONFIG_PATH=$SNAP/etc/fonts FONTCONFIG_FILE=$SNAP/etc/fonts/fonts.conf desktop-launch $SNAP/rocketchat
-    plugs: [unity7, x11, home, x11, opengl, network, network-bind, browser-support]
+    plugs: [unity7, x11, home, opengl, network, network-bind, browser-support]
 
 parts:
   rocketchat:
