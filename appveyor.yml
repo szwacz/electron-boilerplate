@@ -2,9 +2,10 @@
 
 os: unstable
 
-# branches:
-#   only:
-#     - master
+branches:
+  only:
+    - master
+    - develop
 
 skip_tags: true
 
