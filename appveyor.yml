@@ -1,11 +1,11 @@
 # build: off
 
-os: unstable
-platform: x64
+# os: unstable
+platform:
+  - x64
 
-environment:
-  nodejs_version: "6.3.0"
-  GH_TOKEN_TEST2: "test 2"
+# environment:
+  # nodejs_version: "6"
   # matrix:
   #   - platform: x86
   #     GH_TOKEN_TEST3: "test 3"
@@ -27,7 +27,7 @@ cache:
   - node_modules -> package.json
 
 install:
-  - ps: Install-Product node $env:nodejs_version $env:platform
+  - ps: Install-Product node 6 $env:platform
   - npm install npm
   - .\node_modules\.bin\npm install
 
@@ -39,8 +39,7 @@ test_script:
 
 build_script:
   - echo %GH_TOKEN_TEST%
-  - echo %GH_TOKEN_TEST2%
-  - .\node_modules\.bin\npm run release
+  - npm run release
 
 artifacts:
   - path: 'dist\**\*.exe'
