@@ -1,12 +1,13 @@
 matrix:
   include:
   - os: linux
-    dist: xenial
+    dist: trusty
     sudo: required
     language: node_js
     node_js:
     - '6'
     before_install:
+    - sudo add-apt-repository ppa:ubuntu-lxc/lxd-stable
     - sudo apt-get -qq update
     - sudo apt-get install -y rpm g++-multilib snapcraft snapd
   - os: osx
