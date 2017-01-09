@@ -12,9 +12,10 @@ matrix:
     node_js:
     - '6'
 
-# branches:
-#   only:
-#     - master
+branches:
+  only:
+    - master
+    - develop
 
 addons:
   apt:
