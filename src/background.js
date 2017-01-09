@@ -13,6 +13,7 @@ import './background/certificate'
 
 export { default as remoteServers } from './background/servers'
 export { default as certificate } from './background/certificate'
+import { afterMainWindow } from './background.custom'
 
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
@@ -43,6 +44,8 @@ app.on('ready', function () {
         width: 1000,
         height: 600
     });
+
+    afterMainWindow(mainWindow);
 
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'public', 'app.html'),

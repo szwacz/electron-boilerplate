@@ -35,7 +35,7 @@
     }
   },
   "scripts": {
-    "postinstall": "install-app-deps",
+    "postinstall": "install-app-deps && electron-rebuild",
     "build": "gulp build",
     "prerelease": "gulp build --env=production",
     "release": "build",
@@ -49,10 +49,10 @@
   "dependencies": {
     "fs-jetpack": "^0.10.2",
     "@paulcbetts/system-idle-time": "^1.0.4",
-    "ffi": "^2.2.0",
     "electron-notification-shim": "^1.1.0",
     "electron-toaster": "^2.0.2",
-    "spellchecker": "3.3.1"
+    "spellchecker": "3.3.1",
+    "electron-rebuild": "1.5.6"
   },
   "devDependencies": {
     "chai": "^3.5.0",
