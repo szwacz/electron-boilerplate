@@ -1,19 +1,20 @@
 # build: off
 
 os: unstable
+platform: x64
 
 environment:
   nodejs_version: "6.3.0"
   GH_TOKEN_TEST2: "test 2"
-  matrix:
-    - platform: x86
-      GH_TOKEN_TEST3: "test 3"
-      GH_TOKEN:
-        secure: rqUx+ZsMc/HqozfHhXVgjG9rd0Iqyg+cVNakbk7EXXEsQvYC/E77jMgJutWlbI6V
-    - platform: x64
-      GH_TOKEN_TEST3: "test 3"
-      GH_TOKEN:
-        secure: rqUx+ZsMc/HqozfHhXVgjG9rd0Iqyg+cVNakbk7EXXEsQvYC/E77jMgJutWlbI6V
+  # matrix:
+  #   - platform: x86
+  #     GH_TOKEN_TEST3: "test 3"
+  #     GH_TOKEN:
+  #       secure: rqUx+ZsMc/HqozfHhXVgjG9rd0Iqyg+cVNakbk7EXXEsQvYC/E77jMgJutWlbI6V
+  #   - platform: x64
+  #     GH_TOKEN_TEST3: "test 3"
+  #     GH_TOKEN:
+  #       secure: rqUx+ZsMc/HqozfHhXVgjG9rd0Iqyg+cVNakbk7EXXEsQvYC/E77jMgJutWlbI6V
 
 branches:
   only:
@@ -39,7 +40,6 @@ test_script:
 build_script:
   - echo %GH_TOKEN_TEST%
   - echo %GH_TOKEN_TEST2%
-  - echo %GH_TOKEN_TEST3%
   - .\node_modules\.bin\npm run release
 
 artifacts:
