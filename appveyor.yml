@@ -3,6 +3,7 @@
 os: unstable
 
 environment:
+  nodejs_version: "6.3.0"
   global:
     GH_TOKEN:
       secure: rqUx+ZsMc/HqozfHhXVgjG9rd0Iqyg+cVNakbk7EXXEsQvYC/E77jMgJutWlbI6V
@@ -17,9 +18,6 @@ branches:
     - develop
 
 skip_tags: true
-
-environment:
-  nodejs_version: "6.3.0"
 
 cache:
   - node_modules -> package.json
