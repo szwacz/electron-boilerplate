@@ -6,6 +6,9 @@ matrix:
     language: node_js
     node_js:
     - '6'
+    before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get install -y rpm g++-multilib snapcraft snapd
   - os: osx
     osx_image: xcode7.3.1
     language: generic
@@ -17,16 +20,8 @@ branches:
     - master
     - develop
 
-addons:
-  apt:
-    packages:
-    - rpm
-    - g++-multilib
-    - snapcraft
-    - snapd
-
 before_script:
- - chmod +x ./scripts/travis-build.sh
+  - chmod +x ./scripts/travis-build.sh
 
 script: ./scripts/travis-build.sh
 
