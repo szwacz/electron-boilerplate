@@ -3,7 +3,6 @@
 os: unstable
 
 platform:
-  - x86
   - x64
 
 branches:
@@ -28,7 +27,7 @@ test_script:
   # - .\node_modules\.bin\npm run e2e
 
 build_script:
-  - npm run release
+  - npm run release -- --ia32 --x64
 
 artifacts:
   - path: 'dist\**\*.exe'
