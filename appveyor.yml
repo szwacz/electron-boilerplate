@@ -20,7 +20,7 @@ cache:
   - node_modules -> package.json
 
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node $env:nodejs_version $env:platform
   - npm install npm
   - .\node_modules\.bin\npm install
 
