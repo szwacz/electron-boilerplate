@@ -32,3 +32,6 @@ test_script:
 
 build_script:
   - .\node_modules\.bin\npm run release
+
+artifacts:
+  - path: 'dist\**\*.exe'
