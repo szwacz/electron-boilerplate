@@ -37,3 +37,4 @@ build_script:
 
 artifacts:
   - path: 'dist\**\*.exe'
+
