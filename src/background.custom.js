@@ -39,8 +39,12 @@ export function afterMainWindow(mainWindow) {
 		height: 600
 	});
 
-	mainWindow.setPosition(mainWindowState.x, mainWindowState.y, false);
-	mainWindow.setSize(mainWindowState.width, mainWindowState.height, false);
+	if (mainWindowState.x !== undefined && mainWindowState.y !== undefined) {
+		mainWindow.setPosition(mainWindowState.x, mainWindowState.y, false);
+	}
+	if (mainWindowState.width !== undefined && mainWindowState.height !== undefined) {
+		mainWindow.setSize(mainWindowState.width, mainWindowState.height, false);
+	}
 	mainWindow.setMinimumSize(600, 400);
 
 	if (mainWindowState.isMaximized) {
