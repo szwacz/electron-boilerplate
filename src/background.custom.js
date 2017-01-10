@@ -106,13 +106,13 @@ export function afterMainWindow(mainWindow) {
 		toaster.init(mainWindow);
 
 		ipcMain.on('notification-shim', (e, msg) => {
-
 			mainWindow.webContents.executeJavaScript(`
 				require('electron').ipcRenderer.send('electron-toaster-message', {
 					title: '${msg.title}',
 					message: \`${msg.options.body}\`,
 					width: 400,
-					htmlFile: 'file://'+__dirname+'/public/notification.html?'
+					focus: false,
+					htmlFile: 'file://'+__dirname+'/notification.html?'
 				});
 			`);
 		});
