@@ -25,7 +25,7 @@
     "mac": {
       "helperBundleId": "chat.rocket.electron.helper",
       "category": "public.app-category.productivity",
-      "target": ["dmg", "mas", "zip"]
+      "target": ["dmg", "pkg", "zip"]
     },
     "win": {
       "target": ["nsis"]
