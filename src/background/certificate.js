@@ -1,15 +1,14 @@
 import { app, dialog } from 'electron';
-import path from 'path';
-import fs from 'fs';
+import jetpack from 'fs-jetpack';
 import url from 'url';
 
 class CertificateStore {
-	constructor() {
-		this.storeFile = path.resolve(app.getPath('userData'), 'certificate.json');
-		this.load();
-	}
-
 	initWindow(win) {
+		this.storeFileName = 'certificate.json';
+		this.userDataDir = jetpack.cwd(app.getPath('userData'));
+
+		this.load();
+
 		this.window = win;
 		app.on('certificate-error', (event, webContents, url, error, certificate, callback) => {
 			if (this.isTrusted(url, certificate)) {
@@ -50,12 +49,14 @@ class CertificateStore {
 
 	load() {
 		try {
-			this.data = JSON.parse(fs.readFileSync(this.storeFile, 'utf-8'));
-		}
-		catch (e) {
-			console.warn('No file certificate.json found, generating one')
+			this.data = this.userDataDir.read(this.storeFileName, 'json');
+		} catch (e) {
+			console.error(e);
 			this.data = {};
-			this.save();
+		}
+
+		if (this.data === undefined) {
+			this.clear();
 		}
 	}
 
@@ -65,7 +66,7 @@ class CertificateStore {
 	}
 
 	save() {
-		fs.writeFileSync(this.storeFile, JSON.stringify(this.data));
+		this.userDataDir.write(this.storeFileName, this.data, { atomic: true });
 	}
 
 	parseCertificate(certificate) {
