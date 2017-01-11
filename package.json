@@ -2,10 +2,10 @@
   "name": "rocketchat",
   "productName": "Rocket.Chat+",
   "description": "Rocket.Chat Native Cross-Platform Desktop Application via Electron.",
-  "version": "2.2.0-develop",
+  "version": "2.2.0",
   "author": "Rocket.Chat Support <support@rocket.chat>",
   "copyright": "© 2016, Rocket.Chat",
-  "homepage": "http://example.com",
+  "homepage": "https://rocket.chat",
   "license": "MIT",
   "main": "app/background.js",
   "repository": {
