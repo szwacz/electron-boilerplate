@@ -27,6 +27,9 @@ addons:
     packages:
     - rpm
     - g++-multilib
+    - libx11-dev:i386
+    - libxext-dev:i386
+    - libxss-dev:i386
 
 before_script:
   - chmod +x ./scripts/travis-build.sh
