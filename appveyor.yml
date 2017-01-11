@@ -1,26 +1,33 @@
-build: off
+# build: off
 
 os: unstable
+
+platform:
+  - x64
 
 branches:
   only:
     - master
+    - develop
 
 skip_tags: true
-
-environment:
-  nodejs_version: "6.3.0"
 
 cache:
   - node_modules -> package.json
 
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node 6 $env:platform
   - npm install npm
   - .\node_modules\.bin\npm install
 
 test_script:
   - node --version
   - .\node_modules\.bin\npm --version
-  - .\node_modules\.bin\npm test
-  - .\node_modules\.bin\npm run e2e
+  # - .\node_modules\.bin\npm test
+  # - .\node_modules\.bin\npm run e2e
+
+build_script:
+  - npm run release -- --ia32 --x64
+
+artifacts:
+  - path: 'dist\**\*.exe'
