@@ -6,16 +6,9 @@ matrix:
     language: node_js
     node_js:
     - '6'
-    services:
-    - docker
-    script:
-    - docker run --rm -ti -v ${PWD}:/project -v ${PWD##*/}-node-modules:/project/node_modules -v ~/.electron:/root/.electron electronuserland/electron-builder
-    - npm install
-    - npm prune
-    - npm run release -- --ia32
-
     # Install dependencies for snaps
-    # before_install:
+    before_install:
+      dpkg --add-architecture i386
     # - sudo add-apt-repository -y ppa:snappy-dev/tools
     # - sudo apt-get -qq update
     # - sudo apt-get install -y rpm g++-multilib snapcraft
@@ -24,9 +17,6 @@ matrix:
     language: generic
     node_js:
     - '6'
-    before_script:
-    - chmod +x ./scripts/travis-build.sh
-    script: ./scripts/travis-build.sh
 
 branches:
   only:
@@ -38,9 +28,14 @@ addons:
     packages:
     - rpm
     - g++-multilib
-    # - libx11-dev:i386
-    # - libxext-dev:i386
-    # - libxss-dev:i386
+    - libx11-dev:i386
+    - libxext-dev:i386
+    - libxss-dev:i386
+
+before_script:
+  - chmod +x ./scripts/travis-build.sh
+
+script: ./scripts/travis-build.sh
 
 cache:
   directories:
