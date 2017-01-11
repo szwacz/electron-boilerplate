@@ -4,12 +4,12 @@ import { remote } from 'electron';
 var app = remote.app;
 
 Bugsnag.metaData = {
-	// platformId: app.process.platform,
-	// platformArch: app.process.arch,
-	// electronVersion: app.process.versions.electron,
-	version: app.getVersion()
-		// platformVersion: cordova.platformVersion
-		// build: appInfo.build
+    // platformId: app.process.platform,
+    // platformArch: app.process.arch,
+    // electronVersion: app.process.versions.electron,
+    version: app.getVersion()
+    // platformVersion: cordova.platformVersion
+    // build: appInfo.build
 };
 
 Bugsnag.appVersion = app.getVersion();

@@ -1,0 +1,6 @@
+node_modules
+app
+e2e
+src/public/lib/bugsnag.js
+src/public/vendor/jquery-1.12.0.js
+scripts/istanbul-reporter.js
