@@ -27,9 +27,6 @@ addons:
     packages:
     - rpm
     - g++-multilib
-    - lib32z1
-    - lib32ncurses5
-    - lib32bz2-1.0
     # - libx11-dev:i386
     # - libxext-dev:i386
     # - libxss-dev:i386
