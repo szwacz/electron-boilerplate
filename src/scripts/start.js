@@ -7,7 +7,7 @@ import { webview } from './webview';
 import tray from './tray';
 import './menus';
 
-sidebar.on('badge-setted', function() {
+sidebar.on('badge-setted', function () {
     var badge = sidebar.getGlobalBadge();
 
     if (process.platform === 'darwin') {
@@ -16,15 +16,15 @@ sidebar.on('badge-setted', function() {
     tray.showTrayAlert(!isNaN(parseInt(badge)) && badge > 0, badge);
 });
 
-export var start = function() {
+export var start = function () {
     var defaultInstance = 'https://demo.rocket.chat';
 
     // connection check
-    function online() {
+    function online () {
         document.body.classList.remove('offline');
     }
 
-    function offline() {
+    function offline () {
         document.body.classList.add('offline');
     }
 
@@ -40,13 +40,13 @@ export var start = function() {
     var button = form.querySelector('[type="submit"]');
     var invalidUrl = form.querySelector('#invalidUrl');
 
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function () {
         hostField.focus();
     });
 
-    function validateHost() {
-        return new Promise(function(resolve, reject) {
-            var execValidation = function() {
+    function validateHost () {
+        return new Promise(function (resolve, reject) {
+            var execValidation = function () {
                 invalidUrl.style.display = 'none';
                 hostField.classList.remove('wrong');
 
@@ -64,11 +64,11 @@ export var start = function() {
                 button.value = 'Validating...';
                 button.disabled = true;
 
-                servers.validateHost(host, 2000).then(function() {
+                servers.validateHost(host, 2000).then(function () {
                     button.value = 'Connect';
                     button.disabled = false;
                     resolve();
-                }, function(status) {
+                }, function (status) {
                     // If the url begins with HTTP, mark as invalid
                     if (/^https?:\/\/.+/.test(host) || status === 'basic-auth') {
                         button.value = 'Invalid url';
@@ -113,17 +113,17 @@ export var start = function() {
         });
     }
 
-    hostField.addEventListener('blur', function() {
-        validateHost().then(function() {}, function() {});
+    hostField.addEventListener('blur', function () {
+        validateHost().then(function () {}, function () {});
     });
 
-    ipcRenderer.on('certificate-reload', function(event, url) {
+    ipcRenderer.on('certificate-reload', function (event, url) {
         hostField.value = url.replace(/\/api\/info$/, '');
-        validateHost().then(function() {}, function() {});
+        validateHost().then(function () {}, function () {});
     });
 
-    var submit = function() {
-        validateHost().then(function() {
+    var submit = function () {
+        validateHost().then(function () {
             var input = form.querySelector('[name="host"]');
             var url = input.value;
 
@@ -138,10 +138,10 @@ export var start = function() {
             }
 
             input.value = '';
-        }, function() {});
+        }, function () {});
     };
 
-    hostField.addEventListener('keydown', function(ev) {
+    hostField.addEventListener('keydown', function (ev) {
         if (ev.which === 13) {
             ev.preventDefault();
             ev.stopPropagation();
@@ -150,20 +150,20 @@ export var start = function() {
         }
     });
 
-    form.addEventListener('submit', function(ev) {
+    form.addEventListener('submit', function (ev) {
         ev.preventDefault();
         ev.stopPropagation();
         submit();
         return false;
     });
 
-    $('.add-server').on('click', function() {
+    $('.add-server').on('click', function () {
         servers.clearActive();
     });
 
     servers.restoreActive();
 };
 
-window.addEventListener('focus', function() {
+window.addEventListener('focus', function () {
     webview.focusActive();
 });

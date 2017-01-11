@@ -9,15 +9,15 @@ var Menu = remote.Menu;
 let mainWindow = remote.getCurrentWindow();
 
 var icons = {
-    'win32': {
+    win32: {
         dir: 'windows'
     },
 
-    'linux': {
+    linux: {
         dir: 'linux'
     },
 
-    'darwin': {
+    darwin: {
         dir: 'osx',
         icon: 'icon-trayTemplate.png'
     }
@@ -26,22 +26,23 @@ var icons = {
 let _iconTray = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].icon || 'icon-tray.png');
 let _iconTrayAlert = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].iconAlert || 'icon-tray-alert.png');
 
-function createAppTray() {
+function createAppTray () {
     let _tray = new Tray(_iconTray);
     var contextMenu = Menu.buildFromTemplate([{
         label: 'Quit',
-        click: function() {
+        click: function () {
             remote.app.quit();
         }
+
     }]);
 
     _tray.setToolTip(remote.app.getName());
 
-    _tray.on('right-click', function(e, b) {
+    _tray.on('right-click', function (e, b) {
         _tray.popUpContextMenu(contextMenu, b);
     });
 
-    _tray.on('click', function(e, b) {
+    _tray.on('click', function (e, b) {
         if (e.ctrlKey === true) {
             _tray.popUpContextMenu(contextMenu, b);
             return;
@@ -58,7 +59,7 @@ function createAppTray() {
     mainWindow.tray = _tray;
 }
 
-function showTrayAlert(showAlert, title) {
+function showTrayAlert (showAlert, title) {
     if (mainWindow.tray === null || mainWindow.tray === undefined) {
         return;
     }
