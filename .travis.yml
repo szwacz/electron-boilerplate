@@ -2,7 +2,7 @@ matrix:
   include:
   - os: linux
     dist: trusty
-    sudo: required
+    sudo: false
     language: node_js
     node_js:
     - '6'
