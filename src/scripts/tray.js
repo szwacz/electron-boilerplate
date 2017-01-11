@@ -3,12 +3,11 @@
 import { remote } from 'electron';
 import path from 'path';
 
-var Tray = remote.Tray;
-var Menu = remote.Menu;
+const { Tray, Menu } = remote;
 
-let mainWindow = remote.getCurrentWindow();
+const mainWindow = remote.getCurrentWindow();
 
-var icons = {
+const icons = {
     win32: {
         dir: 'windows'
     },
@@ -23,39 +22,55 @@ var icons = {
     }
 };
 
-let _iconTray = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].icon || 'icon-tray.png');
-let _iconTrayAlert = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].iconAlert || 'icon-tray-alert.png');
+const _iconTray = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].icon || 'icon-tray.png');
+const _iconTrayAlert = path.join(__dirname, 'images', icons[process.platform].dir, icons[process.platform].iconAlert || 'icon-tray-alert.png');
 
 function createAppTray () {
-    let _tray = new Tray(_iconTray);
-    var contextMenu = Menu.buildFromTemplate([{
+    const _tray = new Tray(_iconTray);
+    const contextMenuShow = Menu.buildFromTemplate([{
+        label: 'Show',
+        click () {
+            mainWindow.show();
+        }
+    }, {
         label: 'Quit',
-        click: function () {
+        click () {
             remote.app.quit();
         }
-
     }]);
+
+    const contextMenuHide = Menu.buildFromTemplate([{
+        label: 'Hide',
+        click () {
+            mainWindow.hide();
+        }
+    }, {
+        label: 'Quit',
+        click () {
+            remote.app.quit();
+        }
+    }]);
+
+    if (!mainWindow.isMinimized() && !mainWindow.isVisible()) {
+        _tray.setContextMenu(contextMenuShow);
+    } else {
+        _tray.setContextMenu(contextMenuHide);
+    }
+
+    mainWindow.on('show', () => {
+        _tray.setContextMenu(contextMenuHide);
+    });
+
+    mainWindow.on('hide', () => {
+        _tray.setContextMenu(contextMenuShow);
+    });
 
     _tray.setToolTip(remote.app.getName());
 
     _tray.on('right-click', function (e, b) {
-        _tray.popUpContextMenu(contextMenu, b);
+        _tray.popUpContextMenu(undefined, b);
     });
 
-    _tray.on('click', function (e, b) {
-        if (e.ctrlKey === true) {
-            _tray.popUpContextMenu(contextMenu, b);
-            return;
-        }
-
-        if (mainWindow.isVisible()) {
-            mainWindow.hide();
-        } else {
-            mainWindow.show();
-        }
-    });
-
-    mainWindow = mainWindow;
     mainWindow.tray = _tray;
 }
 
