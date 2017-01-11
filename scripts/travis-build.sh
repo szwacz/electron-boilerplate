@@ -16,4 +16,4 @@ npm --version
 
 npm install
 # npm test & npm run e2e
-npm run release -- --x64
+npm run release -- --ia32
