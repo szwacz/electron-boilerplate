@@ -6,54 +6,38 @@ matrix:
     language: node_js
     node_js:
     - '6'
-    script:
-      - npm run release
-    deploy:
-      provider: releases
-      api_key:
-        secure: DHzFJ9JGNAdeTfTmr2vLJFajTL0XHEYG1OKeD4DQhxB1mGDVLF2FX2T0PrRoqD1S084acnEKN1nElMn/NWc6eNPVksqQlC+8kVtYsX6EMOoiT8YnsQW7TbAsBEp30a/cuNWLfUFEmwsXN6zQQMgyF5vBoMjsycxDXq9MF5AQ9Y5BXM0Dky/v5fBmKyoVl76G/L6RkXM4SaTpthwfFmYlrAC9ctbCgA337qS3SmNLjh/EzdvgAkI9mKxewBizp1/T8hzagcOXs+UoDm/avhbZTTxfxf03PcBHs6/YwlVGKWnsIKD+BP0N7kt4q7QjXmetx5UDvKiYk269lyapqgJgF9QhODjuxufK8HD9dkOfDsG2kC0VR0BK7fHgkFCEItp6rvWwvvSDKVJN7ogT9V8XzQjeYTWwc03B58zu0f9hS4x5OMrZrs3z+NsZ/Qr+yaEjmJAiazkJPOpfPyQB0EllnPY+uugzo9iUMLmK99aYTgK0ZKOOHtJh0ziv6aQgKK6L8i9k7A4t99SfLlaKPCNITx4FH8TbLts6Oxm87iNhTQPafpOZUGUeuHtJywK1Rj+CfYffqIpZahG8jRkfllqMoLZ0QmBXE+CD7aPkTN3MF1Tj38Dbe3HjOGl8oJfS2VKH8dH6p6e9BBTXvU/bOKNCb8FBjNT2SY8UYAxnlDmzJDA=
-      file:
-      - "$TRAVIS_BUILD_DIR/releases/rocketchat-$TRAVIS_TAG-linux-x64.deb"
-      - "$TRAVIS_BUILD_DIR/releases/rocketchat-$TRAVIS_TAG-linux.x86_64.rpm"
-      skip_cleanup: true
-      on:
-        tags: true
-        all_branches: true
+    # Install dependencies for snaps
+    # before_install:
+    # - sudo add-apt-repository -y ppa:snappy-dev/tools
+    # - sudo apt-get -qq update
+    # - sudo apt-get install -y rpm g++-multilib snapcraft
   - os: osx
     osx_image: xcode7.3.1
     language: generic
     node_js:
     - '6'
-    script:
-    - echo $CERTIFICATE_OSX_P12_DEVELOPER_ID_APPLICATION | base64 --decode > CERTIFICATE_OSX_P12_DEVELOPER_ID_APPLICATION.p12
-    - security create-keychain -p KEYCHAIN_PASSWORD build.keychain
-    - security default-keychain -s build.keychain
-    - security unlock-keychain -p KEYCHAIN_PASSWORD build.keychain
-    - security import CERTIFICATE_OSX_P12_DEVELOPER_ID_APPLICATION.p12 -k build.keychain -P '' -T /usr/bin/codesign
-    - security find-identity -v
-    - npm run release
-    deploy:
-      provider: releases
-      api_key:
-        secure: DHzFJ9JGNAdeTfTmr2vLJFajTL0XHEYG1OKeD4DQhxB1mGDVLF2FX2T0PrRoqD1S084acnEKN1nElMn/NWc6eNPVksqQlC+8kVtYsX6EMOoiT8YnsQW7TbAsBEp30a/cuNWLfUFEmwsXN6zQQMgyF5vBoMjsycxDXq9MF5AQ9Y5BXM0Dky/v5fBmKyoVl76G/L6RkXM4SaTpthwfFmYlrAC9ctbCgA337qS3SmNLjh/EzdvgAkI9mKxewBizp1/T8hzagcOXs+UoDm/avhbZTTxfxf03PcBHs6/YwlVGKWnsIKD+BP0N7kt4q7QjXmetx5UDvKiYk269lyapqgJgF9QhODjuxufK8HD9dkOfDsG2kC0VR0BK7fHgkFCEItp6rvWwvvSDKVJN7ogT9V8XzQjeYTWwc03B58zu0f9hS4x5OMrZrs3z+NsZ/Qr+yaEjmJAiazkJPOpfPyQB0EllnPY+uugzo9iUMLmK99aYTgK0ZKOOHtJh0ziv6aQgKK6L8i9k7A4t99SfLlaKPCNITx4FH8TbLts6Oxm87iNhTQPafpOZUGUeuHtJywK1Rj+CfYffqIpZahG8jRkfllqMoLZ0QmBXE+CD7aPkTN3MF1Tj38Dbe3HjOGl8oJfS2VKH8dH6p6e9BBTXvU/bOKNCb8FBjNT2SY8UYAxnlDmzJDA=
-      file:
-      - "$TRAVIS_BUILD_DIR/releases/rocketchat-$TRAVIS_TAG-darwin-x64.dmg"
-      skip_cleanup: true
-      on:
-        tags: true
-        all_branches: true
-git:
-  depth: 1
+
+branches:
+  only:
+    - master
+    - develop
+
 addons:
   apt:
     packages:
     - rpm
+    - g++-multilib
+
 before_script:
-- rm -rf releases
-- travis_retry npm install
-- |
-  perl -pe "s/(\"version\": )\"([0-9.]+)\"/ q{\"version\": \"${TRAVIS_TAG:-0.0.0}\"} /ge" -i app/package.json
-- |
-  perl -pe "s/(\"build\": )\"([0-9.]+)\"/ q{\"build\": \"${TRAVIS_BUILD_NUMBER:-0}\"} /ge" -i app/package.json
-after_script:
-- ls releases/
+  - chmod +x ./scripts/travis-build.sh
+
+script: ./scripts/travis-build.sh
+
+cache:
+  directories:
+    - node_modules
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
