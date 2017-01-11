@@ -7,12 +7,10 @@ matrix:
     node_js:
     - '6'
     # Install dependencies for snaps
-    before_install:
-    - sudo echo "deb http://old-releases.ubuntu.com/ubuntu/ raring main restricted universe multiverse" > /etc/apt/sources.list.d/ia32-libs-raring.list
+    # before_install:
     # - sudo add-apt-repository -y ppa:snappy-dev/tools
-    - sudo apt-get -qq update
-    - sudo apt-get install -y rpm g++-multilib ia32-libs
-    # - sudo apt-get install -y snapcraft
+    # - sudo apt-get -qq update
+    # - sudo apt-get install -y rpm g++-multilib snapcraft
   - os: osx
     osx_image: xcode7.3.1
     language: generic
@@ -24,14 +22,17 @@ branches:
     - master
     - develop
 
-# addons:
-#   apt:
-#     packages:
-#     - rpm
-#     - g++-multilib
-#     - libx11-dev:i386
-#     - libxext-dev:i386
-#     - libxss-dev:i386
+addons:
+  apt:
+    packages:
+    - rpm
+    - g++-multilib
+    - lib32z1
+    - lib32ncurses5
+    - lib32bz2-1.0
+    # - libx11-dev:i386
+    # - libxext-dev:i386
+    # - libxss-dev:i386
 
 before_script:
   - chmod +x ./scripts/travis-build.sh
