@@ -1,5 +1,21 @@
 # History
 
+## 2.2.0 - 2017-Jan-11
+
+### Upgrade electron-builder to 11.2.4
+
+- Fix context menu
+
+## 2.1.0 - 2017-Jan-10
+
+- Better file organization
+- Use [electron-builder](https://github.com/electron-userland/electron-builder) to generate our packages and installers
+- Fix Spell Checker for all platforms
+- Add builds for windows x32 and x64
+- Add build automation with Travis and AppVeyor
+- Fixed notifications on Windows 7
+- Fixed post installation error messages on Windows 7
+
 ## 2.0.0 - 2016-Dec-26
 
 ### Upgrade electron to 1.4.13
