@@ -6,8 +6,9 @@ This project does not impose on you any framework (like Angular or React). It tr
 
 # Quick start
 
-The only development dependency of this project is [Node.js](https://nodejs.org), so just make sure you have it installed.
-Then type few commands known to every Node developer...
+The only requirments for gettings started are that you have [Node.js](https://nodejs.org) installed and that you have the packages that [node-gyp](https://github.com/nodejs/node-gyp) requires to build the native componentes. 
+
+After checking those requirments, simply run the few commands known to every Node developer...
 ```
 git clone https://github.com/szwacz/electron-boilerplate.git
 cd electron-boilerplate
