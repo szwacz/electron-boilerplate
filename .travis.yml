@@ -2,42 +2,27 @@ matrix:
   include:
   - os: linux
     dist: trusty
-    sudo: required
-    language: node_js
-    node_js:
-    - '6'
-    # Install dependencies for snaps
-    before_install:
-      - sudo dpkg --add-architecture i386
-      - sudo apt-get install -y libx11-dev:i386 libxext-dev:i386 libxss-dev:i386
-    # - sudo add-apt-repository -y ppa:snappy-dev/tools
-    # - sudo apt-get -qq update
-    # - sudo apt-get install -y rpm g++-multilib snapcraft
+    sudo: false
+    services:
+    - docker
+    script:
+    - docker run --rm -v ${PWD}:/project -e GH_TOKEN=${GH_TOKEN} rocketchat/electron.builder /bin/bash -l -c "npm install && npm run release -- --x64 --ia32"
   - os: osx
     osx_image: xcode7.3.1
     language: generic
     node_js:
     - '6'
+    before_script:
+    - chmod +x ./scripts/travis-build.sh
+    script: ./scripts/travis-build.sh
+    cache:
+      directories:
+        - node_modules
 
 branches:
   only:
     - master
     - develop
-
-addons:
-  apt:
-    packages:
-    - rpm
-    - g++-multilib
-
-before_script:
-  - chmod +x ./scripts/travis-build.sh
-
-script: ./scripts/travis-build.sh
-
-cache:
-  directories:
-    - node_modules
 
 notifications:
   email:
