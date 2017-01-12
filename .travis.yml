@@ -1,3 +1,8 @@
+env:
+  global:
+  - DOCKER_CACHE_FILE=$HOME/docker/cache.tar.gz
+  - DOCKER_REPOSITORY=rocketchat/electron.builder
+
 matrix:
   include:
   - os: linux
@@ -5,8 +10,14 @@ matrix:
     sudo: false
     services:
     - docker
+    before_install:
+    - if [ -f ${DOCKER_CACHE_FILE} ]; then gunzip -c ${DOCKER_CACHE_FILE} | docker load; fi
     script:
-    - docker run --rm -v ${PWD}:/project -e GH_TOKEN=${GH_TOKEN} rocketchat/electron.builder /bin/bash -l -c "npm install && npm run release -- --x64 --ia32"
+    - docker run --rm -v ${PWD}:/project -e GH_TOKEN=${GH_TOKEN} ${DOCKER_REPOSITORY} /bin/bash -l -c "npm install && npm run release -- --x64 --ia32"
+    before_cache:
+    # - if [[ ${TRAVIS_BRANCH} == "master" ]] && [[ ${TRAVIS_PULL_REQUEST} == "false" ]]; then mkdir -p $(dirname ${DOCKER_CACHE_FILE}); docker save $(docker history -q ${DOCKER_REPOSITORY} | grep -v '<missing>') | gzip > ${DOCKER_CACHE_FILE}; fi
+    - mkdir -p $(dirname ${DOCKER_CACHE_FILE})
+    - docker save $(docker history -q ${DOCKER_REPOSITORY} | grep -v '<missing>') | gzip > ${DOCKER_CACHE_FILE}
   - os: osx
     osx_image: xcode7.3.1
     language: generic
@@ -15,14 +26,18 @@ matrix:
     before_script:
     - chmod +x ./scripts/travis-build.sh
     script: ./scripts/travis-build.sh
-    cache:
-      directories:
-        - node_modules
 
 branches:
   only:
-    - master
-    - develop
+  - master
+  - develop
+
+cache:
+  directories:
+  - node_modules
+  - $HOME/.electron
+  - $HOME/.cache
+  - $HOME/docker
 
 notifications:
   email:
