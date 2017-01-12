@@ -1,4 +1,4 @@
-# electron-boilerplate [![Build Status](https://travis-ci.org/szwacz/electron-boilerplate.svg?branch=master)](https://travis-ci.org/szwacz/electron-boilerplate) [![Build status](https://ci.appveyor.com/api/projects/status/s9htc1k5ojkn08fr?svg=true)](https://ci.appveyor.com/project/szwacz/electron-boilerplate)
+# electron-boilerplate [![Build Status](https://img.shields.io/travis/RocketChat/Rocket.Chat.Electron/master.svg)](https://travis-ci.org/RocketChat/Rocket.Chat.Electron) [![Build status](https://ci.appveyor.com/api/projects/status/k72eq3gm42wt4j8b?svg=true)](https://ci.appveyor.com/project/RocketChat/rocket-chat-electron) [![Project Dependencies](https://david-dm.org/RocketChat/Rocket.Chat.Electron.svg)](https://david-dm.org/RocketChat/Rocket.Chat.Electron) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/54ebf39732d14cb19a1a992b46bd0da6)](https://www.codacy.com/app/RocketChat/Rocket-Chat-Electron?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=RocketChat/Rocket.Chat.Electron&amp;utm_campaign=Badge_Grade)
 
 A minimalistic yet comprehensive boilerplate application for [Electron runtime](http://electron.atom.io). Tested on macOS, Windows and Linux.  
 
@@ -6,8 +6,9 @@ This project does not impose on you any framework (like Angular or React). It tr
 
 # Quick start
 
-The only development dependency of this project is [Node.js](https://nodejs.org), so just make sure you have it installed.
-Then type few commands known to every Node developer...
+The only requirments for gettings started are that you have [Node.js](https://nodejs.org) installed and that you have the packages that [node-gyp](https://github.com/nodejs/node-gyp) requires to build the native componentes. 
+
+After checking those requirments, simply run the few commands known to every Node developer...
 ```
 git clone https://github.com/szwacz/electron-boilerplate.git
 cd electron-boilerplate
