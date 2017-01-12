@@ -22,6 +22,9 @@
     "extraResources": [
       "dictionaries/**/*"
     ],
+    "publish": {
+      "vPrefixedTagName": false
+    },
     "mac": {
       "helperBundleId": "chat.rocket.electron.helper",
       "category": "public.app-category.productivity",
