@@ -14,31 +14,29 @@
 // </p>
 
 (function () {
-    'use strict';
+  const shell = require('electron').shell;
 
-    var shell = require('electron').shell;
+  const supportExternalLinks = (event) => {
+    let href;
+    let isExternal = false;
 
-    var supportExternalLinks = function (e) {
-        var href;
-        var isExternal = false;
-
-        var checkDomElement = function (element) {
-            if (element.nodeName === 'A') {
-                href = element.getAttribute('href');
-            }
-            if (element.classList.contains('js-external-link')) {
-                isExternal = true;
-            }
-            if (href && isExternal) {
-                shell.openExternal(href);
-                e.preventDefault();
-            } else if (element.parentElement) {
-                checkDomElement(element.parentElement);
-            }
-        };
-
-        checkDomElement(e.target);
+    const checkDomElement = (element) => {
+      if (element.nodeName === 'A') {
+        href = element.getAttribute('href');
+      }
+      if (element.classList.contains('js-external-link')) {
+        isExternal = true;
+      }
+      if (href && isExternal) {
+        shell.openExternal(href);
+        event.preventDefault();
+      } else if (element.parentElement) {
+        checkDomElement(element.parentElement);
+      }
     };
 
-    document.addEventListener('click', supportExternalLinks, false);
+    checkDomElement(event.target);
+  };
+
+  document.addEventListener('click', supportExternalLinks, false);
 }());

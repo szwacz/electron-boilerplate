@@ -1,11 +1,9 @@
-'use strict';
+const argv = require('minimist')(process.argv);
 
-var argv = require('minimist')(process.argv);
-
-exports.getEnvName = function () {
-    return argv.env || 'development';
+exports.getEnvName = () => {
+  return argv.env || 'development';
 };
 
-exports.beepSound = function () {
-    process.stdout.write('\u0007');
+exports.beepSound = () => {
+  process.stdout.write('\u0007');
 };
