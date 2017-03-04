@@ -43,7 +43,7 @@ npm start
 The version of Electron runtime your app is using is declared in `package.json`:
 ```json
 "devDependencies": {
-  "electron": "1.5.1"
+  "electron": "1.6.1"
 }
 ```
 Side note: [Electron authors advise](http://electron.atom.io/docs/tutorial/electron-versioning/) to use fixed version here.
