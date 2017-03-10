@@ -14,7 +14,8 @@
       "app/**/*",
       "node_modules/**/*",
       "package.json"
-    ]
+    ],
+    "publish": null
   },
   "scripts": {
     "postinstall": "install-app-deps",
