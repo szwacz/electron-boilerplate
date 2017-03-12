@@ -1,28 +1,30 @@
-/* eslint no-console:off */
-
 // Here is the starting point for your application code.
-// All stuff below is just to show you how it works. You can delete all of it.
+
+// Small helpers you might want to keep
 import './helpers/context_menu.js';
 import './helpers/external_links.js';
+
+// All stuff below is just to show you how it works. You can delete all of it.
+import { remote } from 'electron';
+import jetpack from 'fs-jetpack';
+import { greet } from './hello_world/hello_world';
 import env from './env';
-
-// Use new ES6 modules syntax for everything.
-import os from 'os'; // native node.js module
-import { remote } from 'electron'; // native electron module
-import jetpack from 'fs-jetpack'; // module loaded from npm
-import { greet } from './hello_world/hello_world'; // code authored by you in this project
-
-console.log('Loaded environment variables:', env);
 
 const app = remote.app;
 const appDir = jetpack.cwd(app.getAppPath());
 
 // Holy crap! This is browser window with HTML and stuff, but I can read
-// here files like it's node.js! Welcome to Electron world :)
-console.log('The author of this app is:', appDir.read('package.json', 'json').author);
+// here files form disk like it's node.js! Welcome to Electron world :)
+const manifest = appDir.read('package.json', 'json');
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('greet').innerHTML = greet();
-  document.getElementById('platform-info').innerHTML = os.platform();
-  document.getElementById('env-name').innerHTML = env.name;
-});
+const osMap = {
+  win32: 'Windows',
+  darwin: 'macOS',
+  linux: 'Linux',
+};
+
+document.querySelector('#greet').innerHTML = greet();
+document.querySelector('#os').innerHTML = osMap[process.platform];
+document.querySelector('#author').innerHTML = manifest.author;
+document.querySelector('#env').innerHTML = env.name;
+document.querySelector('#electron-version').innerHTML = process.versions.electron;
