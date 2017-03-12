@@ -22,12 +22,18 @@ const generateExternalModulesList = () => {
 
 const cached = {};
 
-module.exports = (src, dest, opts = {}) => {
+module.exports = (src, dest, opts) => {
+  const options = opts || {};
+
+  const plugins = [
+    // Add rollup plugins here
+  ];
+
   return rollup({
     entry: src,
     external: generateExternalModulesList(),
     cache: cached[src],
-    plugins: opts.rollupPlugins || [],
+    plugins: plugins.concat(options.rollupPlugins || []),
   })
   .then((bundle) => {
     cached[src] = bundle;
