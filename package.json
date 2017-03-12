@@ -14,7 +14,8 @@
       "app/**/*",
       "node_modules/**/*",
       "package.json"
-    ]
+    ],
+    "publish": null
   },
   "scripts": {
     "postinstall": "install-app-deps",
@@ -30,27 +31,27 @@
     "lint": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {
-    "fs-jetpack": "^0.10.2"
+    "fs-jetpack": "^0.12.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "electron": "^1.4.7",
-    "electron-builder": "^8.6.0",
-    "electron-mocha": "^3.0.0",
+    "electron": "1.6.2",
+    "electron-builder": "^14.5.2",
+    "electron-mocha": "^3.3.0",
     "eslint": "^3.12.0",
     "eslint-config-decent-code": "szwacz/eslint-config-decent-code",
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-batch": "^1.0.5",
-    "gulp-less": "^3.0.3",
+    "gulp-less": "^3.3.0",
     "gulp-plumber": "^1.1.0",
-    "gulp-util": "^3.0.6",
-    "gulp-watch": "^4.3.5",
-    "istanbul": "^0.4.3",
+    "gulp-util": "^3.0.8",
+    "gulp-watch": "^4.3.11",
+    "istanbul": "^0.4.5",
     "minimist": "^1.2.0",
-    "mocha": "^3.0.2",
-    "rollup": "^0.36.3",
+    "mocha": "^3.2.0",
+    "rollup": "^0.41.4",
     "rollup-plugin-istanbul": "^1.1.0",
-    "source-map-support": "^0.4.2",
-    "spectron": "^3.3.0"
+    "source-map-support": "^0.4.11",
+    "spectron": "^3.6.0"
   }
 }
