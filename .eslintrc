@@ -1,7 +1,0 @@
-{
-  "extends": "decent-code",
-  "env": {
-    "browser": true,
-    "node": true
-  }
-}
