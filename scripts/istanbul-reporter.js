@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 const istanbul = require('istanbul');
 
 module.exports = function (runner, options = {}) {

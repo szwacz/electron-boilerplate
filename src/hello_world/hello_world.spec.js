@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 import { expect } from 'chai';
 import { greet, bye } from './hello_world';
 import env from '../env';
