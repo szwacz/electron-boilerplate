@@ -11,7 +11,7 @@ export default (name, options) => {
   const stateStoreFile = `window-state-${name}.json`;
   const defaultSize = {
     width: options.width,
-    height: options.height,
+    height: options.height
   };
   let state = {};
   let win;
