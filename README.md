@@ -116,11 +116,11 @@ To package your app into an installer use command:
 npm run release
 ```
 
-It will start the packaging process for operating system you are running this command on. Ready for distribution file will be outputted to `dist` directory.
-
-You can create Windows installer only when running on Windows, the same is true for Linux and macOS. So to generate all three installers you need all three operating systems.
+It will start the packaging process and ready for distribution file will be outputted to `dist` directory.
 
 All packaging actions are handled by [electron-builder](https://github.com/electron-userland/electron-builder). It has a lot of [customization options](https://github.com/electron-userland/electron-builder/wiki/Options), which you can declare under ["build" key in package.json file](https://github.com/szwacz/electron-boilerplate/blob/master/package.json#L2).
+
+If you want to package your app for multiple operating systems from your own machine [electron-builder kind of supports this](https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build), but there is a lot of asterisks. That's why this boilerplate is configured so only package for the OS you're running on is created (you can of course change it).
 
 # License
 
