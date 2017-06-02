@@ -4,7 +4,7 @@
   "description": "Starter for your Electron application",
   "version": "0.0.0",
   "author": "Mr. Gumby <mr.gumby@example.com>",
-  "copyright": "© 2016, Gumby inc.",
+  "copyright": "© 2017, Gumby inc.",
   "homepage": "http://example.com",
   "license": "MIT",
   "main": "app/background.js",
@@ -35,7 +35,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "electron": "^1.6.8",
-    "electron-builder": "^17.1.1",
+    "electron-builder": "^18.3.5",
     "electron-mocha": "^3.3.0",
     "gulp": "^3.9.1",
     "gulp-batch": "^1.0.5",
