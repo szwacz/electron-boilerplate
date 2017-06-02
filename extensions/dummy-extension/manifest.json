@@ -1,0 +1,13 @@
+{
+   "content_scripts": [ {
+      "css": [ "/hello.css" ],
+      "js": [ "/a.js", "/b.js", "/crash.js"],
+      "matches": [ "https://github.com/*", "https://developer.mozilla.org/*"],
+      "run_at": "document_end"
+   }],
+   "description": "Dummy Extension",
+   "manifest_version": 2,
+   "name": "Dummy Extension",
+   "short_name": "Dummy Extension",
+   "version": "1.1.4"
+}
