@@ -33,22 +33,22 @@
     "fs-jetpack": "^1.0.0"
   },
   "devDependencies": {
-    "chai": "^4.0.1",
+    "chai": "^4.1.0",
     "electron": "^1.6.11",
-    "electron-builder": "^19.5.1",
+    "electron-builder": "^19.16.0",
     "electron-mocha": "^4.0.0",
     "gulp": "^3.9.1",
     "gulp-batch": "^1.0.5",
-    "gulp-less": "^3.3.0",
+    "gulp-less": "^3.3.2",
     "gulp-plumber": "^1.1.0",
     "gulp-util": "^3.0.8",
     "gulp-watch": "^4.3.11",
     "istanbul": "^0.4.5",
     "minimist": "^1.2.0",
-    "mocha": "^3.2.0",
-    "rollup": "^0.43.0",
+    "mocha": "^3.4.2",
+    "rollup": "^0.45.2",
     "rollup-plugin-istanbul": "^1.1.0",
-    "source-map-support": "^0.4.11",
-    "spectron": "^3.6.4"
+    "source-map-support": "^0.4.15",
+    "spectron": "^3.7.2"
   }
 }
