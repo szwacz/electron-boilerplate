@@ -53,5 +53,8 @@ module.exports = (src, dest, opts) => {
       ]);
     })
   })
-  .catch(console.error);
+  .catch(e => {
+    console.error(e);
+    throw e;
+  });
 };
