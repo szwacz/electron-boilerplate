@@ -52,5 +52,9 @@ module.exports = (src, dest, opts) => {
         jetpack.writeAsync(`${dest}.map`, result.map.toString()),
       ]);
     })
+  })
+  .catch(e => {
+    console.error(e);
+    throw e;
   });
 };
