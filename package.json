@@ -37,6 +37,7 @@
     "electron": "^1.6.11",
     "electron-builder": "^19.16.0",
     "electron-mocha": "^4.0.0",
+    "electron-reload": "^1.2.2",
     "gulp": "^3.9.1",
     "gulp-batch": "^1.0.5",
     "gulp-less": "^3.3.2",
