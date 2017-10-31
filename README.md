@@ -2,12 +2,12 @@
 
 A minimalistic yet comprehensive boilerplate application for [Electron runtime](http://electron.atom.io). Tested on macOS, Windows and Linux.  
 
-This project does not impose on you any framework (like Angular or React). It tries to give you only the 'electron' part of technology stack so you can pick your favorite tools to build the actual app.
+This project does not impose on you any framework (like Angular or React). It tries to give you the 'electron' part of technology stack with the least amount of dependecies as possible. This enbables you to pick your favorite tools to build the actual app.
 
 # Quick start
 
-The only development dependency of this project is [Node.js](https://nodejs.org), so just make sure you have it installed.
-Then type few commands known to every Node developer...
+The sole development dependency of this project is [Node.js](https://nodejs.org), so make sure you have it installed.
+Then type the following commands known to every Node developer...
 ```
 git clone https://github.com/szwacz/electron-boilerplate.git
 cd electron-boilerplate
@@ -18,13 +18,13 @@ npm start
 
 # Structure of the project
 
-The application is split between two main folders...
+The application consists of two main folders...
 
-`src` - this folder is intended for files which need to be transpiled or compiled (files which can't be used directly by Electron).
+`src` - files within this folder get transpiled or compiled (because Electron can't use them directly).
 
 `app` - contains all static assets (put here images, css, html etc.) which don't need any pre-processing.
 
-The build process compiles all stuff from the `src` folder and puts it into the `app` folder, so after the build has finished, your `app` folder contains the full, runnable application.
+The build process compiles the content of the `src` folder and puts it into the `app` folder, so after the build has finished, your `app` folder contains the full, runnable application.
 
 Treat `src` and `app` folders like two halves of one bigger thing.
 
@@ -40,27 +40,27 @@ npm start
 
 ## Upgrading Electron version
 
-The version of Electron runtime your app is using is declared in `package.json`:
+The `package.json`-file declares the Electron runtime version of your app:
 ```json
 "devDependencies": {
   "electron": "1.6.11"
 }
 ```
-Side note: [Electron authors advise](http://electron.atom.io/docs/tutorial/electron-versioning/) to use fixed version here.
+Side note: [Electron authors recommend](http://electron.atom.io/docs/tutorial/electron-versioning/) to use fixed version here.
 
 ## The build pipeline
 
-Build process is founded upon [gulp](https://github.com/gulpjs/gulp) task runner and [rollup](https://github.com/rollup/rollup) bundler. There are two entry files for your code: `src/background.js` and `src/app.js`. Rollup will follow all `import` statements starting from those files and compile code of the whole dependency tree into one `.js` file for each entry point.
+Build process relies upon [gulp](https://github.com/gulpjs/gulp) task runner and [rollup](https://github.com/rollup/rollup) bundler. The entry-points of your code are the files `src/background.js` and `src/app.js`. Rollup will follow all `import` statements starting from those files and compile code of the whole dependency tree into one `.js` file for each entry point.
 
-You can [add as many more entry points as you like](https://github.com/szwacz/electron-boilerplate/blob/master/tasks/build_app.js#L16) (e.g. to split your app into modules).
+You can [add more entry points as you like](https://github.com/szwacz/electron-boilerplate/blob/master/tasks/build_app.js#L16) (e.g. to split your app into modules).
 
 By the way, [rollup has a lot of plugins](https://github.com/rollup/rollup/wiki/Plugins). You can add them in [this file](https://github.com/szwacz/electron-boilerplate/blob/master/tasks/bundle.js#L29).
 
 ## Adding npm modules to your app
 
-Remember to respect the split between `dependencies` and `devDependencies` in `package.json` file. Only modules listed in `dependencies` will be included into distributable app when you run the release script.
+Remember to respect the split between `dependencies` and `devDependencies` in `package.json` file. Your distributable app will contain modules listed in `dependencies` after running the release script.
 
-Side note: If the module you want to use in your app is a native one (not pure JavaScript but compiled C code or something) you should first  run `npm install name_of_npm_module --save` and then `npm run postinstall` to rebuild the module for Electron. This needs to be done only once when you're first time installing the module. Later on postinstall script will fire automatically with every `npm install`.
+Side note: If the module you want to use in your app is a native one (not pure JavaScript but compiled C code or something) you should first  run `npm install name_of_npm_module --save` and then `npm run postinstall` to rebuild the module for Electron. You need to do this once after you're first time installing the module. Later on the postinstall script will fire automatically with every `npm install`.
 
 ## Working with modules
 
@@ -102,11 +102,11 @@ npm run coverage
 
 Using [istanbul](http://gotwarlost.github.io/istanbul/) code coverage tool.
 
-You can set the reporter(s) by setting `ISTANBUL_REPORTERS` environment variable (defaults to `text-summary` and `html`). The report directory can be set with `ISTANBUL_REPORT_DIR` (defaults to `coverage`).
+You can set the reporter(s) by setting `ISTANBUL_REPORTERS` environment variable (defaults to `text-summary` and `html`). `ISTANBUL_REPORT_DIR` configures the report directory and defaults to `coverage`.
 
 ## Continuous integration
 
-Electron [can be plugged](https://github.com/atom/electron/blob/master/docs/tutorial/testing-on-headless-ci.md) into CI systems. Here two CIs are preconfigured for you. [Travis CI](https://travis-ci.org/) tests on macOS and Linux, [App Veyor](https://www.appveyor.com) tests on Windows.
+Electron [is compatible with most CI Systems](https://github.com/atom/electron/blob/master/docs/tutorial/testing-on-headless-ci.md). This Boilerplate even preconfigures [Travis CI](https://travis-ci.org/) tests on macOS and Linux as well as [App Veyor](https://www.appveyor.com) tests on Windows out of the box.
 
 # Making a release
 
@@ -116,11 +116,11 @@ To package your app into an installer use command:
 npm run release
 ```
 
-It will start the packaging process and ready for distribution file will be outputted to `dist` directory.
+It will start the packaging process. One the process finished, the `dist` directory will contain your distributable file.
 
-All packaging actions are handled by [electron-builder](https://github.com/electron-userland/electron-builder). It has a lot of [customization options](https://github.com/electron-userland/electron-builder/wiki/Options), which you can declare under ["build" key in package.json file](https://github.com/szwacz/electron-boilerplate/blob/master/package.json#L2).
+We use [electron-builder](https://github.com/electron-userland/electron-builder) to handle the packaging process. It has a lot of [customization options](https://github.com/electron-userland/electron-builder/wiki/Options), which you can declare under ["build" key in package.json file](https://github.com/szwacz/electron-boilerplate/blob/master/package.json#L2).
 
-If you want to package your app for multiple operating systems from your own machine [electron-builder kind of supports this](https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build), but there is a lot of asterisks. That's why this boilerplate is configured so only package for the OS you're running on is created (you can of course change it).
+You can package your app cross-platform from a single machine [electron-builder kind of supports this](https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build), but there is a lot of asterisks. That's why this the release process of this boilerplate defaults to the executing OS. You can change that of course.
 
 # License
 
