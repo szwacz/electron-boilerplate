@@ -1,20 +1,25 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
-  "description": "Starter for your Electron application",
-  "version": "0.0.0",
-  "author": "Mr. Gumby <mr.gumby@example.com>",
-  "copyright": "© 2017, Gumby inc.",
+  "name": "modelica-editor",
+  "productName": "RS MODELICA EDITOR",
+  "description": "Ricardo Software Modelica Editor",
+  "version": "1.0.0",
+  "author": "Ricardo Software <rs_support@ricardo.com>",
+  "copyright": "© 2017, Ricardo inc.",
   "homepage": "http://example.com",
-  "license": "MIT",
-  "main": "app/background.js",
+  "license": "UNLICENSED",
+  "main": "out-vscode-min/out/main.js",
   "build": {
-    "appId": "com.example.electron-boilerplate",
+    "appId": "com.ricardo.modelica-editor",
+    "asar": false,
     "files": [
-      "app/**/*",
-      "node_modules/**/*",
+      "out-vscode-min/**/*",
       "package.json"
     ],
+    "nsis": {
+      "oneClick": true,
+      "runAfterFinish": false,
+      "createDesktopShortcut": false
+    },
     "publish": null
   },
   "scripts": {
@@ -34,7 +39,7 @@
   },
   "devDependencies": {
     "chai": "^4.1.0",
-    "electron": "^1.6.11",
+    "electron": "1.7.7",
     "electron-builder": "^19.16.0",
     "electron-mocha": "^4.0.0",
     "gulp": "^3.9.1",
