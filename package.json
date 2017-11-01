@@ -15,6 +15,9 @@
       "node_modules/**/*",
       "package.json"
     ],
+    "directories": {
+      "buildResources": "resources"
+    },
     "publish": null
   },
   "scripts": {
