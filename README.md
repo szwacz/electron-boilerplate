@@ -1,9 +1,8 @@
 # electron-boilerplate
 
-This boilerplate is done in a bare minimum spirit.
-A minimalistic boilerplate application for [Electron runtime](http://electron.atom.io). Tested on macOS, Windows and Linux.  
+A minimalistic boilerplate for [Electron runtime](http://electron.atom.io). Tested on macOS, Windows and Linux.  
 
-This project doesn't impose on you any frontend framework. It tries to give you only the 'electron' part of technology stack with the least amount of dependecies possible. This enables you to pick your favorite tools to build the actual app.
+This project doesn't impose on you any frontend framework, and tries to give you only the 'electron' part of technology stack with bare minimum of dependencies. This enables you to pick your favourite tools to build the actual app.
 
 # Quick start
 
@@ -41,11 +40,17 @@ npm start
 
 ## The build pipeline
 
-Build process uses [webpack](https://webpack.js.org/). The entry-points of your code are the files `src/background.js` and `src/app.js`. Webpack will follow all `import` statements starting from those files and compile code of the whole dependency tree into one `.js` file for each entry point.
+Build process uses [Webpack](https://webpack.js.org/). The entry-points of your code are the files `src/background.js` and `src/app.js`. Webpack will follow all `import` statements starting from those files and compile code of the whole dependency tree into one `.js` file for each entry point.
+
+[Babel](http://babeljs.io/) is also utilised, but mainly for its great error messages. Electron runs under the hood latest Chromium, hence most of the new JavaScript features is already natively supported.
 
 ## Environments
 
-TODO
+Environmental variables are done in a bit different way (not via `process.env`). Env files are plain JSONs in `config` directory, and build process dynamically links one of them as an `env` module. You can import it wherever in code you need access to the environment.
+```
+import env from "env";
+console.log(env.name);
+```
 
 ## Upgrading Electron version
 
@@ -65,7 +70,7 @@ Side note: If the module you want to use in your app is a native one (not pure J
 
 # Testing
 
-Run all tests
+Run all tests:
 ```
 npm test
 ```
@@ -84,12 +89,11 @@ Using [electron-mocha](https://github.com/jprichardson/electron-mocha) test runn
 npm run e2e
 ```
 
-Using [mocha](https://mochajs.org/) test runner and [spectron](http://electron.atom.io/spectron/). This task searches for all files in `e2e` directory which respect pattern `*.e2e.js`.
+Using [mocha](https://mochajs.org/) and [spectron](http://electron.atom.io/spectron/). This task searches for all files in `e2e` directory which respect pattern `*.e2e.js`.
 
 # Making a release
 
 To package your app into an installer use command:
-
 ```
 npm run release
 ```
@@ -98,4 +102,4 @@ It will start the packaging process. Once the process finished, the `dist` direc
 
 We use [electron-builder](https://github.com/electron-userland/electron-builder) to handle the packaging process. It has a lot of [customization options](https://www.electron.build/configuration/configuration), which you can declare under `"build"` key in `package.json`.
 
-You can package your app cross-platform from a single operating system, [electron-builder kind of supports this](https://www.electron.build/multi-platform-build), but there are limitations. That's why this boilerplate doesn't do that by default.
+You can package your app cross-platform from a single operating system, [electron-builder kind of supports this](https://www.electron.build/multi-platform-build), but there are limitations and asterisks. That's why this boilerplate doesn't do that by default.
