@@ -13,17 +13,17 @@
 //    <a href="http://bing.com">bing</a>
 // </p>
 
-import { shell } from 'electron';
+import { shell } from "electron";
 
-const supportExternalLinks = (event) => {
+const supportExternalLinks = event => {
   let href;
   let isExternal = false;
 
-  const checkDomElement = (element) => {
-    if (element.nodeName === 'A') {
-      href = element.getAttribute('href');
+  const checkDomElement = element => {
+    if (element.nodeName === "A") {
+      href = element.getAttribute("href");
     }
-    if (element.classList.contains('js-external-link')) {
+    if (element.classList.contains("js-external-link")) {
       isExternal = true;
     }
     if (href && isExternal) {
@@ -37,4 +37,4 @@ const supportExternalLinks = (event) => {
   checkDomElement(event.target);
 };
 
-document.addEventListener('click', supportExternalLinks, false);
+document.addEventListener("click", supportExternalLinks, false);

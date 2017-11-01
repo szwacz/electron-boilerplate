@@ -3,7 +3,7 @@ os:
   - osx
 
 node_js:
- - "4"
+ - "8"
 
 before_script:
  - chmod +x ./scripts/travis-build.sh
