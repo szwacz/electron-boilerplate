@@ -4,7 +4,10 @@ import "./stylesheets/main.css";
 import "./helpers/context_menu.js";
 import "./helpers/external_links.js";
 
+// ----------------------------------------------------------------------------
 // Everything below is just to show you how it works. You can delete all of it.
+// ----------------------------------------------------------------------------
+
 import { remote } from "electron";
 import jetpack from "fs-jetpack";
 import { greet } from "./hello_world/hello_world";
@@ -14,7 +17,7 @@ const app = remote.app;
 const appDir = jetpack.cwd(app.getAppPath());
 
 // Holy crap! This is browser window with HTML and stuff, but I can read
-// here files from disk like it's node.js! Welcome to Electron world :)
+// files from disk like it's node.js! Welcome to Electron world :)
 const manifest = appDir.read("package.json", "json");
 
 const osMap = {
