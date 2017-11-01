@@ -2,7 +2,7 @@
 
 A minimalistic boilerplate for [Electron runtime](http://electron.atom.io). Tested on macOS, Windows and Linux.  
 
-This project doesn't impose on you any frontend framework, and tries to give you only the 'electron' part of technology stack with bare minimum of dependencies. This enables you to pick your favourite tools to build the actual app.
+This project doesn't impose on you any frontend framework and tries to give you only the 'electron' part of technology stack with bare minimum of dependencies. This enables you to pick your favourite tools to build the actual app.
 
 # Quick start
 
@@ -47,7 +47,7 @@ Build process uses [Webpack](https://webpack.js.org/). The entry-points of your 
 ## Environments
 
 Environmental variables are done in a bit different way (not via `process.env`). Env files are plain JSONs in `config` directory, and build process dynamically links one of them as an `env` module. You can import it wherever in code you need access to the environment.
-```
+```js
 import env from "env";
 console.log(env.name);
 ```
@@ -60,13 +60,13 @@ To do so edit `package.json`:
   "electron": "1.6.11"
 }
 ```
-Side note: [Electron authors recommend](http://electron.atom.io/docs/tutorial/electron-versioning/) to use fixed version here.
+*Side note:* [Electron authors recommend](http://electron.atom.io/docs/tutorial/electron-versioning/) to use fixed version here.
 
 ## Adding npm modules to your app
 
 Remember to respect the split between `dependencies` and `devDependencies` in `package.json` file. Your distributable app will contain modules listed in `dependencies` after running the release script.
 
-Side note: If the module you want to use in your app is a native one (not pure JavaScript but compiled binary) you should first  run `npm install name_of_npm_module --save` and then `npm run postinstall` to rebuild the module for Electron. You need to do this once after you're first time installing the module. Later on the postinstall script will fire automatically with every `npm install`.
+*Side note:* If the module you want to use in your app is a native one (not pure JavaScript but compiled binary) you should first  run `npm install name_of_npm_module --save` and then `npm run postinstall` to rebuild the module for Electron. You need to do this once after you're first time installing the module. Later on the postinstall script will fire automatically with every `npm install`.
 
 # Testing
 
@@ -80,16 +80,14 @@ npm test
 ```
 npm run unit
 ```
-
-Using [electron-mocha](https://github.com/jprichardson/electron-mocha) test runner with the [chai](http://chaijs.com/api/assert/) assertion library. You can put your spec files wherever within `src` directory, just name them respecting the `*.spec.js` pattern.
+Using [electron-mocha](https://github.com/jprichardson/electron-mocha) test runner with the [Chai](http://chaijs.com/api/assert/) assertion library. You can put your spec files wherever you want within the `src` directory, just name them with the `.spec.js` pattern.
 
 ## End to end
 
 ```
 npm run e2e
 ```
-
-Using [mocha](https://mochajs.org/) and [spectron](http://electron.atom.io/spectron/). This task searches for all files in `e2e` directory which respect pattern `*.e2e.js`.
+Using [Mocha](https://mochajs.org/) and [Spectron](http://electron.atom.io/spectron/). This task will run all files in `e2e` directory with pattern `.e2e.js`.
 
 # Making a release
 
