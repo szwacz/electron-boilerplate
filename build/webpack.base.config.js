@@ -12,7 +12,7 @@ module.exports = env => {
     externals: [nodeExternals()],
     resolve: {
       alias: {
-        env: path.resolve(__dirname, `config/env_${env}.json`)
+        env: path.resolve(__dirname, `../config/env_${env}.json`)
       }
     },
     devtool: "source-map",
