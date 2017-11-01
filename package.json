@@ -22,9 +22,9 @@
   },
   "scripts": {
     "postinstall": "install-app-deps",
-    "preunit": "webpack --config=build/webpack.unit.config.js --env=test --display=errors-only",
+    "preunit": "webpack --config=build/webpack.unit.config.js --env=test --display=none",
     "unit": "electron-mocha temp/specs.js --renderer --require source-map-support/register",
-    "pree2e": "webpack --config=build/webpack.app.config.js --env=test --display=errors-only && webpack --config=build/webpack.e2e.config.js --env=test --display=errors-only",
+    "pree2e": "webpack --config=build/webpack.app.config.js --env=test --display=none && webpack --config=build/webpack.e2e.config.js --env=test --display=none",
     "e2e": "mocha temp/e2e.js --require source-map-support/register",
     "test": "npm run unit && npm run e2e",
     "start": "node build/start.js",
@@ -34,6 +34,10 @@
     "fs-jetpack": "^1.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0-beta.5",
+    "@babel/preset-env": "^7.0.0-beta.5",
+    "babel-loader": "^8.0.0-beta.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "chai": "^4.1.0",
     "css-loader": "^0.28.7",
     "electron": "^1.6.11",

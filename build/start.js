@@ -8,24 +8,7 @@ const compiler = webpack(config(env));
 let electronStarted = false;
 
 const watching = compiler.watch({}, (err, stats) => {
-  if (err) {
-    console.error(err.stack || err);
-    if (err.details) {
-      console.error(err.details);
-    }
-    return;
-  }
-
-  console.log(
-    stats.toString({
-      colors: true,
-      hash: false,
-      version: false,
-      timings: false
-    })
-  );
-
-  if (!stats.hasErrors() && !electronStarted) {
+  if (!err && !stats.hasErrors() && !electronStarted) {
     electronStarted = true;
 
     childProcess
