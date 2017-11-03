@@ -40,7 +40,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "chai": "^4.1.0",
     "css-loader": "^0.28.7",
-    "electron": "^1.6.11",
+    "electron": "1.7.9",
     "electron-builder": "^19.43.3",
     "electron-mocha": "^4.0.0",
     "friendly-errors-webpack-plugin": "^1.6.1",

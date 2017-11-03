@@ -57,7 +57,7 @@ console.log(env.name);
 To do so edit `package.json`:
 ```json
 "devDependencies": {
-  "electron": "1.6.11"
+  "electron": "1.7.9"
 }
 ```
 *Side note:* [Electron authors recommend](http://electron.atom.io/docs/tutorial/electron-versioning/) to use fixed version here.
