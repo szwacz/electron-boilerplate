@@ -40,7 +40,7 @@
     "babel-plugin-transform-object-rest-spread": "^7.0.0-beta.3",
     "chai": "^4.1.0",
     "css-loader": "^0.28.7",
-    "electron": "1.7.9",
+    "electron": "1.7.10",
     "electron-builder": "^19.43.3",
     "electron-mocha": "^5.0.0",
     "friendly-errors-webpack-plugin": "^1.6.1",
@@ -51,7 +51,7 @@
     "webpack": "^3.8.1",
     "webpack-merge": "^4.1.0",
     "webpack-node-externals": "^1.6.0",
-    "typescript": "^2.3.4",
+    "typescript": "^2.6.2",
     "ts-loader": "~2.3.7"
   }
 }
