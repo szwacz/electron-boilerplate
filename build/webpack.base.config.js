@@ -4,7 +4,7 @@ const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 
 module.exports = env => {
   return {
-    target: "node",
+    target: "electron",
     node: {
       __dirname: false,
       __filename: false
@@ -13,7 +13,8 @@ module.exports = env => {
     resolve: {
       alias: {
         env: path.resolve(__dirname, `../config/env_${env}.json`)
-      }
+      },
+      extensions: ['.ts', '.js']
     },
     devtool: "source-map",
     module: {
@@ -26,7 +27,8 @@ module.exports = env => {
         {
           test: /\.css$/,
           use: ["style-loader", "css-loader"]
-        }
+        },
+        { test: /\.ts$/, use: 'ts-loader', exclude: /node_modules/ }
       ]
     },
     plugins: [
