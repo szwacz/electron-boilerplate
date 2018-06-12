@@ -2,7 +2,7 @@
 
 A minimalistic boilerplate for [Electron runtime](http://electron.atom.io). Tested on Windows, macOS and Linux.  
 
-This project contains only bare minimum of dependencies, to provide you with nice development environment. Doesn't impose on you any frontend technologies, so you can pick your favourite.
+This project contains only bare minimum of tooling and dependencies, to provide you with simple to understand and extensible base (still this is fully functional Electron environment). Also doesn't impose on you any frontend technologies, so you can pick your favourite.
 
 # Quick start
 
@@ -56,7 +56,7 @@ console.log(env.name);
 To do so edit `package.json`:
 ```json
 "devDependencies": {
-  "electron": "1.7.9"
+  "electron": "2.0.2"
 }
 ```
 *Side note:* [Electron authors recommend](http://electron.atom.io/docs/tutorial/electron-versioning/) to use fixed version here.

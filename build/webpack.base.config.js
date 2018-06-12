@@ -2,9 +2,17 @@ const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 
+const translateEnvToMode = (env) => {
+  if (env === "production") {
+    return "production";
+  }
+  return "development";
+};
+
 module.exports = env => {
   return {
-    target: "node",
+    target: "electron-renderer",
+    mode: translateEnvToMode(env),
     node: {
       __dirname: false,
       __filename: false
