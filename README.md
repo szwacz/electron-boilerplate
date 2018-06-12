@@ -2,7 +2,7 @@
 
 A minimalistic boilerplate for [Electron runtime](http://electron.atom.io). Tested on Windows, macOS and Linux.  
 
-This project contains only bare minimum of tooling and dependencies, to provide you with simple to understand and extensible base (still this is fully functional Electron environment). Also doesn't impose on you any frontend technologies, so you can pick your favourite.
+This project contains only bare minimum of tooling and dependencies to provide you with simple to understand and extensible base (but still, this is fully functional Electron environment). The boilerplate also doesn't impose on you any frontend technologies, so feel free to pick your favourite.
 
 # Quick start
 
