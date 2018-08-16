@@ -43,8 +43,7 @@ module.exports = env => {
       new HtmlWebpackPlugin({
         filename: 'app.html',
         template: 'src/app.html',
-        inject: true,
-        excludeChunks: ['background']
+        chunks: ['app']
       })
     ]
   };
