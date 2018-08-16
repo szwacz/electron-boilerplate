@@ -1,6 +1,7 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const translateEnvToMode = (env) => {
   if (env === "production") {
@@ -38,7 +39,13 @@ module.exports = env => {
       ]
     },
     plugins: [
-      new FriendlyErrorsWebpackPlugin({ clearConsole: env === "development" })
+      new FriendlyErrorsWebpackPlugin({ clearConsole: env === "development" }),
+      new HtmlWebpackPlugin({
+        filename: 'app.html',
+        template: 'src/app.html',
+        inject: true,
+        excludeChunks: ['background']
+      })
     ]
   };
 };
