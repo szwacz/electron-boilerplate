@@ -1,4 +1,5 @@
 const path = require("path");
+const jetpack = require("fs-jetpack");
 const nodeExternals = require("webpack-node-externals");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -8,6 +9,12 @@ const translateEnvToMode = (env) => {
     return "production";
   }
   return "development";
+};
+
+const getAllHtmlFilesInSrcDir = () => {
+  const srcDir = jetpack.cwd('src');
+  return srcDir.find({ matching: '*.html', recursive: false })
+    .map(path => path.split('.').slice(0, -1).join('.'));
 };
 
 module.exports = env => {
@@ -38,13 +45,21 @@ module.exports = env => {
         }
       ]
     },
-    plugins: [
-      new FriendlyErrorsWebpackPlugin({ clearConsole: env === "development" }),
-      new HtmlWebpackPlugin({
-        filename: 'app.html',
-        template: 'src/app.html',
-        chunks: ['app']
-      })
-    ]
+    plugins: (() => {
+      const plugins = [
+        new FriendlyErrorsWebpackPlugin({ clearConsole: env === "development" }),
+      ];
+
+      getAllHtmlFilesInSrcDir().map(fileName => 
+        plugins.push(
+          new HtmlWebpackPlugin({
+            filename: `${fileName}.html`,
+            template: `src/${fileName}.html`,
+            chunks: [ fileName ]
+          })
+        )
+      )
+      return plugins;
+    })()
   };
 };
