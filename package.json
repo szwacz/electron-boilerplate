@@ -2,7 +2,7 @@
   "name": "modelica-editor",
   "productName": "RS MODELICA EDITOR",
   "description": "Ricardo Software Modelica Editor",
-  "version": "1.0.0",
+  "version": "0.1.2",
   "author": "Ricardo Software <rs_support@ricardo.com>",
   "copyright": "© 2017, Ricardo inc.",
   "homepage": "http://example.com",
@@ -18,7 +18,7 @@
     "nsis": {
       "oneClick": true,
       "runAfterFinish": false,
-      "createDesktopShortcut": false
+      "createDesktopShortcut": true
     },
     "publish": null
   },
