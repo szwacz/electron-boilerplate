@@ -4,7 +4,8 @@ import { Application } from "spectron";
 const beforeEach = function() {
   this.app = new Application({
     path: electron,
-    args: ["."]
+    args: ["."],
+    chromeDriverArgs: ['remote-debugging-port=9222']
   });
   return this.app.start();
 };
