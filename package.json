@@ -22,34 +22,34 @@
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
-    "preunit": "webpack --config=build/webpack.unit.config.js --env=test --display=none",
+    "preunit": "webpack --config=build/webpack.unit.config.js --env=test",
     "unit": "electron-mocha temp/specs.js --renderer --require source-map-support/register",
-    "pree2e": "webpack --config=build/webpack.app.config.js --env=test --display=none && webpack --config=build/webpack.e2e.config.js --env=test --display=none",
+    "pree2e": "webpack --config=build/webpack.app.config.js --env=test && webpack --config=build/webpack.e2e.config.js --env=test",
     "e2e": "mocha temp/e2e.js --require source-map-support/register",
     "test": "npm run unit && npm run e2e",
     "start": "node build/start.js",
     "release": "npm test && webpack --config=build/webpack.app.config.js --env=production && electron-builder"
   },
   "dependencies": {
-    "fs-jetpack": "^2.1.0"
+    "fs-jetpack": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "babel-loader": "^8.0.0-beta.4",
     "chai": "^4.1.0",
-    "css-loader": "^3.1.0",
-    "electron": "^8.2.3",
+    "css-loader": "^5.2.0",
+    "electron": "^12.0.2",
     "electron-builder": "^22.5.1",
-    "electron-mocha": "^8.1.1",
+    "electron-mocha": "^10.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
-    "mocha": "^7.1.1",
+    "mocha": "^8.3.2",
     "source-map-support": "^0.5.6",
-    "spectron": "^10.0.1",
-    "style-loader": "^1.1.4",
-    "webpack": "^4.38.0",
-    "webpack-cli": "^3.3.6",
-    "webpack-merge": "^4.1.3",
-    "webpack-node-externals": "^1.7.2"
+    "spectron": "^14.0.0",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.30.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-merge": "^5.7.3",
+    "webpack-node-externals": "^2.5.2"
   }
 }

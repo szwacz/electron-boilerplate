@@ -5,7 +5,7 @@
 
 import path from "path";
 import url from "url";
-import { app, Menu } from "electron";
+import { app, Menu, ipcMain } from "electron";
 import { devMenuTemplate } from "./menu/dev_menu_template";
 import { editMenuTemplate } from "./menu/edit_menu_template";
 import createWindow from "./helpers/window";
@@ -22,6 +22,13 @@ const setApplicationMenu = () => {
   Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
+// We can communicate with our window (the renderer process) via messages.
+const initIpc = () => {
+  ipcMain.on("need-app-path", (event, arg) => {
+    event.reply("app-path", app.getAppPath());
+  });
+};
+
 // Save userData in separate folders for each environment.
 // Thanks to this you can use production and development versions of the app
 // on same machine like those are two separate apps.
@@ -32,12 +39,15 @@ if (env.name !== "production") {
 
 app.on("ready", () => {
   setApplicationMenu();
-
+  initIpc();
+  console.log(env.name);
   const mainWindow = createWindow("main", {
     width: 1000,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: env.name === "test"
     }
   });
 

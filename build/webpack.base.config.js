@@ -2,8 +2,18 @@ const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 
-const translateEnvToMode = (env) => {
-  if (env === "production") {
+const envName = (env) => {
+  if (env.production) {
+    return "production";
+  }
+  if (env.test) {
+    return "test";
+  }
+  return "development";
+};
+
+const envToMode = (env) => {
+  if (env.production) {
     return "production";
   }
   return "development";
@@ -12,7 +22,7 @@ const translateEnvToMode = (env) => {
 module.exports = env => {
   return {
     target: "electron-renderer",
-    mode: translateEnvToMode(env),
+    mode: envToMode(env),
     node: {
       __dirname: false,
       __filename: false
@@ -20,7 +30,7 @@ module.exports = env => {
     externals: [nodeExternals()],
     resolve: {
       alias: {
-        env: path.resolve(__dirname, `../config/env_${env}.json`)
+        env: path.resolve(__dirname, `../config/env_${envName(env)}.json`)
       }
     },
     devtool: "source-map",
@@ -38,7 +48,7 @@ module.exports = env => {
       ]
     },
     plugins: [
-      new FriendlyErrorsWebpackPlugin({ clearConsole: env === "development" })
+      new FriendlyErrorsWebpackPlugin({ clearConsole: env.development })
     ]
   };
 };
