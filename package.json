@@ -7,7 +7,7 @@
   "author": "Mr. Gumby <mr.gumby@example.com>",
   "copyright": "© 2017, Gumby inc.",
   "homepage": "http://example.com",
-  "main": "app/background.js",
+  "main": "app/main.js",
   "build": {
     "appId": "com.example.electron-boilerplate",
     "files": [

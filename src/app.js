@@ -26,7 +26,7 @@ const osMap = {
 };
 document.querySelector("#os").innerHTML = osMap[process.platform];
 
-// We can communicate with background (main process) through messages.
+// We can communicate with main process through messages.
 ipcRenderer.on("app-path", (event, appDirPath) => {
   // Holy crap! This is browser window with HTML and stuff, but I can read
   // files from disk like it's node.js! Welcome to Electron world :)
