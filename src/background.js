@@ -45,8 +45,12 @@ app.on("ready", () => {
     width: 1000,
     height: 600,
     webPreferences: {
+      // Two properties below are here for demo purposes, and are
+      // security hazard. Make sure you know what you're doing
+      // in your production app.
       nodeIntegration: true,
       contextIsolation: false,
+      // Spectron needs access to remote module
       enableRemoteModule: env.name === "test"
     }
   });

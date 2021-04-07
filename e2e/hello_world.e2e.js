@@ -6,9 +6,10 @@ describe("application launch", function() {
   afterEach(testUtils.afterEach);
 
   it("shows hello world text on screen after launch", function() {
-    console.log("this.app.client",this.app.client.$)
-    return this.app.client.getText("#greet").then(text => {
-      expect(text).to.equal("Hello World!");
+    return this.app.client.$("#greet").then(element => {
+      return element.getText().then(text => {
+        expect(text).to.equal("Hello World!");
+      });
     });
   });
 });
