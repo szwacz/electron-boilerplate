@@ -13,9 +13,9 @@
 //    <a href="http://bing.com">bing</a>
 // </p>
 
-import { shell } from "electron";
+import { ipcRenderer } from "electron";
 
-const supportExternalLinks = event => {
+const externalLinksSupport = event => {
   let href;
   let isExternal = false;
 
@@ -27,7 +27,7 @@ const supportExternalLinks = event => {
       isExternal = true;
     }
     if (href && isExternal) {
-      shell.openExternal(href);
+      ipcRenderer.send("open-external-link", href);
       event.preventDefault();
     } else if (element.parentElement) {
       checkDomElement(element.parentElement);
@@ -37,4 +37,4 @@ const supportExternalLinks = event => {
   checkDomElement(event.target);
 };
 
-document.addEventListener("click", supportExternalLinks, false);
+document.addEventListener("click", externalLinksSupport, false);

@@ -8,6 +8,7 @@ import url from "url";
 import { app, Menu, ipcMain } from "electron";
 import { devMenuTemplate } from "./menu/dev_menu_template";
 import { editMenuTemplate } from "./menu/edit_menu_template";
+import initExternalLinks from "./helpers/external_links_main";
 import createWindow from "./helpers/window";
 
 // Special module holding environment variables which you declared
@@ -40,7 +41,8 @@ if (env.name !== "production") {
 app.on("ready", () => {
   setApplicationMenu();
   initIpc();
-  console.log(env.name);
+  initExternalLinks();
+
   const mainWindow = createWindow("main", {
     width: 1000,
     height: 600,

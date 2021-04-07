@@ -2,10 +2,10 @@ import "./stylesheets/main.css";
 
 // Small helpers you might want to keep
 // import "./helpers/context_menu.js";
-// import "./helpers/external_links.js";
+import "./helpers/external_links_renderer.js";
 
 // ----------------------------------------------------------------------------
-// Everything below is just to show you how it works. You can delete all of it.
+// Everything below is just a demo. You can delete all of it.
 // ----------------------------------------------------------------------------
 
 import { ipcRenderer } from "electron";
@@ -26,7 +26,7 @@ const osMap = {
 };
 document.querySelector("#os").innerHTML = osMap[process.platform];
 
-// We can communicate with background process through messages.
+// We can communicate with background (main process) through messages.
 ipcRenderer.on("app-path", (event, appDirPath) => {
   // Holy crap! This is browser window with HTML and stuff, but I can read
   // files from disk like it's node.js! Welcome to Electron world :)
