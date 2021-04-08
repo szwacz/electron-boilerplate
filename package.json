@@ -31,6 +31,7 @@
     "release": "npm test && webpack --config=build/webpack.app.config.js --env=production && electron-builder"
   },
   "dependencies": {
+    "electron-context-menu": "^2.5.0",
     "fs-jetpack": "^4.1.0"
   },
   "devDependencies": {

@@ -5,18 +5,28 @@
 
 import path from "path";
 import url from "url";
+import contextMenu from "electron-context-menu";
 import { app, Menu, ipcMain } from "electron";
-import { devMenuTemplate } from "./menu/dev_menu_template";
-import { editMenuTemplate } from "./menu/edit_menu_template";
-import initExternalLinks from "./helpers/external_links_main";
+import appMenuTemplate from "./menu/app_menu_template";
+import editMenuTemplate from "./menu/edit_menu_template";
+import devMenuTemplate from "./menu/dev_menu_template";
+import externalLinks from "./helpers/external_links";
 import createWindow from "./helpers/window";
 
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
 import env from "env";
 
+// Save userData in separate folders for each environment.
+// Thanks to this you can use production and development versions of the app
+// on same machine like those are two separate apps.
+if (env.name !== "production") {
+  const userDataPath = app.getPath("userData");
+  app.setPath("userData", `${userDataPath} (${env.name})`);
+}
+
 const setApplicationMenu = () => {
-  const menus = [editMenuTemplate];
+  const menus = [appMenuTemplate, editMenuTemplate];
   if (env.name !== "production") {
     menus.push(devMenuTemplate);
   }
@@ -30,18 +40,12 @@ const initIpc = () => {
   });
 };
 
-// Save userData in separate folders for each environment.
-// Thanks to this you can use production and development versions of the app
-// on same machine like those are two separate apps.
-if (env.name !== "production") {
-  const userDataPath = app.getPath("userData");
-  app.setPath("userData", `${userDataPath} (${env.name})`);
-}
+contextMenu();
+externalLinks();
 
 app.on("ready", () => {
   setApplicationMenu();
   initIpc();
-  initExternalLinks();
 
   const mainWindow = createWindow("main", {
     width: 1000,

@@ -1,7 +1,6 @@
 import "./stylesheets/main.css";
 
-// Small helpers you might want to keep
-// import "./helpers/context_menu.js";
+// Small helper you might want to keep
 import "./helpers/external_links_renderer.js";
 
 // ----------------------------------------------------------------------------
