@@ -5,12 +5,10 @@
 
 import path from "path";
 import url from "url";
-import contextMenu from "electron-context-menu";
-import { app, Menu, ipcMain } from "electron";
+import { app, Menu, ipcMain, shell } from "electron";
 import appMenuTemplate from "./menu/app_menu_template";
 import editMenuTemplate from "./menu/edit_menu_template";
 import devMenuTemplate from "./menu/dev_menu_template";
-import externalLinks from "./helpers/external_links";
 import createWindow from "./helpers/window";
 
 // Special module holding environment variables which you declared
@@ -38,10 +36,10 @@ const initIpc = () => {
   ipcMain.on("need-app-path", (event, arg) => {
     event.reply("app-path", app.getAppPath());
   });
+  ipcMain.on("open-external-link", (event, href) => {
+    shell.openExternal(href);
+  });
 };
-
-contextMenu();
-externalLinks();
 
 app.on("ready", () => {
   setApplicationMenu();

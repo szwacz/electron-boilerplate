@@ -1,6 +1,6 @@
 # electron-boilerplate
 
-A minimalistic boilerplate for [Electron runtime](https://www.electronjs.org/). Tested on Windows, macOS and Linux.  
+Minimalistic, very easy to understand boilerplate for [Electron runtime](https://www.electronjs.org/). Tested on Windows, macOS and Linux.  
 
 This project contains only bare minimum of tooling and dependencies to provide you with simple to understand and extensible base (but still, this is fully functional Electron environment). The boilerplate doesn't impose on you any frontend technologies, so feel free to pick your favourite.
 

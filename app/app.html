@@ -1,27 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>Electron Boilerplate</title>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Electron Boilerplate</title>
+  </head>
+  <body>
+    <div id="app" class="container" style="display: none;">
+      <h1 id="greet"></h1>
+      <p>
+        Welcome to
+        <a href="https://www.electronjs.org/" class="electron-website-link">
+          Electron
+        </a>
+        app running on this <strong id="os"></strong> machine.
+      </p>
+      <p>App author: <strong id="author"></strong></p>
+      <p>Environment: <strong id="env"></strong></p>
+      <p>Electron version: <strong id="electron-version"></strong></p>
+    </div>
 
-  <div id="app" class="container" style="display: none;">
-    <h1 id="greet"></h1>
-    <p>
-      Welcome to <a href="https://www.electronjs.org/" class="js-external-link">Electron</a> app running on this <strong id="os"></strong> machine.
-    </p>
-    <p>
-      App author: <strong id="author"></strong>
-    </p>
-    <p>
-      Environment: <strong id="env"></strong>
-    </p>
-    <p>
-      Electron version: <strong id="electron-version"></strong>
-    </p>
-  </div>
-
-  <script src="app.js"></script>
-</body>
+    <script src="app.js"></script>
+  </body>
 </html>

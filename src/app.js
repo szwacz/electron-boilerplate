@@ -1,11 +1,6 @@
 import "./stylesheets/main.css";
 
-// Small helper you might want to keep
-import "./helpers/external_links_renderer.js";
-
-// ----------------------------------------------------------------------------
 // Everything below is just a demo. You can delete all of it.
-// ----------------------------------------------------------------------------
 
 import { ipcRenderer } from "electron";
 import jetpack from "fs-jetpack";
@@ -34,3 +29,12 @@ ipcRenderer.on("app-path", (event, appDirPath) => {
   document.querySelector("#author").innerHTML = manifest.author;
 });
 ipcRenderer.send("need-app-path");
+
+document.querySelector(".electron-website-link").addEventListener(
+  "click",
+  event => {
+    ipcRenderer.send("open-external-link", event.target.href);
+    event.preventDefault();
+  },
+  false
+);
