@@ -7,13 +7,16 @@ const compiler = webpack(config({ development: true }));
 let electronStarted = false;
 
 const watching = compiler.watch({}, (err, stats) => {
-  if (!err && !stats.hasErrors() && !electronStarted) {
+  if (err != null) {
+    console.log(err);
+  } else if (!electronStarted) {
     electronStarted = true;
-
     childProcess
       .spawn(electron, ["."], { stdio: "inherit" })
       .on("close", () => {
         watching.close();
       });
   }
+
+  console.log(stats.toString({ colors: true }));
 });
