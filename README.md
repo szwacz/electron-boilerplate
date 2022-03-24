@@ -85,6 +85,6 @@ npm run release
 
 Once the packaging process finished, the `dist` directory will contain your distributable file.
 
-[Electron-builder](https://github.com/electron-userland/electron-builder) is handling the packaging process. Follow dosc over there to customise your build.
+[Electron-builder](https://github.com/electron-userland/electron-builder) is handling the packaging process. Follow docs over there to customise your build.
 
 You can package your app cross-platform from a single operating system, [electron-builder kind of supports this](https://www.electron.build/multi-platform-build), but there are limitations and asterisks. That's why this boilerplate doesn't do that by default.
